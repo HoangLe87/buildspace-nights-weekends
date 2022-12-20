@@ -4,9 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
+/artifacts
+/cache
 
 # testing
 /coverage
+/tests
 
 # next.js
 /.next/
@@ -27,6 +30,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
