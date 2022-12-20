@@ -9,16 +9,19 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Anna</title>
+        <title>AnnaSwap</title>
         <meta name="description" content="DeFi protocol" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
         <h1>Welcome to yet another DEX</h1>
+        <h1>To come:</h1>
         <h2>Countdown clock</h2>
         <h2>3D animation</h2>
         <h2>Some random sale pitch and text</h2>
+        <h2>Roadmap</h2>
+        <h2>The team</h2>
       </main>
     </>
   );
