@@ -11,7 +11,7 @@ contract Anna is ERC20, ERC20Burnable {
 
     constructor() ERC20("Anna", "ANNA") {
         owner = payable(msg.sender);
-        _mint(msg.sender, 1000000 * 10**18); // 1mil pre-mint
+        _mint(msg.sender, 1000000 * 10**decimals()); // 1mil pre-mint
     }
 
     event Mint(address indexed to, uint256 amount, uint256 time);
@@ -56,6 +56,11 @@ contract Anna is ERC20, ERC20Burnable {
     // get max supply
     function getPrice() public view returns (uint256) {
         return price;
+    }
+
+    // transfer owner
+    function transferOwner(address _newOwnerAddress) external onlyOwner {
+        owner = payable(_newOwnerAddress);
     }
 
     modifier onlyOwner() {

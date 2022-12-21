@@ -3,62 +3,66 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 error TransferFailed();
 
-contract Exchange is ERC20, ReentrancyGuard {
-    // update with ANNA's token address at deployment with constructor
-    address public annaAddress;
+contract Exchange is ERC20 {
+    // The IERC20 interface allows us to access the token contracts
+    IERC20 private immutable token1;
+    IERC20 private immutable token2;
     address payable public owner;
+    uint256 totalLpSharesIssued; // Stores the total amount of share issued for the LP pool
+    uint256 K; // Algorithmic constant used to determine price
+    mapping(address => uint256) lpSharesPerAddress; // Stores the LP share holding of each user
 
     // events
     event AddedLiquidity(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Total,
+        uint256 token2Total,
         uint256 time
     );
     event RemovedLiquidity(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Total,
+        uint256 token2Total,
         uint256 time
     );
-    event BougthAnnaForEth(
+    event BoughtToken1(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Total,
+        uint256 token2Total,
         uint256 time
     );
-    event SoldAnnaForEth(
+    event BoughtToken2(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Total,
+        uint256 token2Total,
         uint256 time
     );
 
-    // Exchange LP token is ERC20 token
-    constructor(address _annaAddress) ERC20("ANNA LP Token", "xANNA") {
+    // Pass the token addresses to the constructor
+    constructor(IERC20 _token1, IERC20 _token2) ERC20("LP ANNA", "xANNA") {
         require(
-            _annaAddress != address(0),
-            "ANNA token address passed must be valid"
+            token1 != address(0) && token2 != address(0),
+            "Invalid token addresses"
         );
-        annaAddress = _annaAddress;
+        token1 = _token1;
+        token2 = _token2;
         owner = payable(msg.sender);
     }
 
     /**
-     * @dev Returns the amount of ANNA ERC20 token and eth native amount held by this contract
+     * @dev Returns the amount of tokens held by this contract
      */
     function getReserves()
         public
         view
-        returns (uint256 annaReserve, uint256 ethBalance)
+        returns (uint256 token1Reserves, uint256 token2Reserves)
     {
         // Retrieve reserves
-        annaReserve = IERC20(annaAddress).balanceOf(address(this));
-        ethBalance = address(this).balance;
+        token1Reserves = token1.balanceOf(address(this));
+        token2Reserves = token2.balanceOf(address(this));
     }
 
     /**
@@ -67,47 +71,26 @@ contract Exchange is ERC20, ReentrancyGuard {
      * to add liquidity call addLiquidity function with below params:
      * _annaAmount of ANNA tokens and msg.value is the amount of Eth
      */
-    function addLiquidity(uint256 _annaAmount)
+    function addLiquidity(uint256 _token1Amount)
         public
-        payable
-        nonReentrant
-        returns (uint256 liquidity)
+        validAmountCheck(token1, _token1Amount)
+        returns (uint256 lpShares)
     {
-        require(
-            _annaAmount > 0,
-            "Please send ANNA token amount larger than zero"
-        );
-        // Retrieve reserves
         (uint256 annaReserve, uint256 ethBalance) = getReserves();
-        // If the reserve is empty, intake any user supplied value as the initial ratio
-        // of ANNA token sent and msg.value of Eth
-        IERC20 anna = IERC20(annaAddress);
-        if (annaReserve == 0) {
-            // Transfer the `ANNA` from the user's account to the contract
+        if (totalLpShares == 0) {
             bool success = anna.transferFrom(
                 msg.sender,
                 address(this),
                 _annaAmount
             );
-            // if transfer is not successful revert with error
-            if (!success) {
-                revert TransferFailed();
-            }
-            // Take the current ethBalance and mint ethBalance amount of LP tokens to the user.
-            liquidity = ethBalance;
-            uint256 annaToBeAdded = _annaAmount;
-            emit AddedLiquidity(
-                msg.sender,
-                msg.value,
-                annaToBeAdded,
-                block.timestamp
-            );
+            lpShares = 100 * 10**18; // Initial liquidity provider is issued with 100 tokens
         } else {
-            // If the reserve is not empty, iration must be calculated
-            require(
-                ethBalance > msg.value,
-                "Current contract ETH balance is too low"
-            );
+            // If the reserve is not empty, ratio must be calculated
+            require(token1Total > 0, "Insufficient reserves");
+            require(token2Total > 0, "Insufficient reserves");
+            uint256 share1 = totalLpShares * (_token1Amount / token1Total);
+            uint256 share2 = totalLpShares * (_token2Amount / token2Total);
+
             uint256 ethReserve = ethBalance - msg.value;
             require(ethReserve > 0, "Eth reserve is negative or zero");
             // annaToBeAdded/ annaReserve in the contract) = (Eth Sent by the user/ ethReserve in the contract);
@@ -295,6 +278,26 @@ contract Exchange is ERC20, ReentrancyGuard {
         // Underscore is a special character only used inside
         // a function modifier and it tells Solidity to
         // execute the rest of the code.
+        _;
+    }
+
+    // Liquidity must be provided before we can make swaps from the pool
+    modifier activePool() {
+        require(totalLpShares > 0, "The pool has zero Liquidity");
+        _;
+    }
+
+    // check that transaction amount > 0 and that the user has enough tokens
+    modifier validAmountCheck(IERC20 _token, uint256 _amount) {
+        require(_amount > 0, "Amount cannot be zero!");
+        require(_amount <= _token.balanceOf(msg.sender), "Insufficient amount");
+        _;
+    }
+
+    // check thay transaction amount is > 0  and that user has enough LP tokens
+    modifier validLpSharesCheck(uint256 _amount) {
+        require(_amount > 0, "Share amount cannot be zero!");
+        require(_amount <= shares[msg.sender], "Insufficient share amount");
         _;
     }
 }

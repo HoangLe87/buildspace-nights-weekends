@@ -10,8 +10,8 @@ const Header = () => {
         <li onClick={() => router.push("/")}>Home</li>
         <li onClick={() => router.push("Marketplace")}>Marketplace</li>
         <li onClick={() => router.push("Invest")}>Invest</li>
-        <li onClick={() => router.push("Dex")}>DEX</li>
-        <li onClick={() => router.push("Governance")}>Governance</li>
+        <li onClick={() => router.push("Dex")}>Trade</li>
+        <li onClick={() => router.push("Governance")}>Partners</li>
         <li onClick={() => router.push("Career")}>Career</li>
         <li onClick={() => router.push("AboutUs")}>About us</li>
       </ul>

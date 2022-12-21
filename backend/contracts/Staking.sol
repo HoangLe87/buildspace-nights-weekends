@@ -138,6 +138,11 @@ contract Staking is ReentrancyGuard {
         selfdestruct(owner);
     }
 
+    // transfer owner
+    function transferOwner(address _newOwnerAddress) external onlyOwner {
+        owner = payable(_newOwnerAddress);
+    }
+
     modifier updateReward(address account) {
         rewardPerTokenStaked = rewardPerToken();
         lastUpdateTime = block.timestamp;
