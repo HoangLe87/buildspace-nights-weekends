@@ -18,31 +18,35 @@ contract Exchange is ERC20 {
     address payable public owner;
     // algorithmic constant used to determine price
     uint256 K;
+    bool public isLocked = true; // additional security for claiming ownership
 
     // events
     event OwnerChanged(address indexed to, uint256 time);
+    event Unlocked(address indexed to, bool isLocked, uint256 time);
     event AddedLiquidity(
         address indexed user,
-        uint256 token1Total,
-        uint256 token2Total,
+        uint256 token1Added,
+        uint256 token1Added,
+        uint256 lpTokenMinted,
         uint256 time
     );
     event RemovedLiquidity(
         address indexed user,
-        uint256 token1Total,
-        uint256 token2Total,
+        uint256 token1Removed,
+        uint256 token2Removed,
+        uint256 lpTokenBurned,
         uint256 time
     );
     event BoughtToken1(
         address indexed user,
-        uint256 token1Total,
-        uint256 token2Total,
+        uint256 token1Removed,
+        uint256 token2Added,
         uint256 time
     );
     event BoughtToken2(
         address indexed user,
-        uint256 token1Total,
-        uint256 token2Total,
+        uint256 token1Added,
+        uint256 token2Removed,
         uint256 time
     );
 
@@ -82,7 +86,7 @@ contract Exchange is ERC20 {
      * check if transaction amount is bigger than zero
      * check if user has enough tokens in the wallet
      */
-    function addLiquidity(uint256 _token1Amount)
+    function addLiquidity(uint256 _token1Amount, uint256 _token2Amount)
         external
         validAmountCheck(token1, _token1Amount)
         returns (uint256 lpTokensIssued)
@@ -95,41 +99,58 @@ contract Exchange is ERC20 {
         ) = getReserves();
         // no liquidity yet
         if (totalLpTokensIssued == 0) {
-            lpTokensIssued = 100 * 10**18; // issue 100 lp tokens
+            lpTokensIssued = 100 * 10**18; // init some lp tokens for the initial amount provided
         } else {
             require(
                 token1Reserves > 0 && token2Reserves > 0,
                 "Reserves are not sufficient"
             );
             // calculate ratio
-            uint256 token1Share = totalLpTokensIssued *
+            uint256 lpTokensIssued = totalLpTokensIssued *
                 (_token1Amount / (token1Reserves));
             // check that the lp token to be issued is bigger than zero
             require(
-                token1Share > 0,
-                "Asset value less than threshold for contribution!"
+                lpTokensIssued > 0,
+                "Asset value less than threshold for contribution"
             );
-            uint256 _token2Amount = ((token1Share * token2Reserves) /
+            _token2Amount = ((lpTokensIssued * token2Reserves) /
                 totalLpTokensIssued);
-            require(
-                (IERC20(token2).balanceOf(msg.sender) >= _token2Amount),
-                "User does not have sufficient amount of second token to add liquidity"
-            );
-            // get the tokens from the user
-            // the frontend must call the token contract's approve function first
-            token1.transferFrom(msg.sender, address(this), _token1Amount);
-            token2.transferFrom(msg.sender, address(this), _token2Amount);
-            // update the K
-            (
-                token1Reserves,
-                token2Reserves,
-                totalLpTokensIssued
-            ) = getReserves();
-            K = token1Reserves * token2Reserves;
-            // reward the liquidity provider with the lp token
-            _mint(msg.sender, token1Share);
         }
+        // get the tokens from the user
+        // the frontend must call the token contract's approve function first
+        require(_token2Amount > 0, "Amount cannot be zero");
+        require(
+            (IERC20(token2).balanceOf(msg.sender) >= _token2Amount),
+            "User does not have sufficient amount of second token to add liquidity"
+        );
+        token1.transferFrom(msg.sender, address(this), _token1Amount);
+        token2.transferFrom(msg.sender, address(this), _token2Amount);
+        // update the K
+        (token1Reserves, token2Reserves, totalLpTokensIssued) = getReserves();
+        K = token1Reserves * token2Reserves;
+        // reward the liquidity provider with the lp token
+        _mint(msg.sender, lpTokensIssued);
+        emit AddedLiquidity(
+            msg.sender,
+            _token1Amount,
+            _token2Amount,
+            lpTokensIssued,
+            time
+        );
     }
+
+    /**
+     * @dev remove liquidity from the pool
+     * check if transaction amount is bigger than zero
+     * check if the user has enough lp tokens in the wallet
+     * check if the contact has enough reserves
+     */
+    function RemoveLiquidity(uint256 lpTokens)
+        external
+        activePool
+        validLpSharesCheck(lpTokens)
+        returns (uint256 token1Amount, uint256 token2Amount)
+    {}
 
     // transfer owner
     function transferOwner(address _newOwnerAddress) external onlyOwner {
@@ -138,8 +159,16 @@ contract Exchange is ERC20 {
     }
 
     /*
+    // unlock the contract
+    function unlock() external {
+        IERC20 gAnna = ERC20(gAnnaAddress);
+        require(gAnna.balanceOf(msg.sender)>=10000*10**18); // need 10000 gANNA
+        require(balanceOf(msg.sender)>=100*10**18); // need 100 ANNA
+        isLocked = !isLocked;
+        emit Unlocked(msg.sender, isLocked, block.timestamp)
+    }
 
-    let user claim ownership if the user's balance is 10k gAnna or more
+    //let user claim ownership if the user's balance is 10k gAnna or more
     
     function claiOwner() external {
         IERC20 gAnna = ERC20(gAnnaAddress)

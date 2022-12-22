@@ -8,8 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract Anna is ERC20, ERC20Burnable {
     // ---------------------- definitions ------------------ //
     address payable public owner;
-    uint256 public maxSupply = 1000000000 * 10**18; // 1000 mil max supply
-    uint256 public price = 0.1 ether;
+    uint128 public maxSupply = 1000000000 * 10**18; // 1000 mil max supply
+    uint128 public price = 0.1 ether;
+    bool public isLocked = true; // additional security for claiming ownership
 
     // constructor
     constructor() ERC20("Anna", "ANNA") {
@@ -81,9 +82,15 @@ contract Anna is ERC20, ERC20Burnable {
     }
 
     /*
+    // unlock the contract
+    function unlock() external {
+        IERC20 gAnna = ERC20(gAnnaAddress);
+        require(gAnna.balanceOf(msg.sender)>=10000*10**18); // need 10000 gANNA
+        require(balanceOf(msg.sender)>=100*10**18); // need 100 ANNA
+        isLocked = !isLocked;
+    }
 
-    let user claim ownership if the user's balance is 10k gAnna or more
-    
+    // let user claim ownership if the user's balance is 10k gAnna or more
     function claiOwner() external {
         IERC20 gAnna = ERC20(gAnnaAddress)
         // check to see if user has at least 10k gAnna
@@ -97,8 +104,10 @@ contract Anna is ERC20, ERC20Burnable {
         if (!sucess) {
             revert TransferFailed();
         }
+        require(isLocked==false, "The contract is locked, please unlock")
         owner = payable(msg.sender);
         emit OwnerChanged(msg.sender, block.timestamp);
+        isLocked=true;
     } 
     */
 
