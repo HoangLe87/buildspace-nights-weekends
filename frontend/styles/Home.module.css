@@ -2,7 +2,8 @@
 .header {
   display: flex;
   justify-content: space-between;
-  margin: 2rem
+  padding: 2rem;
+  border-bottom: solid 1px white;
 }
 
 .headerNavbar {
@@ -14,14 +15,20 @@
 
 /* body */
 .main {
-  height: 100vh;
-  margin: 2rem
+  margin: 2rem;
+  text-align:center
+}
+
+.heroText{
+  text-align: left;
+  margin: 2rem 0 2rem 0;
 }
 
 /* footer */
 .footer {
   text-align: center;
-  margin: 2rem
+  padding: 2rem;
+  border-top: solid 1px white;
 }
 
 
