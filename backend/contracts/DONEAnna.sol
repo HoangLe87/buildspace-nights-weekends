@@ -2,15 +2,13 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract Anna is ERC20, ERC20Burnable {
+contract Anna is ERC20 {
     // ---------------------- definitions ------------------ //
     address payable public owner;
-    uint128 public maxSupply = 1000000000 * 10**18; // 1000 mil max supply
     uint128 public price = 0.1 ether;
-    bool public isLocked = true; // additional security for claiming ownership
+    // additional security for claiming ownership
+    bool public isLocked = false;
 
     // constructor
     constructor() ERC20("Anna", "ANNA") {
@@ -38,13 +36,13 @@ contract Anna is ERC20, ERC20Burnable {
      * check for position purchase amount
      * check for sufficient ETH amount to make purchase
      */
-    function buyAnna(address to, uint256 amount) external payable {
+    function buyAnna(uint256 _amount) external payable {
         // check that purchase amount is bigger than zero
         require(
-            amount > 0,
+            _amount > 0,
             "Please insert a positive amount of token to be purchased"
         );
-        uint256 amountToBePaid = price * amount;
+        uint256 amountToBePaid = price * _amount;
         // check that the payment sent is enough for the purchase
         require(
             msg.value >= amountToBePaid,
@@ -52,17 +50,12 @@ contract Anna is ERC20, ERC20Burnable {
         );
         // check that the contract actually recived the payment
         require(address(this).balance >= msg.value, "Money not yet recieved");
-        _mint(to, amount);
-        emit Minted(to, amount, block.timestamp);
+        _mint(msg.sender, _amount);
+        emit Minted(msg.sender, _amount, block.timestamp);
     }
 
-    // get max supply
-    function getMaxSupply() public view returns (uint256) {
-        return maxSupply;
-    }
-
-    // get max supply
-    function getPrice() public view returns (uint256) {
+    // get price
+    function getPrice() external view returns (uint256) {
         return price;
     }
 
@@ -81,35 +74,29 @@ contract Anna is ERC20, ERC20Burnable {
         emit OwnerChanged(_newOwnerAddress, block.timestamp);
     }
 
-    /*
     // unlock the contract
     function unlock() external {
-        IERC20 gAnna = ERC20(gAnnaAddress);
-        require(gAnna.balanceOf(msg.sender)>=10000*10**18); // need 10000 gANNA
-        require(balanceOf(msg.sender)>=100*10**18); // need 100 ANNA
+        // need 15k gANNA to lock or unlock
+        require(
+            balanceOf(msg.sender) >= 15000 * 10**18,
+            "You need at least 15k gANNA to do this"
+        );
         isLocked = !isLocked;
     }
 
     // let user claim ownership if the user's balance is 10k gAnna or more
-    function claiOwner() external {
-        IERC20 gAnna = ERC20(gAnnaAddress)
+    function claimOwner() external {
         // check to see if user has at least 10k gAnna
-        require(gAnna.balanceOf(msg.sender)>=10000*10**18)
-        // payment of 1k gANNA to previous onwer
-        bool sucess = gAnna.transferFrom(
-                msg.sender,
-                owner,
-                1000*10**18
-            );
-        if (!sucess) {
-            revert TransferFailed();
-        }
-        require(isLocked==false, "The contract is locked, please unlock")
+        require(
+            balanceOf(msg.sender) >= 10000 * 10**18,
+            "You need at least 10k gANNA to do this"
+        );
+        require(isLocked == false, "The contract is locked, please unlock");
+
         owner = payable(msg.sender);
+        isLocked = true;
         emit OwnerChanged(msg.sender, block.timestamp);
-        isLocked=true;
-    } 
-    */
+    }
 
     // ---------------------- utilities ------------------ //
     // destruct the contract
@@ -125,9 +112,6 @@ contract Anna is ERC20, ERC20Burnable {
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");
-        // Underscore is a special character only used inside
-        // a function modifier and it tells Solidity to
-        // execute the rest of the code.
         _;
     }
 }

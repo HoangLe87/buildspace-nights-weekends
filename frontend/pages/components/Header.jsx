@@ -14,6 +14,7 @@ const Header = () => {
         <li onClick={() => router.push("Governance")}>Partners</li>
         <li onClick={() => router.push("Career")}>Career</li>
         <li onClick={() => router.push("AboutUs")}>About us</li>
+        <li onClick={() => router.push("gANNA")}>Leaderboad</li>
       </ul>
     </div>
   );
