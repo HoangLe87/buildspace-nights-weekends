@@ -33,7 +33,7 @@ contract GANNA is ERC20 {
             (msg.value >= 10_000 ether),
             "You need to send at least 10k ether to do this"
         );
-        uint256 amount = (10_000 * 10**18);
+        uint128 amount = (10_000 * 10**18);
         (bool sucess, ) = owner.call{value: 9_999 ether}("");
         require(sucess, "Eth transfer failed");
         _mint(msg.sender, amount);

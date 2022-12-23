@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 import "./ExchangeV2.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Factory {
+contract Factory is Ownable {
     // exchanges pairs to exchange address
     mapping(address => mapping(address => address))
         public tokenAddressToExchanges;
@@ -21,7 +21,22 @@ contract Factory {
         onlyOwner
         returns (address exchangeAddress)
     {
-        Exchange exchange = new Exchange(_token1Address, _token2Address);
+        require(
+            _token1Address != address(0) && _token2Address != address(0),
+            "Token address not valid"
+        );
+        require(
+            tokenAddressToExchanges[_token1Address][_token2Address] ==
+                address(0) &&
+                tokenAddressToExchanges[_token2Address][_token1Address] ==
+                address(0),
+            "Exchange already exists"
+        );
+        Exchange exchange = new Exchange(
+            _token1Address,
+            _token2Address,
+            address(this)
+        );
         exchangeAddress = address(exchange);
         tokenAddressToExchanges[_token1Address][
             _token2Address
@@ -29,6 +44,7 @@ contract Factory {
         tokenAddressToExchanges[_token2Address][
             _token1Address
         ] = exchangeAddress;
+        return exchangeAddress;
     }
 
     /**
@@ -49,6 +65,8 @@ contract Factory {
                 address(0),
             "Exchange does not exist"
         );
+        Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
+            .destruct();
         delete tokenAddressToExchanges[_token1Address][_token2Address];
         delete tokenAddressToExchanges[_token1Address][_token2Address];
     }
@@ -64,9 +82,45 @@ contract Factory {
         exchange1Address = tokenAddressToExchanges[_token1Address][
             _token2Address
         ];
-        exchange1Address = tokenAddressToExchanges[_token2Address][
+        exchange2Address = tokenAddressToExchanges[_token2Address][
             _token1Address
         ];
-        require(exchangeAddress != address(0), "Exchange exists");
+        require(
+            exchange1Address == exchange1Address,
+            "The 2 mapping addresses do not match"
+        );
+        require(
+            exchange1Address != address(0) && exchange2Address != address(0),
+            "Exchange does not exist"
+        );
+        return (exchange1Address, exchange2Address);
+    }
+
+    // destruct the contract
+    function destruct() internal onlyOwner {
+        // remove from mapping
+        selfdestruct(payable(owner()));
+    }
+
+    // set sellingTax
+    function setSellingTax(
+        address _token1Address,
+        address _token2Address,
+        uint256 _sellingTax
+    ) external onlyOwner {
+        Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
+            .setSellingTax(_sellingTax);
+        (_sellingTax);
+    }
+
+    // set tradingFee
+    function settradingFee(
+        address _token1Address,
+        address _token2Address,
+        uint256 _tradingFee
+    ) external onlyOwner {
+        Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
+            .setTradingFee(_tradingFee);
+        (_tradingFee);
     }
 }
