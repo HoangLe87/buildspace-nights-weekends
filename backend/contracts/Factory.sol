@@ -68,7 +68,7 @@ contract Factory is Ownable {
         Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
             .destruct();
         delete tokenAddressToExchanges[_token1Address][_token2Address];
-        delete tokenAddressToExchanges[_token1Address][_token2Address];
+        delete tokenAddressToExchanges[_token2Address][_token1Address];
     }
 
     /**

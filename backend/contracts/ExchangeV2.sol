@@ -115,17 +115,12 @@ contract Exchange is ERC20, Ownable {
                 "Reserves are not sufficient"
             );
             // calculate ratio
-            lpTokensIssued =
-                totalLpTokensIssued *
-                (_token1Amount / (token1Reserves));
-            _token2Amount = ((lpTokensIssued * token2Reserves) /
-                totalLpTokensIssued);
+
+            _token2Amount = (_token1Amount * token2Reserves) / token1Reserves;
+            // reward the liquidity provider with the lp token
+            lpTokensIssued = ((totalLpTokensIssued * _token1Amount) /
+                token1Reserves);
         }
-        // check that the lp token to be issued is bigger than zero
-        require(
-            lpTokensIssued > 0,
-            "Asset value less than threshold for contribution"
-        );
         // get the tokens from the user
         // the frontend must call the token contract's approve function first
         require(
@@ -139,7 +134,10 @@ contract Exchange is ERC20, Ownable {
         );
         token1.transferFrom(msg.sender, address(this), _token1Amount);
         token2.transferFrom(msg.sender, address(this), _token2Amount);
-        // reward the liquidity provider with the lp token
+        require(
+            lpTokensIssued > 0,
+            "Amount of lp tokens issues should be positive"
+        );
         _mint(msg.sender, lpTokensIssued);
         emit AddedLiquidity(
             msg.sender,
@@ -211,6 +209,7 @@ contract Exchange is ERC20, Ownable {
         uint256 numerator = token1AmountWithFee * token2Reserves;
         uint256 denominator = (1000 * token1Reserves + token1AmountWithFee);
         token2Amount = numerator / denominator;
+        return token2Amount;
     }
 
     function buyToken1SellToken2(uint256 _token1Amount) public activePool {
