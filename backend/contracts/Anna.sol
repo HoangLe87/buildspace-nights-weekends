@@ -2,18 +2,17 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Anna is ERC20 {
+contract Anna is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
-    address payable public owner;
     uint128 public price = 0.1 ether;
     // additional security for claiming ownership
     bool public isLocked = false;
 
     // constructor
     constructor() ERC20("Anna", "ANNA") {
-        owner = payable(msg.sender);
-        _mint(msg.sender, 1000000 * 10**decimals()); // 1mil pre-mint
+        _mint(owner(), 1000000 * 10**decimals()); // 1mil pre-mint
     }
 
     // events
@@ -63,15 +62,9 @@ contract Anna is ERC20 {
     function withdraw() external onlyOwner {
         uint256 amount = address(this).balance;
         require(amount > 0, "Nothing to withdraw: the contract balance empty");
-        (bool sucess, ) = owner.call{value: amount}("");
+        (bool sucess, ) = (msg.sender).call{value: amount}("");
         require(sucess, "Failed to withdraw funds");
         emit WithdrawalDone(msg.sender, amount, block.timestamp);
-    }
-
-    // transfer owner
-    function transferOwner(address _newOwnerAddress) external onlyOwner {
-        owner = payable(_newOwnerAddress);
-        emit OwnerChanged(_newOwnerAddress, block.timestamp);
     }
 
     // unlock the contract
@@ -92,8 +85,7 @@ contract Anna is ERC20 {
             "You need at least 10k gANNA to do this"
         );
         require(isLocked == false, "The contract is locked, please unlock");
-
-        owner = payable(msg.sender);
+        _transferOwnership(msg.sender);
         isLocked = true;
         emit OwnerChanged(msg.sender, block.timestamp);
     }
@@ -101,7 +93,7 @@ contract Anna is ERC20 {
     // ---------------------- utilities ------------------ //
     // destruct the contract
     function destruct() external onlyOwner {
-        selfdestruct(owner);
+        selfdestruct(payable(owner()));
     }
 
     // Function to receive Ether. msg.data must be empty
@@ -109,9 +101,4 @@ contract Anna is ERC20 {
 
     // Fallback function is called when msg.data is not empty
     fallback() external payable {}
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not owner");
-        _;
-    }
 }

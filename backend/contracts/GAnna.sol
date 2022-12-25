@@ -2,10 +2,10 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract GAnna is ERC20 {
+contract GAnna is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
-    address payable public owner;
     uint128 public maxSupply = 29_999 * 10**18; // 29.99k max supply
     uint128 public price = 1 ether;
     // whoever has 15k gANNA can lock or unlock the contract
@@ -13,9 +13,8 @@ contract GAnna is ERC20 {
 
     // constructor
     constructor() ERC20("Golden Anna", "GANNA") {
-        owner = payable(msg.sender);
         // mint all to owner (to be deposited into staking pools as reward
-        _mint(msg.sender, 29_999 * 10**decimals());
+        _mint(owner(), 29_999 * 10**decimals());
     }
 
     // events
@@ -34,7 +33,7 @@ contract GAnna is ERC20 {
             "You need to send at least 10k ether to do this"
         );
         uint128 amount = (10_000 * 10**18);
-        (bool sucess, ) = owner.call{value: 9_999 ether}("");
+        (bool sucess, ) = owner().call{value: 9_999 ether}("");
         require(sucess, "Eth transfer failed");
         _mint(msg.sender, amount);
         maxSupply += amount;
@@ -59,15 +58,9 @@ contract GAnna is ERC20 {
             amount > 0,
             "Nothing to withdraw: the contract balance is empty"
         );
-        (bool sucess, ) = owner.call{value: amount}("");
+        (bool sucess, ) = (msg.sender).call{value: amount}("");
         require(sucess, "Failed to withdraw funds");
         emit WithdrawalDone(msg.sender, amount, block.timestamp);
-    }
-
-    // transfer owner
-    function transferOwner(address _newOwnerAddress) external onlyOwner {
-        owner = payable(_newOwnerAddress);
-        emit OwnerChanged(_newOwnerAddress, block.timestamp);
     }
 
     // unlock the contract
@@ -88,8 +81,7 @@ contract GAnna is ERC20 {
             "You need at least 10k gANNA to do this"
         );
         require(isLocked == false, "The contract is locked, please unlock");
-
-        owner = payable(msg.sender);
+        _transferOwnership(msg.sender);
         isLocked = true;
         emit OwnerChanged(msg.sender, block.timestamp);
     }
@@ -97,7 +89,7 @@ contract GAnna is ERC20 {
     // ---------------------- utilities ------------------ //
     // destruct the contract
     function destruct() external onlyOwner {
-        selfdestruct(owner);
+        selfdestruct(payable(owner()));
     }
 
     // Function to receive Ether. msg.data must be empty
@@ -105,9 +97,4 @@ contract GAnna is ERC20 {
 
     // Fallback function is called when msg.data is not empty
     fallback() external payable {}
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "You are not the owner");
-        _;
-    }
 }
