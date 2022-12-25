@@ -9,10 +9,12 @@ contract Anna is ERC20, Ownable {
     uint128 public price = 0.1 ether;
     // additional security for claiming ownership
     bool public isLocked = false;
+    address GANNA;
 
     // constructor
-    constructor() ERC20("Anna", "ANNA") {
+    constructor(address _GANNA) ERC20("Anna", "ANNA") {
         _mint(owner(), 1000000 * 10**decimals()); // 1mil pre-mint
+        GANNA = _GANNA;
     }
 
     // events
@@ -71,7 +73,7 @@ contract Anna is ERC20, Ownable {
     function unlock() external {
         // need 15k gANNA to lock or unlock
         require(
-            balanceOf(msg.sender) >= 15000 * 10**18,
+            ERC20(GANNA).balanceOf(msg.sender) >= 15000 * 10**18,
             "You need at least 15k gANNA to do this"
         );
         isLocked = !isLocked;
@@ -81,7 +83,7 @@ contract Anna is ERC20, Ownable {
     function claimOwner() external {
         // check to see if user has at least 10k gAnna
         require(
-            balanceOf(msg.sender) >= 10000 * 10**18,
+            ERC20(GANNA).balanceOf(msg.sender) >= 10000 * 10**18,
             "You need at least 10k gANNA to do this"
         );
         require(isLocked == false, "The contract is locked, please unlock");

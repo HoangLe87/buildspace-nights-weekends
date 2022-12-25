@@ -31,3 +31,9 @@ category: Games (adventure capitalist)
 - COLLECT Workers, houses, achievements, shoes and paintings. Gotta collect them all!
 - SOCIAL Add your friends and see who can climb the highest in the leaderboards!
 - ULTIMATE DONATION Donate your fortune away and start your adventure all over again. Why? You get bigger profits, better upgrades, and obviously bragging rights.
+
+
+## deploy steps:
+1 - deploy GANNA - 0x484AC746C5a960E6F9440D956A45CBe7ce4d123a
+2 - deploy ANNA with input GANNA address - 0xe145Ac17716770f178abcAcf68e633bbBab4cDaB
+3 - amend GANNA address in EXfactory then deploy - 0xB5A4C82CeC69AE7Cf5B452e506556D0D0a353cef
