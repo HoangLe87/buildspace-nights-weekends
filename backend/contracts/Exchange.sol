@@ -2,299 +2,293 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-error TransferFailed();
+/**
+ * @dev DEX logic to exchange ERC20 tokens
+ */
 
-contract Exchange is ERC20, ReentrancyGuard {
-    // update with ANNA's token address at deployment with constructor
-    address public annaAddress;
-    address payable public owner;
+contract Exchange is ERC20 {
+    // ---------------------- definitions ------------------ //
+    ERC20 private immutable token1;
+    ERC20 private immutable token2;
+    address public factoryAddress;
+    address public owner;
+    // 1% trading and withdrawal fee
+    uint256 fee = 990;
 
     // events
+    event FeeChanged(address indexed to, uint256 fee, uint256 time);
     event AddedLiquidity(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Added,
+        uint256 token2Added,
+        uint256 lpTokenMinted,
         uint256 time
     );
     event RemovedLiquidity(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 token1Removed,
+        uint256 token2Removed,
+        uint256 lpTokenBurned,
         uint256 time
     );
-    event BougthAnnaForEth(
+    event Traded(
         address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
-        uint256 time
-    );
-    event SoldAnnaForEth(
-        address indexed user,
-        uint256 ethAmount,
-        uint256 annaAmount,
+        uint256 tokenBought,
+        uint256 tokenSold,
         uint256 time
     );
 
-    // Exchange LP token is ERC20 token
-    constructor(address _annaAddress) ERC20("ANNA LP Token", "xANNA") {
+    // contructor
+    constructor(
+        address _token1Address,
+        address _token2Address,
+        address _owner,
+        address _factoryAddress
+    ) ERC20("LP ANNA", "lpANNA") {
         require(
-            _annaAddress != address(0),
-            "ANNA token address passed must be valid"
+            _token1Address != address(0) && _token2Address != address(0),
+            "Invalid addresses"
         );
-        annaAddress = _annaAddress;
-        owner = payable(msg.sender);
+        token1 = ERC20(_token1Address);
+        token2 = ERC20(_token2Address);
+        owner = _owner;
+        factoryAddress = _factoryAddress;
     }
 
+    // ---------------------- functions ------------------ //
+
     /**
-     * @dev Returns the amount of ANNA ERC20 token and eth native amount held by this contract
+     * @dev recalculates the amount of tokens held by this contract
      */
     function getReserves()
         public
         view
-        returns (uint256 annaReserve, uint256 ethBalance)
+        returns (
+            uint256,
+            uint256,
+            uint256
+        )
     {
-        // Retrieve reserves
-        annaReserve = IERC20(annaAddress).balanceOf(address(this));
-        ethBalance = address(this).balance;
+        // returns token1Reserves, token2Reserves, totalLpTokensIssued
+        return (
+            token1.balanceOf(address(this)),
+            token2.balanceOf(address(this)),
+            totalSupply()
+        );
     }
 
     /**
-     * @dev Adds liquidity
-     * amount of ANNA and Eth to be added
-     * to add liquidity call addLiquidity function with below params:
-     * _annaAmount of ANNA tokens and msg.value is the amount of Eth
+     * @dev add liquidity to the pool
+     * check if transaction amount is bigger than zero
+     * check if user has enough tokens in the wallet
      */
-    function addLiquidity(uint256 _annaAmount)
-        public
-        payable
-        nonReentrant
-        returns (uint256 liquidity)
+    function addLiquidity(uint256 _token1Amount)
+        external
+        returns (uint256 lpTokensIssued)
     {
-        require(
-            _annaAmount > 0,
-            "Please send ANNA token amount larger than zero"
-        );
-        // Retrieve reserves
-        (uint256 annaReserve, uint256 ethBalance) = getReserves();
-        // If the reserve is empty, intake any user supplied value as the initial ratio
-        // of ANNA token sent and msg.value of Eth
-        IERC20 anna = IERC20(annaAddress);
-        if (annaReserve == 0) {
-            // Transfer the `ANNA` from the user's account to the contract
-            bool success = anna.transferFrom(
-                msg.sender,
-                address(this),
-                _annaAmount
-            );
-            // if transfer is not successful revert with error
-            if (!success) {
-                revert TransferFailed();
-            }
-            // Take the current ethBalance and mint ethBalance amount of LP tokens to the user.
-            liquidity = ethBalance;
-            uint256 annaToBeAdded = _annaAmount;
-            emit AddedLiquidity(
-                msg.sender,
-                msg.value,
-                annaToBeAdded,
-                block.timestamp
-            );
+        // get reserves
+        (
+            uint256 token1Reserves,
+            uint256 token2Reserves,
+            uint256 totalLpTokensIssued
+        ) = getReserves();
+        uint256 _token2Amount;
+        // no liquidity yet
+        if (totalLpTokensIssued == 0) {
+            lpTokensIssued = _token1Amount;
+            _token2Amount = _token1Amount; // init some lp tokens for the initial amount provided
         } else {
-            // If the reserve is not empty, iration must be calculated
             require(
-                ethBalance > msg.value,
-                "Current contract ETH balance is too low"
+                token1Reserves > 0 && token2Reserves > 0,
+                "Insufficient reserves"
             );
-            uint256 ethReserve = ethBalance - msg.value;
-            require(ethReserve > 0, "Eth reserve is negative or zero");
-            // annaToBeAdded/ annaReserve in the contract) = (Eth Sent by the user/ ethReserve in the contract);
-            // annaToBeAdded = Eth Sent by the user * annaReserve / ethReserve);
-            uint256 annaToBeAdded = (msg.value * annaReserve) / (ethReserve);
-            require(
-                _annaAmount >= annaToBeAdded,
-                "Amount of tokens sent is less than the minimum ANNA tokens required to meet the LP ratio"
-            );
-            bool sucess = anna.transferFrom(
-                msg.sender,
-                address(this),
-                annaToBeAdded
-            );
-            require(sucess, "deposit of ANNA tokens failed");
-            // LP tokens to be sent to the user (liquidity)/ totalSupply of LP tokens in contract) = (Eth sent by the user)/ethReserve
-            // -> liquidity =  totalSupply of LP tokens in contract * (Eth sent by the user))/ethReserve
-            liquidity = (totalSupply() * msg.value) / ethReserve;
-            emit AddedLiquidity(
-                msg.sender,
-                msg.value,
-                annaToBeAdded,
-                block.timestamp
-            );
+            // calculate ratio
+
+            _token2Amount = (_token1Amount * token2Reserves) / token1Reserves;
+            // reward the liquidity provider with the lp token
+            lpTokensIssued = ((totalLpTokensIssued * _token1Amount) /
+                token1Reserves);
         }
-        // send the user the LP tokens
-        _mint(msg.sender, liquidity);
+        // get the tokens from the user
+        // the frontend must call the token contract's approve function first
+        require(
+            _token1Amount > 0 && _token2Amount > 0,
+            "Must be positive amount"
+        );
+        require(
+            (ERC20(token2).balanceOf(msg.sender) >= _token2Amount) &&
+                (ERC20(token1).balanceOf(msg.sender) >= _token1Amount),
+            "Insufficient tokens"
+        );
+        token1.transferFrom(msg.sender, address(this), _token1Amount);
+        token2.transferFrom(msg.sender, address(this), _token2Amount);
+        require(lpTokensIssued > 0, "Must be positive amount");
+        _mint(msg.sender, lpTokensIssued);
+        emit AddedLiquidity(
+            msg.sender,
+            _token1Amount,
+            _token2Amount,
+            lpTokensIssued,
+            block.timestamp
+        );
     }
 
     /**
-     * @dev Remove liquidity and burn LP tokens
-     * amount of Eth and ANNA to be withdrawn
+     * @dev remove liquidity from the pool
      */
-    function removeLiquidity(uint256 _lpAmount)
-        public
-        payable
-        nonReentrant
-        returns (uint256 ethWithdrawAmount, uint256 annaWithdrawAmount)
+    function removeLiquidity(uint256 _lpTokens)
+        external
+        activePool
+        validLpSharesCheck(_lpTokens)
+        returns (uint256, uint256)
     {
-        require(_lpAmount > 0, "_amount should be greater than zero");
-        // check to see if user has the lp tokens
-        uint256 lpAmountHeldByUser = balanceOf(msg.sender);
-        require(
-            _lpAmount <= lpAmountHeldByUser,
-            "cannot withdraw more lp token than what you own"
+        // calc amounts to be withdrawn
+        (uint256 token1Amount, uint256 token2Amount) = getWithdrawEstimate(
+            _lpTokens
         );
-        //get reserves of this contract
-        (uint256 annaReserve, uint256 ethBalance) = getReserves();
-        uint256 _totalSupply = totalSupply();
-        require(_totalSupply > 0, "total supplly of LP tokens is zero");
-        // calc withdrawal amounts based on existing ratios
-        ethWithdrawAmount = (ethBalance * _lpAmount) / _totalSupply;
-        annaWithdrawAmount = (annaReserve * _lpAmount) / _totalSupply;
-        // Burn the LP tokens from the user's wallet
-        _burn(msg.sender, _lpAmount);
-        // Transfer ethWithdrawAmount of Eth from the contract to the user
-        (bool success, ) = (msg.sender).call{value: ethWithdrawAmount}("");
-        require(success, "Eth withdrawal failed");
-        // Transfer AnnaWithdrawAmount of ANNA from the contract to the user
-        bool sent = IERC20(annaAddress).transfer(
-            msg.sender,
-            annaWithdrawAmount
-        );
-        if (!sent) {
-            revert TransferFailed();
-        }
+        // burn lp tokens
+        _burn(msg.sender, _lpTokens);
+        // withdraw tokens
+        token1.transfer(msg.sender, token1Amount);
+        token2.transfer(msg.sender, token2Amount);
+        // emit event
         emit RemovedLiquidity(
             msg.sender,
-            ethWithdrawAmount,
-            annaWithdrawAmount,
+            token1Amount,
+            token2Amount,
+            _lpTokens,
             block.timestamp
         );
+        return (token1Amount, token2Amount);
     }
 
-    /**
-     * @dev Pricing function of token2 if we provide tokenInAmount of token1 in
-     * @notice fees taken intout account. 1 % fees removed from tokenInAmount
-     */
-    function getAmountOfTokens(
-        uint256 tokenInAmount,
-        uint256 tokenInReserve,
-        uint256 tokenOutReserve
-    ) public pure returns (uint256 tokenOutAmount) {
-        require(
-            tokenInReserve > 0 && tokenOutReserve > 0,
-            "insuffient reserves"
-        );
-        require(tokenInAmount > 0, "tokenInAMount mut be larger than zero");
-        uint256 tokenInAmounWithFee = tokenInAmount * 99;
-        // `XY = K` curve -> (x + Δx) * (y - Δy) = x * y
-        // So the final formula is Δy = (y * Δx) / (x + Δx)
-        // Δy is `tokens to be received`
-        uint256 numerator = tokenInAmounWithFee * tokenOutReserve;
-        uint256 denominator = (tokenInReserve * 100) + tokenInAmounWithFee;
-        return numerator / denominator; // tokenOutAmount amount
-    }
-
-    /**
-     * @dev Swaps Eth for ANNA
-     * need to have msg.value and enter the min amount of ANNA tokens user wishes to buy
-     */
-    function ethToAnna(uint256 _minAnnaAmount) public payable nonReentrant {
-        (uint256 annaReserve, uint256 ethBalance) = getReserves();
-        // call the getAmountOfTokens to get the amount of ANNA tokens
-        // that would be returned to the user after the swap
-        uint256 annaBought = getAmountOfTokens(
-            msg.value,
-            ethBalance - msg.value,
-            annaReserve
-        );
-
-        require(
-            annaBought >= _minAnnaAmount,
-            "Please increase eth or lower the purchase amount"
-        );
-        // Transfer the ANNA tokens to the user
-        bool success = IERC20(annaAddress).transfer(msg.sender, annaBought);
-        if (!success) {
-            revert TransferFailed();
-        }
-        emit BougthAnnaForEth(
-            msg.sender,
-            msg.value,
-            annaBought,
-            block.timestamp
-        );
-    }
-
-    /**
-     * @dev Swaps ANNA Tokens for Eth
-     * user enters min eth that he wants back and how many tokens he wishes to sell
-     */
-    function annaToEth(uint256 _annaSold, uint256 _minEth)
+    // Returns the amount of tokens the user will gets back with withdrawing his lp tokens
+    function getWithdrawEstimate(uint256 _lpTokens)
         public
-        payable
-        nonReentrant
+        view
+        validLpSharesCheck(_lpTokens)
+        returns (uint256, uint256)
     {
-        (uint256 annaReserve, uint256 ethBalance) = getReserves();
-        // call the getAmountOfTokens to get the amount of Eth
-        // that would be returned to the user after the swap
-        uint256 ethToBeRecieved = getAmountOfTokens(
-            _annaSold,
-            annaReserve,
-            ethBalance
-        );
-        require(ethToBeRecieved >= _minEth, "Eth Amount low");
-        // Transfer ANNA tokens from the user's address to the contract
-        bool success = IERC20(annaAddress).transferFrom(
-            msg.sender,
-            address(this),
-            _annaSold
-        );
-        if (!success) {
-            revert TransferFailed();
-        }
-        // send the `ethBought` to the user from the contract
-        (bool sent, ) = (msg.sender).call{value: ethToBeRecieved}("");
-        require(sent, "Withdrawal of Eth failed");
-        emit SoldAnnaForEth(
-            msg.sender,
-            ethToBeRecieved,
-            _annaSold,
-            block.timestamp
-        );
+        (
+            uint256 token1Reserves,
+            uint256 token2Reserves,
+            uint256 totalLpTokensIssued
+        ) = getReserves();
+        require(_lpTokens <= totalLpTokensIssued, "Invalid amount");
+        // calculation amounts to be withdrawn with tax applied
+        uint256 token1Amount = ((_lpTokens * fee * token1Reserves) /
+            (1000 * totalLpTokensIssued));
+        uint256 token2Amount = ((_lpTokens * fee * token2Reserves) /
+            (1000 * totalLpTokensIssued));
+        return (token1Amount, token2Amount);
     }
 
+    /**
+     * @dev estimation function: sell _inputAmount and user will get outputAmount
+     */
+    function getAmount(
+        uint256 _inputAmount,
+        uint256 _inputReserves,
+        uint256 _outputReserves
+    ) private view activePool returns (uint256) {
+        require(_inputAmount > 0, "Not positive amount");
+        uint256 numerator = _inputAmount * fee * _outputReserves;
+        uint256 denominator = (1000 * _inputReserves + (_inputAmount * fee));
+        return numerator / denominator;
+    }
+
+    //get estimated token2Amount for _token1Amount sold
+    function sellToken1EstimateAmount(uint256 _token1Amount)
+        public
+        view
+        activePool
+        returns (uint256)
+    {
+        (
+            uint256 token1Reserves,
+            uint256 token2Reserves,
+            uint256 totalLpTokensIssued
+        ) = getReserves();
+        uint256 token2Amount = getAmount(
+            _token1Amount,
+            token1Reserves,
+            token2Reserves
+        );
+        return token2Amount; // how much user will get for _token1Amount sold
+    }
+
+    //get estimated amount of token1 to be paid for a certain amount of token2 purchased
+    function sellToken2EstimateAmount(uint256 _token2Amount)
+        public
+        view
+        activePool
+        returns (uint256)
+    {
+        (
+            uint256 token1Reserves,
+            uint256 token2Reserves,
+            uint256 totalLpTokensIssued
+        ) = getReserves();
+        uint256 token1Amount = getAmount(
+            _token2Amount,
+            token2Reserves,
+            token1Reserves
+        );
+        return token1Amount; // how much user will get for _token2Amount sold
+    }
+
+    // swap function
+    function sellToken1BuyToken2(uint256 _token1Amount) external {
+        uint256 token2Amount = sellToken1EstimateAmount(_token1Amount);
+        token1.transferFrom(msg.sender, address(this), _token1Amount);
+        token2.transfer(msg.sender, token2Amount);
+        emit Traded(msg.sender, token2Amount, _token1Amount, block.timestamp);
+    }
+
+    // swap function
+    function sellToken2BuyToken2(uint256 _token2Amount) external {
+        uint256 token1Amount = sellToken2EstimateAmount(_token2Amount);
+        token2.transferFrom(msg.sender, address(this), _token2Amount);
+        token1.transfer(msg.sender, token1Amount);
+        emit Traded(msg.sender, token1Amount, _token2Amount, block.timestamp);
+    }
+
+    // change fee
+    function setFee(uint256 _fee) public onlyViaFactory {
+        require(
+            _fee >= 900 && _fee <= 1000,
+            "Only between 900 (10% fee) and 1000 (0% fee)"
+        );
+        fee = _fee;
+        emit FeeChanged(msg.sender, _fee, block.timestamp);
+    }
+
+    // ---------------------- utilities ------------------ //
     // destruct the contract
-    function destruct() external onlyOwner {
-        selfdestruct(owner);
+    function destruct() public onlyViaFactory {
+        token1.transfer(owner, token1.balanceOf(address(this)));
+        token2.transfer(owner, token2.balanceOf(address(this)));
+        selfdestruct(payable(owner));
     }
 
-    // transfer owner
-    function transferOwner(address _newOwnerAddress) external onlyOwner {
-        owner = payable(_newOwnerAddress);
+    // check if the pool is active i.e. any lp tokens issued yet?
+    modifier activePool() {
+        require(totalSupply() > 0, "Zero Liquidity");
+        _;
     }
 
-    // Function to receive Ether. msg.data must be empty
-    receive() external payable {}
+    // check thay transaction amount is > 0  and that user has enough LP tokens
+    modifier validLpSharesCheck(uint256 _amount) {
+        require(
+            _amount <= balanceOf(msg.sender) && _amount > 0,
+            "Invalid share amount"
+        );
+        _;
+    }
 
-    // Fallback function is called when msg.data is not empty
-    fallback() external payable {}
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not owner");
-        // Underscore is a special character only used inside
-        // a function modifier and it tells Solidity to
-        // execute the rest of the code.
+    modifier onlyViaFactory() {
+        require(msg.sender == factoryAddress, "Not factory");
         _;
     }
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract GANNA is ERC20 {
+contract GAnna is ERC20 {
     // ---------------------- definitions ------------------ //
     address payable public owner;
     uint128 public maxSupply = 29_999 * 10**18; // 29.99k max supply
@@ -12,7 +12,7 @@ contract GANNA is ERC20 {
     bool public isLocked = false;
 
     // constructor
-    constructor() ERC20("Golden ANNA", "gANNA") {
+    constructor() ERC20("Golden Anna", "GANNA") {
         owner = payable(msg.sender);
         // mint all to owner (to be deposited into staking pools as reward
         _mint(msg.sender, 29_999 * 10**decimals());

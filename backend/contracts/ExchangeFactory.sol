@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./ExchangeV2.sol";
+import "./Exchange.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Factory is Ownable {
+contract ExchangeFactory is Ownable {
     // exchanges pairs to exchange address
     mapping(address => mapping(address => address))
         public tokenAddressToExchanges;
@@ -12,26 +12,11 @@ contract Factory is Ownable {
 
     /**
      * create and deploy a new exchange
-     * @dev
-     * tokenAddress address: Token address for which the factory will create an exchange
-     * @return exchangeAddress address: ERC20 token address
-     * @notice a similar exchange must not exist
      */
     function createExchange(address _token1Address, address _token2Address)
         private
         returns (address exchangeAddress)
     {
-        require(
-            _token1Address != address(0) && _token2Address != address(0),
-            "Token address not valid"
-        );
-        require(
-            tokenAddressToExchanges[_token1Address][_token2Address] ==
-                address(0) &&
-                tokenAddressToExchanges[_token2Address][_token1Address] ==
-                address(0),
-            "Exchange already exists"
-        );
         Exchange exchange = new Exchange(
             _token1Address,
             _token2Address,
@@ -45,13 +30,28 @@ contract Factory is Ownable {
         tokenAddressToExchanges[_token2Address][
             _token1Address
         ] = exchangeAddress;
-        return exchangeAddress;
     }
 
-    function createExchangeUsingTokenSymbol(
+    function createExchangeBySymbol(
         string memory _token1,
-        string memory _token2
-    ) external checkIfExists(_token1, _token2) onlyOwner {
+        address _token1Address,
+        string memory _token2,
+        address _token2Address
+    ) external {
+        // checks
+        require(
+            _token1Address != address(0) && _token2Address != address(0),
+            "Invalid address"
+        );
+        require(
+            tokenAddressToExchanges[_token1Address][_token2Address] ==
+                address(0) ||
+                tokenAddressToExchanges[_token2Address][_token1Address] ==
+                address(0),
+            "The pair exists"
+        );
+        tokenToAdress[_token1] = _token1Address;
+        tokenToAdress[_token2] = _token2Address;
         createExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
     }
 
@@ -63,14 +63,14 @@ contract Factory is Ownable {
     {
         require(
             _token1Address != address(0) && _token2Address != address(0),
-            "Token address not valid"
+            "Invalid address"
         );
         require(
             tokenAddressToExchanges[_token1Address][_token2Address] !=
                 address(0) &&
                 tokenAddressToExchanges[_token2Address][_token1Address] !=
                 address(0),
-            "Exchange does not exist"
+            "Invalid exchange"
         );
         Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
             .destruct();
@@ -78,7 +78,7 @@ contract Factory is Ownable {
         delete tokenAddressToExchanges[_token2Address][_token1Address];
     }
 
-    function removeExchangeUsingTokenSymbol(
+    function removeExchangeBySymbol(
         string memory _token1,
         string memory _token2
     ) external checkIfExists(_token1, _token2) onlyOwner {
@@ -88,33 +88,19 @@ contract Factory is Ownable {
     /**
      * find exchange
      */
-    function getExchange(address _token1Address, address _token2Address)
-        private
+    function getExchangeBySymbol(string memory _token1, string memory _token2)
+        external
         view
+        checkIfExists(_token1, _token2)
         returns (address exchange1Address, address exchange2Address)
     {
-        exchange1Address = tokenAddressToExchanges[_token1Address][
-            _token2Address
+        exchange1Address = tokenAddressToExchanges[tokenToAdress[_token1]][
+            tokenToAdress[_token2]
         ];
-        exchange2Address = tokenAddressToExchanges[_token2Address][
-            _token1Address
+        exchange2Address = tokenAddressToExchanges[tokenToAdress[_token2]][
+            tokenToAdress[_token1]
         ];
-        require(
-            exchange1Address == exchange1Address,
-            "The 2 mapping addresses do not match"
-        );
-        require(
-            exchange1Address != address(0) && exchange2Address != address(0),
-            "Exchange does not exist"
-        );
         return (exchange1Address, exchange2Address);
-    }
-
-    function getExchangeUsingTokenSymbol(
-        string memory _token1,
-        string memory _token2
-    ) external view checkIfExists(_token1, _token2) {
-        getExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
     }
 
     // destruct the contract
@@ -122,26 +108,17 @@ contract Factory is Ownable {
         selfdestruct(payable(owner()));
     }
 
-    // set sellingTax
-    function setSellingTax(
-        address _token1Address,
-        address _token2Address,
-        uint256 _sellingTax
-    ) external onlyOwner {
-        Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
-            .setSellingTax(_sellingTax);
-        (_sellingTax);
-    }
-
-    // set tradingFee
-    function settradingFee(
-        address _token1Address,
-        address _token2Address,
+    // set fee
+    function setFee(
+        string memory _token1,
+        string memory _token2,
         uint256 _tradingFee
     ) external onlyOwner {
-        Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
-            .setTradingFee(_tradingFee);
-        (_tradingFee);
+        Exchange(
+            tokenAddressToExchanges[tokenToAdress[_token1]][
+                tokenToAdress[_token2]
+            ]
+        ).setFee(_tradingFee);
     }
 
     /**
@@ -151,19 +128,12 @@ contract Factory is Ownable {
         external
         onlyOwner
     {
-        require(
-            tokenToAdress[_token] == address(0),
-            "Mapping token->address for this token already exist"
-        );
+        require(tokenToAdress[_token] == address(0), "Mapping exists");
         tokenToAdress[_token] = _address;
     }
 
     // remove token mappings
     function removeTokenMapping(string memory _token) external onlyOwner {
-        require(
-            tokenToAdress[_token] != address(0),
-            "Mapping token->address for this token does not exist"
-        );
         tokenToAdress[_token] = address(0);
     }
 
@@ -179,8 +149,19 @@ contract Factory is Ownable {
         require(
             tokenToAdress[_token1] != address(0) &&
                 tokenToAdress[_token2] != address(0),
-            "Mapping for this token does not exist"
+            "Invalid mapping"
         );
         _;
+    }
+
+    // claim ownership if the user's balance is 15k gAnna or more
+    function claimOwner() external {
+        require(
+            ERC20(0xd9145CCE52D386f254917e481eB44e9943F39138).balanceOf(
+                msg.sender
+            ) >= 15000 * 10**18,
+            "Need at least 15k gANNA"
+        );
+        _transferOwnership(msg.sender);
     }
 }
