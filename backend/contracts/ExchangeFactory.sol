@@ -7,8 +7,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract ExchangeFactory is Ownable {
     // exchanges pairs to exchange address
     mapping(address => mapping(address => address))
-        public tokenAddressToExchanges;
-    mapping(string => address) public tokenToAdress;
+        public tokenAddressToExchanges; // BNB -> ANNA -> BNB-ANNA
+    uint256 totalExchanges;
+    mapping(string => address) public tokenToAdress; // ANNA -> 0x...
 
     /**
      * create and deploy a new exchange
@@ -30,6 +31,7 @@ contract ExchangeFactory is Ownable {
         tokenAddressToExchanges[_token2Address][
             _token1Address
         ] = exchangeAddress;
+        totalExchanges++;
     }
 
     function createExchangeBySymbol(
@@ -37,7 +39,7 @@ contract ExchangeFactory is Ownable {
         address _token1Address,
         string memory _token2,
         address _token2Address
-    ) external {
+    ) external returns (address exchangeAddress) {
         // checks
         require(
             _token1Address != address(0) && _token2Address != address(0),
@@ -52,7 +54,7 @@ contract ExchangeFactory is Ownable {
         );
         tokenToAdress[_token1] = _token1Address;
         tokenToAdress[_token2] = _token2Address;
-        createExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
+        return createExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
     }
 
     /**
@@ -60,6 +62,7 @@ contract ExchangeFactory is Ownable {
      */
     function removeExchange(address _token1Address, address _token2Address)
         private
+        returns (bool)
     {
         require(
             _token1Address != address(0) && _token2Address != address(0),
@@ -74,15 +77,17 @@ contract ExchangeFactory is Ownable {
         );
         Exchange(tokenAddressToExchanges[_token1Address][_token2Address])
             .destruct();
+        totalExchanges--;
         delete tokenAddressToExchanges[_token1Address][_token2Address];
         delete tokenAddressToExchanges[_token2Address][_token1Address];
+        return true;
     }
 
     function removeExchangeBySymbol(
         string memory _token1,
         string memory _token2
-    ) external checkIfExists(_token1, _token2) onlyOwner {
-        removeExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
+    ) external checkIfExists(_token1, _token2) onlyOwner returns (bool) {
+        return removeExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
     }
 
     /**
@@ -103,6 +108,13 @@ contract ExchangeFactory is Ownable {
         return (exchange1Address, exchange2Address);
     }
 
+    /**
+     * find number of exchanges greated
+     */
+    function getTotalExchanges() external view returns (uint256) {
+        return totalExchanges;
+    }
+
     // destruct the contract
     function destruct() external onlyOwner {
         selfdestruct(payable(owner()));
@@ -113,12 +125,13 @@ contract ExchangeFactory is Ownable {
         string memory _token1,
         string memory _token2,
         uint256 _tradingFee
-    ) external onlyOwner {
+    ) external onlyOwner returns (uint256) {
         Exchange(
             tokenAddressToExchanges[tokenToAdress[_token1]][
                 tokenToAdress[_token2]
             ]
         ).setFee(_tradingFee);
+        return _tradingFee;
     }
 
     /**
@@ -157,7 +170,7 @@ contract ExchangeFactory is Ownable {
     // claim ownership if the user's balance is 15k gAnna or more
     function claimOwner() external {
         require(
-            ERC20(0xd9145CCE52D386f254917e481eB44e9943F39138).balanceOf(
+            ERC20(0xe145Ac17716770f178abcAcf68e633bbBab4cDaB).balanceOf(
                 msg.sender
             ) >= 15000 * 10**18,
             "Need at least 15k gANNA"

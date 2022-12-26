@@ -12,9 +12,6 @@ export default function Layout({ children }) {
     const { ethereum } = window;
     if (!ethereum) {
       console.log("Please install metamask");
-      toast.error("Please install metamast", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
       return;
     } else {
       const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -24,16 +21,16 @@ export default function Layout({ children }) {
         console.log(`account is ${account}`);
       } else {
         console.log("No authorized account found");
-        toast.error("No authorized account found", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
       }
     }
   };
+
   // check if metamask is connected upon load
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
+
+  const tokens = ["ANNA", "WETH"];
   return (
     <>
       <Header

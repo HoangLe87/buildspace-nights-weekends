@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Exchange = () => {
-  const links = ["Exchange", "Pools"];
+  const links = ["Exchange", "Pools", "Create"];
 
   const swap = () => {
     try {

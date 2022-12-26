@@ -36,5 +36,6 @@ category: Games (adventure capitalist)
 ## deploy steps:
 1 - deploy GANNA - 0x484AC746C5a960E6F9440D956A45CBe7ce4d123a
 2 - deploy ANNA with input GANNA address - 0xe145Ac17716770f178abcAcf68e633bbBab4cDaB
-3 - amend GANNA address in EXfactory then deploy - 
+3 - amend GANNA address in EXfactory then deploy - 0xA3f3a8fe01814BD7e1E82f1A388Fa4cd387ebaD8
 WETH - 0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6
+

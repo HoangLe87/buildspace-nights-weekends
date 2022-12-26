@@ -2,20 +2,31 @@ import styles from "../styles/Home.module.scss";
 import NavBar from "./components/NavBar";
 import { ethers } from "ethers";
 import abi from "../public/static/exchangeFactory.json";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddLiquidity from "./components/AddLiquidity";
 
 const Pools = () => {
-  const EXCHANGE_FACTORY = "0xB5A4C82CeC69AE7Cf5B452e506556D0D0a353cef";
-  const links = ["Exchange", "Pools"];
-  const [input, setInput] = useState({
-    token1: "",
-    token1Address: "",
-    token2: "",
-    token2Address: "",
-  });
-  const addPool = async (e) => {
+  const EXCHANGE_FACTORY = "0xA3f3a8fe01814BD7e1E82f1A388Fa4cd387ebaD8";
+  const links = ["Exchange", "Pools", "Create"];
+  const tokens = ["ANNA", "WETH", "GANNA"];
+
+  const filteredTokens = () => {
+    let k = [];
+    tokens.forEach((element) => {
+      let filteredList = tokens.filter((i) => i != element);
+      for (let i = 0; i < filteredList.length; i++) {
+        k.push([element, filteredList[i]]);
+      }
+    });
+    return k;
+  };
+
+  const [totalExchanges, setTotalExchanges] = useState(0);
+  const [exchanges, setExchanges] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const getExchanges = async () => {
     try {
       const { ethereum } = window;
       if (!ethereum) {
@@ -29,94 +40,61 @@ const Pools = () => {
         abi.abi,
         signer
       );
-
-      const result = await connectedContract.createExchangeBySymbol(
-        input.token1,
-        input.token1Address,
-        input.token2,
-        input.token2Address
+      const numberOfExchanges = Number(
+        await connectedContract.getTotalExchanges()
       );
 
-      const res = toast(result, {
-        pending: "Transaction pending...",
-        success: `Pool added at address: ${result}`,
-        error: "Upps, unable to add the pool",
-      });
+      const fetch = async () => {
+        let u = [];
+        let a = filteredTokens();
+        for (const x of a) {
+          const data = await connectedContract.getExchangeBySymbol(x[0], x[1]);
+          if (data[0] != "0x0000000000000000000000000000000000000000") {
+            let dataObj = {
+              token1: x[0],
+              token2: x[1],
+              address: data[0],
+            };
+            u.push(dataObj);
+          }
+        }
+        const add = u.map((ad) => ad.address);
+        let uadd = [...new Set(add)];
+        const unique = [...new Set(u)];
+        console.log(unique);
+      };
+      fetch();
+      setExchanges();
+      setTotalExchanges(Number(numberOfExchanges));
     } catch (error) {
       console.log(error);
-      toast.error("Upps, someting went wrong");
+      toast.error("Upps, cannot load liquidity pools");
     }
   };
+
+  useEffect(() => {
+    getExchanges();
+  }, []);
 
   return (
     <main className={styles.tradeMain}>
       <ToastContainer position="top-right" />
       <NavBar links={links} />
-      <div className={styles.tradeBox}>
-        <div className={styles.tradeBoxTop}>
-          <div className={styles.tradeBoxLeft}>
-            <input
-              id="token1Symbol"
-              type="text"
-              placeholder="ANNA"
-              minLength="3"
-              maxLength="6"
-              required
-              value={input.token1}
-              onChange={(e) => setInput({ ...input, token1: e.target.value })}
-            ></input>
-            <div>symbol</div>
-          </div>
-          <div>
-            <input
-              id="token1Address"
-              type="text"
-              placeholder="045x..."
-              minLength="42"
-              maxLength="42"
-              required
-              value={input.token1Address}
-              onChange={(e) =>
-                setInput({ ...input, token1Address: e.target.value })
-              }
-            ></input>
-            <div>address</div>
-          </div>
+      {exchanges && (
+        <div>
+          {exchanges.map((element) => (
+            <div key={exchanges.indexOf(element)}>
+              {element.token1}-{element.token2}{" "}
+              <button onClick={() => setModalShow(true)}>Details</button>
+              <AddLiquidity
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                element={element}
+              />
+            </div>
+          ))}
         </div>
-        <div className={styles.tradeBoxBottom}>
-          <div className={styles.tradeBoxLeft}>
-            <input
-              id="token2Symbol"
-              type="text"
-              placeholder="ANNA"
-              minLength="3"
-              maxLength="6"
-              required
-              value={input.token2}
-              onChange={(e) => setInput({ ...input, token2: e.target.value })}
-            ></input>
-            <div>symbol</div>
-          </div>
-          <div>
-            <input
-              id="token2Address"
-              type="text"
-              placeholder="045x..."
-              minLength="42"
-              maxLength="42"
-              required
-              value={input.token2Address}
-              onChange={(e) =>
-                setInput({ ...input, token2Address: e.target.value })
-              }
-            ></input>
-            <div>address</div>
-          </div>
-        </div>
-        <button onClick={addPool} className={styles.button}>
-          Add pool
-        </button>
-      </div>
+      )}
     </main>
   );
 };

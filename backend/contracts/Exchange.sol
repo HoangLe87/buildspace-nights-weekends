@@ -83,33 +83,10 @@ contract Exchange is ERC20 {
      * check if transaction amount is bigger than zero
      * check if user has enough tokens in the wallet
      */
-    function addLiquidity(uint256 _token1Amount)
-        external
-        returns (uint256 lpTokensIssued)
-    {
-        // get reserves
-        (
-            uint256 token1Reserves,
-            uint256 token2Reserves,
-            uint256 totalLpTokensIssued
-        ) = getReserves();
-        uint256 _token2Amount;
-        // no liquidity yet
-        if (totalLpTokensIssued == 0) {
-            lpTokensIssued = _token1Amount;
-            _token2Amount = _token1Amount; // init some lp tokens for the initial amount provided
-        } else {
-            require(
-                token1Reserves > 0 && token2Reserves > 0,
-                "Insufficient reserves"
-            );
-            // calculate ratio
-
-            _token2Amount = (_token1Amount * token2Reserves) / token1Reserves;
-            // reward the liquidity provider with the lp token
-            lpTokensIssued = ((totalLpTokensIssued * _token1Amount) /
-                token1Reserves);
-        }
+    function addLiquidity(uint256 _token1Amount) external returns (uint256) {
+        (uint256 _token2Amount, uint256 lpTokensIssued) = getEstimateOfToken2(
+            _token1Amount
+        );
         // get the tokens from the user
         // the frontend must call the token contract's approve function first
         require(
@@ -132,6 +109,34 @@ contract Exchange is ERC20 {
             lpTokensIssued,
             block.timestamp
         );
+        return lpTokensIssued;
+    }
+
+    function getEstimateOfToken2(uint256 _token1Amount)
+        public
+        view
+        returns (uint256 _token2Amount, uint256 lpTokensIssued)
+    {
+        (
+            uint256 token1Reserves,
+            uint256 token2Reserves,
+            uint256 totalLpTokensIssued
+        ) = getReserves();
+        if (totalLpTokensIssued == 0) {
+            lpTokensIssued = _token1Amount;
+            _token2Amount = _token1Amount;
+        } else {
+            require(
+                token1Reserves > 0 && token2Reserves > 0,
+                "Insufficient reserves"
+            );
+            // calculate ratio
+            _token2Amount = (_token1Amount * token2Reserves) / token1Reserves;
+            // reward the liquidity provider with the lp token
+            lpTokensIssued = ((totalLpTokensIssued * _token1Amount) /
+                token1Reserves);
+        }
+        return (_token2Amount, lpTokensIssued);
     }
 
     /**
@@ -139,8 +144,6 @@ contract Exchange is ERC20 {
      */
     function removeLiquidity(uint256 _lpTokens)
         external
-        activePool
-        validLpSharesCheck(_lpTokens)
         returns (uint256, uint256)
     {
         // calc amounts to be withdrawn
@@ -167,7 +170,6 @@ contract Exchange is ERC20 {
     function getWithdrawEstimate(uint256 _lpTokens)
         public
         view
-        validLpSharesCheck(_lpTokens)
         returns (uint256, uint256)
     {
         (
@@ -175,7 +177,12 @@ contract Exchange is ERC20 {
             uint256 token2Reserves,
             uint256 totalLpTokensIssued
         ) = getReserves();
-        require(_lpTokens <= totalLpTokensIssued, "Invalid amount");
+        require(
+            _lpTokens <= balanceOf(msg.sender) &&
+                _lpTokens > 0 &&
+                _lpTokens <= totalLpTokensIssued,
+            "Invalid amount"
+        );
         // calculation amounts to be withdrawn with tax applied
         uint256 token1Amount = ((_lpTokens * fee * token1Reserves) /
             (1000 * totalLpTokensIssued));
@@ -191,7 +198,7 @@ contract Exchange is ERC20 {
         uint256 _inputAmount,
         uint256 _inputReserves,
         uint256 _outputReserves
-    ) private view activePool returns (uint256) {
+    ) private view returns (uint256) {
         require(_inputAmount > 0, "Not positive amount");
         uint256 numerator = _inputAmount * fee * _outputReserves;
         uint256 denominator = (1000 * _inputReserves + (_inputAmount * fee));
@@ -202,7 +209,6 @@ contract Exchange is ERC20 {
     function sellToken1EstimateAmount(uint256 _token1Amount)
         public
         view
-        activePool
         returns (uint256)
     {
         (
@@ -210,6 +216,7 @@ contract Exchange is ERC20 {
             uint256 token2Reserves,
             uint256 totalLpTokensIssued
         ) = getReserves();
+        require(totalLpTokensIssued > 0, "Inactive pool");
         uint256 token2Amount = getAmount(
             _token1Amount,
             token1Reserves,
@@ -222,7 +229,6 @@ contract Exchange is ERC20 {
     function sellToken2EstimateAmount(uint256 _token2Amount)
         public
         view
-        activePool
         returns (uint256)
     {
         (
@@ -230,6 +236,7 @@ contract Exchange is ERC20 {
             uint256 token2Reserves,
             uint256 totalLpTokensIssued
         ) = getReserves();
+        require(totalLpTokensIssued > 0, "Inactive pool");
         uint256 token1Amount = getAmount(
             _token2Amount,
             token2Reserves,
@@ -255,40 +262,22 @@ contract Exchange is ERC20 {
     }
 
     // change fee
-    function setFee(uint256 _fee) public onlyViaFactory {
+    function setFee(uint256 _fee) public {
         require(
             _fee >= 900 && _fee <= 1000,
             "Only between 900 (10% fee) and 1000 (0% fee)"
         );
+        require(msg.sender == factoryAddress, "Not factory");
         fee = _fee;
         emit FeeChanged(msg.sender, _fee, block.timestamp);
     }
 
     // ---------------------- utilities ------------------ //
     // destruct the contract
-    function destruct() public onlyViaFactory {
+    function destruct() public {
+        require(msg.sender == factoryAddress, "Not factory");
         token1.transfer(owner, token1.balanceOf(address(this)));
         token2.transfer(owner, token2.balanceOf(address(this)));
         selfdestruct(payable(owner));
-    }
-
-    // check if the pool is active i.e. any lp tokens issued yet?
-    modifier activePool() {
-        require(totalSupply() > 0, "Zero Liquidity");
-        _;
-    }
-
-    // check thay transaction amount is > 0  and that user has enough LP tokens
-    modifier validLpSharesCheck(uint256 _amount) {
-        require(
-            _amount <= balanceOf(msg.sender) && _amount > 0,
-            "Invalid share amount"
-        );
-        _;
-    }
-
-    modifier onlyViaFactory() {
-        require(msg.sender == factoryAddress, "Not factory");
-        _;
     }
 }
