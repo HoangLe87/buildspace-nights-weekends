@@ -1,4 +1,4 @@
-import styles from "../../styles/Home.module.css";
+import styles from "../../styles/Home.module.scss";
 import { FaBeer, SiGitbook } from "react-icons/si";
 
 const Footer = () => {

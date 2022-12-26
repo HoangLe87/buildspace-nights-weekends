@@ -1,4 +1,4 @@
-import styles from "../styles/globals.css";
+import styles from "../styles/globals.scss";
 import Layout from "./components/Layout";
 
 export default function App({ Component, pageProps }) {
