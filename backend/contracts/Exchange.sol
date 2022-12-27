@@ -267,7 +267,7 @@ contract Exchange is ERC20 {
             _fee >= 900 && _fee <= 1000,
             "Only between 900 (10% fee) and 1000 (0% fee)"
         );
-        require(msg.sender == factoryAddress, "Not factory");
+        require(msg.sender == owner, "Not factory");
         fee = _fee;
         emit FeeChanged(msg.sender, _fee, block.timestamp);
     }

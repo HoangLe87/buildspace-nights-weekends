@@ -11,6 +11,19 @@ contract ExchangeFactory is Ownable {
     uint256 totalExchanges;
     mapping(string => address) public tokenToAdress; // ANNA -> 0x...
 
+    event ExchangeCreated(
+        address exchange,
+        string token1,
+        string token2,
+        uint256 time
+    );
+    event ExchangeRemoved(
+        bool isDone,
+        string token1,
+        string token2,
+        uint256 time
+    );
+
     /**
      * create and deploy a new exchange
      */
@@ -32,6 +45,7 @@ contract ExchangeFactory is Ownable {
             _token1Address
         ] = exchangeAddress;
         totalExchanges++;
+        return exchangeAddress;
     }
 
     function createExchangeBySymbol(
@@ -54,7 +68,17 @@ contract ExchangeFactory is Ownable {
         );
         tokenToAdress[_token1] = _token1Address;
         tokenToAdress[_token2] = _token2Address;
-        return createExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
+        exchangeAddress = createExchange(
+            tokenToAdress[_token1],
+            tokenToAdress[_token2]
+        );
+        emit ExchangeCreated(
+            exchangeAddress,
+            _token1,
+            _token2,
+            block.timestamp
+        );
+        return exchangeAddress;
     }
 
     /**
@@ -86,8 +110,10 @@ contract ExchangeFactory is Ownable {
     function removeExchangeBySymbol(
         string memory _token1,
         string memory _token2
-    ) external checkIfExists(_token1, _token2) onlyOwner returns (bool) {
-        return removeExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
+    ) external checkIfExists(_token1, _token2) onlyOwner returns (bool isDone) {
+        isDone = removeExchange(tokenToAdress[_token1], tokenToAdress[_token2]);
+        emit ExchangeRemoved(isDone, _token1, _token2, block.timestamp);
+        return isDone;
     }
 
     /**
@@ -118,20 +144,6 @@ contract ExchangeFactory is Ownable {
     // destruct the contract
     function destruct() external onlyOwner {
         selfdestruct(payable(owner()));
-    }
-
-    // set fee
-    function setFee(
-        string memory _token1,
-        string memory _token2,
-        uint256 _tradingFee
-    ) external onlyOwner returns (uint256) {
-        Exchange(
-            tokenAddressToExchanges[tokenToAdress[_token1]][
-                tokenToAdress[_token2]
-            ]
-        ).setFee(_tradingFee);
-        return _tradingFee;
     }
 
     /**
