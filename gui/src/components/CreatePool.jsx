@@ -22,30 +22,34 @@ export function CreatePool() {
   })
 
   const addPool = async () => {
-    if (!window.ethereum) {
-      toast('Cannot do this without metamask')
-      return
+    try {
+      if (!window.ethereum) {
+        toast('Cannot do this without metamask.')
+        return
+      }
+      const connectedContract = await connectToContractUsingEthers(
+        abi,
+        EXCHANGE_FACTORY
+      )
+      const result = await connectedContract.createExchangeBySymbol(
+        input.token1,
+        input.token1Address,
+        input.token2,
+        input.token2Address
+      )
+      if (result) {
+        toast(`Hash: ${result.hash}`)
+      }
+      setInput({
+        token1: '',
+        token1Address: '',
+        token2: '',
+        token2Address: '',
+      })
+      setCreatePoolBoxOpen(false)
+    } catch (error) {
+      toast(`Uups, somthing went wrong.`)
     }
-    const connectedContract = await connectToContractUsingEthers(
-      abi,
-      EXCHANGE_FACTORY
-    )
-    const result = await connectedContract.createExchangeBySymbol(
-      input.token1,
-      input.token1Address,
-      input.token2,
-      input.token2Address
-    )
-    if (result) {
-      toast(`Hash: ${result.hash}`)
-    }
-    setInput({
-      token1: '',
-      token1Address: '',
-      token2: '',
-      token2Address: '',
-    })
-    setCreatePoolBoxOpen(false)
   }
 
   return (

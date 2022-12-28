@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
-import { submitDataToFireStore } from './firestore'
+import { submitDataToFireStore, deleteDataFromFireStore } from './firestore'
 
 // get contact using ethers with abi and address as input
 export const connectToContractUsingEthers = async (abi, contractAddress) => {
@@ -44,11 +44,15 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
       return
     }
     const [newExchangeCreated, setNewExchangeCreated] = useState('')
+    const [update, setUpdate] = useState(false)
     const onExchangeCreated = async (exchangeAddress, t1, t2, timestamp) => {
       const message = {
         address: exchangeAddress,
         token1: t1,
         token2: t2,
+      }
+      if (message.address) {
+        setUpdate(true)
       }
       setNewExchangeCreated(message)
       await submitDataToFireStore(
@@ -70,8 +74,52 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
 
     useEffect(() => {
       listen()
-    }, [])
+    }, [update])
     return [newExchangeCreated]
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// delete exchange listener
+export const useExchangeRemoved = async (abi, contractAddress) => {
+  try {
+    if (!window.ethereum) {
+      return
+    }
+    const [exchangeRemoved, setExchangeRemoved] = useState('')
+    const [update, setUpdate] = useState(false)
+    const onExchangeRemoved = async (isDone, t1, t2, timestamp) => {
+      const message = {
+        isDone: isDone,
+        token1: t1,
+        token2: t2,
+      }
+      if (message.isDone) {
+        setUpdate(true)
+      }
+      setExchangeRemoved(message)
+      await deleteDataFromFireStore(
+        exchangeRemoved.isDone,
+        exchangeRemoved.token1,
+        exchangeRemoved.token2
+      )
+    }
+    const listen = async () => {
+      let contract = await connectToContractUsingEthers(abi, contractAddress)
+      console.log(`listening to exchange deletion... `)
+      contract.on('ExchangeRemoved', onExchangeRemoved)
+      return () => {
+        if (contract) {
+          contract.off('ExchangeRemoved', onExchangeRemoved)
+        }
+      }
+    }
+
+    useEffect(() => {
+      listen()
+    }, [update])
+    return [exchangeRemoved]
   } catch (error) {
     console.log(error)
   }
