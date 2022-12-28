@@ -17,7 +17,7 @@ const team = [
     },
     {
       content:
-        '"The blockchain technology exites me. An amazing team to work with and a meaning full project to work on. What more to ask?"',
+        '"The blockchain technology exites me. An amazing team to work with and a meaningful project to work on. What more is there to ask?"',
       member: {
         name: 'Hoang',
         role: 'Web3 developer',

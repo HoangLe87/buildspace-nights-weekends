@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ethers } from 'ethers'
 import abi from '../../public/static/exchangeFactory.json'
@@ -6,20 +6,20 @@ import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../../firebase/firebaseConfig'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { PoolDetailsContext } from './Pools'
+import { connectToContractUsingEthers } from '@/utils/metamask'
 
-export function CreatePool({ setIsLoaded, isLoaded }) {
+export function CreatePool() {
   const EXCHANGE_FACTORY = '0xDBBB9ad31b0bf8Ab53a54Da6f62b10F7b4b1240e'
-  const [open, setOpen] = useState(true)
+  const [createPool, setCreatePool, pairs, setPairs, isLoaded, setIsLoaded] =
+    useContext(PoolDetailsContext)
+  console.log(pairs)
   const [input, setInput] = useState({
     token1: '',
     token1Address: '',
     token2: '',
     token2Address: '',
   })
-
-  const { ethereum } = window
-  if (ethereum) {
-  }
 
   const submitDataToFireStore = async () => {
     // Add a new document in collection "cities"
@@ -32,7 +32,27 @@ export function CreatePool({ setIsLoaded, isLoaded }) {
     })
   }
 
-  const addPool = async (e) => {
+  const addPool = async()=> {
+    const connectedContract = connectToContractUsingEthers(abi, EXCHANGE_FACTORY)
+    const result = await connectedContract.createExchangeBySymbol(
+      input.token1,
+      input.token1Address,
+      input.token2,
+      input.token2Address
+    )
+    if (result) {
+      toast(`Hash: ${result.hash}`)
+    }
+    await submitDataToFireStore()
+    setInput({
+      token1: '',
+      token1Address: '',
+      token2: '',
+      token2Address: '',
+    })
+    setCreatePool(false)
+  }
+  /*const addPool = async (e) => {
     try {
       const { ethereum } = window
       if (!ethereum) {
@@ -60,12 +80,12 @@ export function CreatePool({ setIsLoaded, isLoaded }) {
         token2: '',
         token2Address: '',
       })
-      setOpen(false)
+      setCreatePool(false)
     } catch (error) {
-      console.log(error)
       toast.error('Upps, someting went wrong')
     }
   }
+  */
 
   useEffect(() => {
     let connectedContract
@@ -91,8 +111,12 @@ export function CreatePool({ setIsLoaded, isLoaded }) {
   }, [])
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={true} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => setCreatePool(!createPool)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -183,7 +207,7 @@ export function CreatePool({ setIsLoaded, isLoaded }) {
                   <button
                     type="button"
                     className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={() => setCreatePool(false)}
                   >
                     Close
                   </button>

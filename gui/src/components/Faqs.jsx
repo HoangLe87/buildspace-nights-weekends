@@ -2,35 +2,30 @@ import Image from 'next/image'
 
 import backgroundImage from '@/images/background-faqs.jpg'
 import roadmap from '@/images/roadmap.png'
-import economy from '@/images/economy.png'
 
 const faqs = [
   [
     {
       question: 'What do I do with the ANNA token?',
       answer:
-        'ANNA tokens can be staked in the staking pool to earn 2 type of rewards.',
+        'ANNA tokens can be staked in the staking pool to earn 2 types of rewards.',
     },
     {
       question: 'What are the rewards for staking ANNA tokens?',
       answer:
-        'Staking ANNA tokens allows the protocol to share its profits with the holders. Furthermore, staking ANNA tokens rewards holders with gANNA tokens that allows some individual to buy over this entire protocol for a certain amount of gANNA.',
+        'Staking ANNA tokens allows the protocol to share its profits with the holders. Furthermore, staking ANNA tokens rewards holders with gANNA tokens that allows some individual to claim ownership over this entire ecosystem once he has obtained 10k gANNA tokens.',
     },
     {
       question: 'How does the protocol make money?',
-      answer: `There are various revenue streams:
-        DEX exchange fees
-        Service revenue generated from ANNA offerings such as educational couses, crypto index funds, binary options etc.
-        Marketplace revenue generated from creation and trading of digital assets
-        Protocol revenue generated form ongoing operations
-        Partnership revenue generated from investors and sponsors`,
+      answer:
+        'There are various revenue streams e.g. DEX exchange, marketplace, partnerships and revenue generated from ANNA offerings such as educational couses, crypto index funds, binary options etc.',
     },
   ],
   [
     {
       question: 'What is gAnna?',
       answer:
-        'gANNA is an ERC20 tokens with a fixed supply of 29.99k. gANNA cannot be initially bought but only earned via staking ANNA tokens via the staking pool. The ownership of the entire ANNA protocol will be transferred to the first user with 10k gANNA to claim ownership.',
+        'gANNA tokens are ERC20 tokens with a fixed supply of 29.99k. gANNA tokens cannot be initially bought but only earned via staking ANNA tokens via the staking pool. The ownership of the entire ANNA ecosystem shall be claimed by the first user with 10k gANNA tokens.',
     },
   ],
 ]

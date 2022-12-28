@@ -12,14 +12,14 @@ export function Hero() {
         <span className="relative whitespace-nowrap text-blue-600">
           <span className="relative">ANNA.</span>
         </span>{' '}
-        DeFi made fun and simple
+        Gamified DeFi made fun and simple
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         Obtain just 10k gANNA tokens to claim ownerhip of the entire ANNA
         ecosystem.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-        <Button href="/register">Connect Wallet</Button>
+        <Button href="/register">Documentation</Button>
         <Button
           href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           variant="outline"
