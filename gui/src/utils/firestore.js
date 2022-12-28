@@ -1,7 +1,8 @@
-import { getDocs, collection } from 'firebase/firestore'
+import { getDocs, collection, setDoc, doc } from 'firebase/firestore'
 import { db } from '../../firebase/firebaseConfig'
 import { useState, useEffect } from 'react'
 
+// fetches all data from firestore
 export const useFetchAllFirestoreData = (collectionName) => {
   const [allData, setAllData] = useState([])
   let collectionData = []
@@ -18,4 +19,16 @@ export const useFetchAllFirestoreData = (collectionName) => {
     fetch(collectionName)
   }, [])
   return [allData, setAllData]
+}
+
+// uploads pairs data to firestore
+export const submitDataToFireStore = async (id, token1, token2) => {
+  if (id) {
+    await setDoc(doc(db, 'LiquidityPools', id), {
+      pair: `${token1}-${token2}`,
+      address: id,
+      token1: token1,
+      token2: token2,
+    })
+  }
 }

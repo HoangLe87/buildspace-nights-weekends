@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { PoolDetailsContext } from './Pools'
 
 export function PoolsDisplay() {
-  const [createPool, setCreatePool, pairs, setPairs, isLoaded, setIsLoaded] =
+  const [createPool, setCreatePool, pairs, setPairs] =
     useContext(PoolDetailsContext)
   return (
     <div className="my-60 px-4 sm:px-6 lg:px-8">
@@ -55,7 +55,7 @@ export function PoolsDisplay() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      LP Tokens
+                      address
                     </th>
                     <th
                       scope="col"
@@ -76,7 +76,7 @@ export function PoolsDisplay() {
                         {pair.token2}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {pair.amount}
+                        {pair.address}
                       </td>
                       <td className="relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-6">
                         <a

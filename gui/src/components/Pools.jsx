@@ -1,30 +1,36 @@
 import { CreatePool } from './CreatePool'
-import { useState, useEffect, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import { PoolsDisplay } from './PoolsDisplay'
-import { useFetchAllFirestoreData, useTest } from '@/utils/firestore'
+import { useFetchAllFirestoreData } from '@/utils/firestore'
+import abi from '../../public/static/exchangeFactory.json'
+import { useNewExchangeCreatedEvent } from '@/utils/metamask'
 
 export const PoolDetailsContext = createContext()
 
 export function Pools() {
-  const [createPool, setCreatePool] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const EXCHANGE_FACTORY = '0xDBBB9ad31b0bf8Ab53a54Da6f62b10F7b4b1240e'
+  const [isCreatePoolBoxOpen, setCreatePoolBoxOpen] = useState(false)
   const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
+  const { newExchangeCreated } = useNewExchangeCreatedEvent(
+    abi,
+    EXCHANGE_FACTORY
+  )
 
   return (
-    <PoolDetailsContext.Provider
-      value={[
-        createPool,
-        setCreatePool,
-        pairs,
-        setPairs,
-        isLoaded,
-        setIsLoaded,
-      ]}
-    >
-      <div className="my-60 px-4 sm:px-6 lg:px-8">
+    <div className="my-60 px-4 sm:px-6 lg:px-8">
+      <PoolDetailsContext.Provider
+        value={[
+          isCreatePoolBoxOpen,
+          setCreatePoolBoxOpen,
+          pairs,
+          setPairs,
+          abi,
+          EXCHANGE_FACTORY,
+        ]}
+      >
         <PoolsDisplay />
-        {createPool && <CreatePool />}
-      </div>
-    </PoolDetailsContext.Provider>
+        {isCreatePoolBoxOpen && <CreatePool />}
+      </PoolDetailsContext.Provider>
+    </div>
   )
 }
