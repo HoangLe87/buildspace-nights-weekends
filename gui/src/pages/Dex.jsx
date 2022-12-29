@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { Pools } from '@/components/Pools'
+import { LPPools } from '@/components/LPPools'
 import { DexNavBar } from '@/components/DexNavBar'
 
 export default function Dex() {
@@ -17,7 +17,7 @@ export default function Dex() {
       <Header />
       <main>
         <DexNavBar />
-        <Pools />
+        <LPPools />
       </main>
       <Footer />
     </>

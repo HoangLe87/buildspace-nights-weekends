@@ -2,10 +2,10 @@ import { Fragment, useState, useContext, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { PoolDetailsContext } from './Pools'
+import { PoolDetailsContext } from './LPPools'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 
-export function CreatePool() {
+export function LPPoolWithdraw() {
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -13,6 +13,10 @@ export function CreatePool() {
     setPairs,
     abi,
     EXCHANGE_FACTORY,
+    isDepositBoxOpen,
+    setDepositBoxOpen,
+    isWithdrawBoxOpen,
+    setWithdrawBoxOpen,
   ] = useContext(PoolDetailsContext)
   const [input, setInput] = useState({
     token1: '',

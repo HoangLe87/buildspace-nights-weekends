@@ -1,9 +1,19 @@
 import { useContext } from 'react'
-import { PoolDetailsContext } from './Pools'
+import { PoolDetailsContext } from './LPPools'
 
-export function PoolsDisplay() {
-  const [createPool, setCreatePool, pairs, setPairs] =
-    useContext(PoolDetailsContext)
+export function LPPoolsDisplay() {
+  const [
+    isCreatePoolBoxOpen,
+    setCreatePoolBoxOpen,
+    pairs,
+    setPairs,
+    abi,
+    EXCHANGE_FACTORY,
+    isDepositBoxOpen,
+    setDepositBoxOpen,
+    isWithdrawBoxOpen,
+    setWithdrawBoxOpen,
+  ] = useContext(PoolDetailsContext)
   return (
     <div className="my-60 px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -20,7 +30,7 @@ export function PoolsDisplay() {
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-            onClick={() => setCreatePool(!createPool)}
+            onClick={() => setCreatePoolBoxOpen(!isCreatePoolBoxOpen)}
           >
             Create a new pool
           </button>
@@ -82,6 +92,7 @@ export function PoolsDisplay() {
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"
+                          onClick={() => setDepositBoxOpen(!isDepositBoxOpen)}
                         >
                           Deposit
                         </a>
@@ -90,15 +101,19 @@ export function PoolsDisplay() {
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"
+                          onClick={() => setWithdrawBoxOpen(!isWithdrawBoxOpen)}
                         >
                           Withdraw
                         </a>
+                        <LPPoolWithdraw />
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            {isDepositBoxOpen && <LPPoolDeposit />}
+            {isWithdrawBoxOpen && <LPPoolWithdraw />}
           </div>
         </div>
       </div>
