@@ -94,7 +94,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         exchangeABI,
         exchangeAddress
       )
-      const result = await exchangeContract.createExchangeBySymbol()
+      const result = await exchangeContract.addLiquidity()
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
@@ -109,11 +109,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
     <>
       {isDepositBoxOpen && window.ethereum && (
         <Transition.Root show={true} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-10"
-            onClose={() => setCreatePoolBoxOpen(!isCreatePoolBoxOpen)}
-          >
+          <Dialog as="div" className="relative z-10" onClose={() => {}}>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -54,11 +54,7 @@ export function LPPoolCreate() {
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        onClose={() => setCreatePoolBoxOpen(!isCreatePoolBoxOpen)}
-      >
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
