@@ -1,5 +1,8 @@
 import { useContext } from 'react'
 import { PoolDetailsContext } from './LPPools'
+import { LPPoolDeposit } from './LPPoolDeposit'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export function LPPoolsDisplay() {
   const [
@@ -16,6 +19,7 @@ export function LPPoolsDisplay() {
   ] = useContext(PoolDetailsContext)
   return (
     <div className="my-60 px-4 sm:px-6 lg:px-8">
+      <ToastContainer position="top-right" />
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">
@@ -92,7 +96,11 @@ export function LPPoolsDisplay() {
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"
-                          onClick={() => setDepositBoxOpen(!isDepositBoxOpen)}
+                          onClick={() =>
+                            window.ethereum
+                              ? setDepositBoxOpen(!isDepositBoxOpen)
+                              : toast('Cannot do this without metamask!')
+                          }
                         >
                           Deposit
                         </a>
@@ -105,15 +113,17 @@ export function LPPoolsDisplay() {
                         >
                           Withdraw
                         </a>
-                        <LPPoolWithdraw />
+                        <LPPoolDeposit
+                          token1={pair.token1}
+                          token2={pair.token2}
+                          exchangeAddress={pair.address}
+                        />
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {isDepositBoxOpen && <LPPoolDeposit />}
-            {isWithdrawBoxOpen && <LPPoolWithdraw />}
           </div>
         </div>
       </div>

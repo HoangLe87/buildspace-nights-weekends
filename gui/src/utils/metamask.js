@@ -123,3 +123,47 @@ export const useExchangeRemoved = async (abi, contractAddress) => {
     console.log(error)
   }
 }
+
+// get liquidity estimate
+export const useTest = async (abi, contractAddress, amount) => {
+  const [estimate, setEstimate] = useState('')
+  try {
+    // if (typeof window == 'undefined' || !window.ethereum) return
+    const exchangeContract = await connectToContractUsingEthers(
+      abi,
+      contractAddress
+    )
+    console.log(exchangeContract)
+    const fetching = async () => {
+      let token2Estimate = await exchangeContract.getEstimateOfToken2(amount)
+      console.log(token2Estimate)
+      setEstimate(token2Estimate)
+      console.log(estimate)
+    }
+    useEffect(() => {
+      fetching()
+    }, [amount])
+    return [estimate]
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+/*
+  const test = async () => {
+    try {
+      if (typeof window == 'undefined') return
+      if (window.ethereum) {
+        const exchangeContract = await connectToContractUsingEthers(
+          exchangeABI,
+          exchangeAddress
+        )
+        console.log(exchangeContract)
+        let token2Estimate = await exchangeContract.getEstimateOfToken2(20)
+        console.log(String(token2Estimate).split(',')[0])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  test()*/
