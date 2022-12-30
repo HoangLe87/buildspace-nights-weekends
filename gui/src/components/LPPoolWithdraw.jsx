@@ -1,11 +1,15 @@
-import { Fragment, useState, useContext, useEffect } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { PoolDetailsContext } from './LPPools'
 import { connectToContractUsingEthers } from '@/utils/metamask'
+import exchangeABI from '../../public/static/ex.json'
+import erc20ABI from '../../public/static/erc20.json'
+import { WalletContext } from '../pages/_app'
 
-export function LPPoolWithdraw() {
+export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
+  console.log('withdraw')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -18,158 +22,212 @@ export function LPPoolWithdraw() {
     isWithdrawBoxOpen,
     setWithdrawBoxOpen,
   ] = useContext(PoolDetailsContext)
-  const [input, setInput] = useState({
-    token1: '',
-    token1Address: '',
-    token2: '',
-    token2Address: '',
+
+  const [userLpBalance, setUserLpBalance] = useState('')
+
+  const [estimateTokens, setEstimateTokens] = useState({
+    requiredTokenSymbol: token2,
+    requiredTokenAmount: 0,
+    lpTokensToReceive: '',
   })
 
-  const addPool = async () => {
+  const [currentAccount, setCurrentAccount] = useContext(WalletContext)
+
+  const getMaxLp = async (e) => {
+    try {
+      if (typeof window == 'undefined') return
+      if (window.ethereum) {
+        const erc20lp = await connectToContractUsingEthers(
+          erc20ABI,
+          exchangeAddress
+        )
+        let userLpBalance = await erc20lp.getbalanceOf(currentAccount)
+        setUserLpBalance(userLpBalance)
+      }
+    } catch (error) {
+      toast(error)
+    }
+  }
+
+  const getEstimateTokens = async (e) => {
+    try {
+      if (typeof window == 'undefined') return
+      if (window.ethereum) {
+        const erc20lp = await connectToContractUsingEthers(
+          erc20ABI,
+          exchangeAddress
+        )
+        let userLpBalance = await erc20lp.getWdrEst(e.target.value)
+        setUserLpBalance(userLpBalance)
+      }
+    } catch (error) {
+      toast(error)
+    }
+  }
+
+  // close the input box
+  const closeModal = () => {
+    setInputToken({
+      inputTokenSymbol: token1,
+      inputTokenAmount: '',
+    })
+    setRequiredToken({
+      requiredTokenSymbol: token2,
+      requiredTokenAmount: '',
+      lpTokensToReceive: '',
+    })
+    setDepositBoxOpen(false)
+  }
+
+  const withdrawLp = async () => {
     try {
       if (!window.ethereum) {
         toast('Cannot do this without metamask.')
         return
       }
-      const connectedContract = await connectToContractUsingEthers(
+      // connect to factory
+      const exchangeFactory = await connectToContractUsingEthers(
         abi,
         EXCHANGE_FACTORY
       )
-      const result = await connectedContract.createExchangeBySymbol(
-        input.token1,
-        input.token1Address,
-        input.token2,
-        input.token2Address
+      // get addresses of the 2 ERC20 tokens
+      const inputAdr = await exchangeFactory.symbAdr(
+        inputToken.inputTokenSymbol
       )
+      const requiredAdr = await exchangeFactory.symbAdr(
+        requiredToken.requiredTokenSymbol
+      )
+      // connecting to the input ERC20 token
+      const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
+      await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
+
+      // connecting to the required ERC20 token
+      const erc20required = await connectToContractUsingEthers(
+        erc20ABI,
+        requiredAdr
+      )
+      await erc20required.approve(
+        exchangeAddress,
+        requiredToken.requiredTokenAmount
+      )
+
+      // connect to exchange contract
+      const exchangeContract = await connectToContractUsingEthers(
+        exchangeABI,
+        exchangeAddress
+      )
+
+      const result = await exchangeContract.add(
+        inputToken.inputTokenSymbol,
+        inputToken.inputTokenAmount
+      )
+
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
-      setInput({
-        token1: '',
-        token1Address: '',
-        token2: '',
-        token2Address: '',
-      })
+
       setCreatePoolBoxOpen(false)
     } catch (error) {
-      toast(`Uups, somthing went wrong.`)
+      toast(`Uups, something went wrong.`)
     }
   }
 
   return (
-    <Transition.Root show={true} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        onClose={() => setCreatePoolBoxOpen(!isCreatePoolBoxOpen)}
-      >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
-        <ToastContainer position="top-right" />
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+    <>
+      {isWithdrawBoxOpen && window.ethereum && (
+        <Transition.Root show={true} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={() => {}}>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                <div>
-                  <div className="mt-3 text-center sm:mt-5">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Create a pool
-                    </Dialog.Title>
-                    <div className="mt-2">
-                      <input
-                        id="token1Symbol"
-                        type="text"
-                        placeholder="ANNA"
-                        minLength="3"
-                        maxLength="6"
-                        required
-                        value={input.token1}
-                        onChange={(e) =>
-                          setInput({ ...input, token1: e.target.value })
-                        }
-                      ></input>{' '}
-                      <input
-                        id="token1Address"
-                        type="text"
-                        placeholder="0x..."
-                        minLength="42"
-                        maxLength="42"
-                        required
-                        value={input.token1Address}
-                        onChange={(e) =>
-                          setInput({ ...input, token1Address: e.target.value })
-                        }
-                      ></input>
-                    </div>
-                    <div className="mt-2">
-                      <input
-                        id="token2Symbol"
-                        type="text"
-                        placeholder="ETH"
-                        minLength="3"
-                        maxLength="6"
-                        required
-                        value={input.token2}
-                        onChange={(e) =>
-                          setInput({ ...input, token2: e.target.value })
-                        }
-                      ></input>{' '}
-                      <input
-                        id="token2Address"
-                        type="text"
-                        placeholder="0x..."
-                        minLength="42"
-                        maxLength="42"
-                        required
-                        value={input.token2Address}
-                        onChange={(e) =>
-                          setInput({ ...input, token2Address: e.target.value })
-                        }
-                      ></input>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-5 flex justify-center gap-3 sm:mt-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                    onClick={() => setCreatePoolBoxOpen(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                    onClick={() => addPool()}
-                  >
-                    Create
-                  </button>
-                </div>
-              </Dialog.Panel>
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+            <ToastContainer position="top-right" />
+            <div className="fixed inset-0 z-10 overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                    <div>
+                      <div className="mt-3 text-center sm:mt-5">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Withdraw liquidity
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          <button onClick={getMaxLp}>Max</button>
+                          <input
+                            id="lpTokens"
+                            type="number"
+                            minLength="0"
+                            maxLength="30"
+                            required
+                            value={userLpBalance}
+                            readOnly
+                          >
+                            {userLpBalance}
+                          </input>{' '}
+                        </div>
+                        <div className="mt-2">
+                          <select id="token2Symbol" className="w-28">
+                            <option value={requiredToken.requiredTokenSymbol}>
+                              {requiredToken.requiredTokenSymbol}
+                            </option>
+                          </select>{' '}
+                          <input
+                            id="token2Amount"
+                            type="number"
+                            minLength="0"
+                            maxLength="30"
+                            value={requiredToken.requiredTokenAmount}
+                            readOnly
+                          ></input>{' '}
+                        </div>
+
+                        <div className="mt-2">
+                          Total lp tokens to be recieved:{' '}
+                          {requiredToken.lpTokensToReceive}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5 flex justify-center gap-3 sm:mt-6">
+                      <button
+                        type="button"
+                        className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                        onClick={() => closeModal()}
+                      >
+                        Close
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                        onClick={() => withdrawLp()}
+                      >
+                        Withdraw
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+      )}
+    </>
   )
 }

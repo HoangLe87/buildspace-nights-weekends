@@ -3,8 +3,10 @@ import { PoolDetailsContext } from './LPPools'
 import { LPPoolDeposit } from './LPPoolDeposit'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { LPPoolWithdraw } from './LPPoolWithdraw'
 
 export function LPPoolsDisplay() {
+  console.log('display')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -57,19 +59,13 @@ export function LPPoolsDisplay() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Token1
+                      Interest
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Token2
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      address
+                      Address
                     </th>
                     <th
                       scope="col"
@@ -84,10 +80,7 @@ export function LPPoolsDisplay() {
                         {`${pair.token1}-${pair.token2}`}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {pair.token1}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {pair.token2}
+                        {pair.interest}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {pair.address}
@@ -98,7 +91,7 @@ export function LPPoolsDisplay() {
                           className="text-indigo-600 hover:text-indigo-900"
                           onClick={() =>
                             window.ethereum
-                              ? setDepositBoxOpen(!isDepositBoxOpen)
+                              ? setDepositBoxOpen(true)
                               : toast('Cannot do this without metamask!')
                           }
                         >
@@ -109,11 +102,20 @@ export function LPPoolsDisplay() {
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"
-                          onClick={() => setWithdrawBoxOpen(!isWithdrawBoxOpen)}
+                          onClick={() =>
+                            window.ethereum
+                              ? setWithdrawBoxOpen(true)
+                              : toast('Cannot do this without metamask!')
+                          }
                         >
                           Withdraw
                         </a>
                         <LPPoolDeposit
+                          token1={pair.token1}
+                          token2={pair.token2}
+                          exchangeAddress={pair.address}
+                        />
+                        <LPPoolWithdraw
                           token1={pair.token1}
                           token2={pair.token2}
                           exchangeAddress={pair.address}

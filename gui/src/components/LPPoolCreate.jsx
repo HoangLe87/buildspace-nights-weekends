@@ -31,7 +31,7 @@ export function LPPoolCreate() {
         abi,
         EXCHANGE_FACTORY
       )
-      const result = await connectedContract.createExchangeBySymbol(
+      const result = await connectedContract.addEx(
         input.token1,
         input.token1Address,
         input.token2,
@@ -86,12 +86,13 @@ export function LPPoolCreate() {
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
                       Create a pool
+                      <div>(owner only)</div>
                     </Dialog.Title>
                     <div className="mt-2">
                       <input
                         id="token1Symbol"
                         type="text"
-                        placeholder="ANNA"
+                        placeholder="symbol e.g. ANNA"
                         minLength="3"
                         maxLength="6"
                         required
@@ -103,7 +104,7 @@ export function LPPoolCreate() {
                       <input
                         id="token1Address"
                         type="text"
-                        placeholder="0x..."
+                        placeholder="address e.g 0x..."
                         minLength="42"
                         maxLength="42"
                         required
@@ -117,7 +118,7 @@ export function LPPoolCreate() {
                       <input
                         id="token2Symbol"
                         type="text"
-                        placeholder="ETH"
+                        placeholder="symbol e.g. BTC"
                         minLength="3"
                         maxLength="6"
                         required
@@ -129,7 +130,7 @@ export function LPPoolCreate() {
                       <input
                         id="token2Address"
                         type="text"
-                        placeholder="0x..."
+                        placeholder="address e.g 0x..."
                         minLength="42"
                         maxLength="42"
                         required

@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import hero from '../images/hero.png'
-import herobg from '../images/nnneon.svg'
 
 import { Button } from '@/components/Button'
 

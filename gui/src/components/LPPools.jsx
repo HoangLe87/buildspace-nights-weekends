@@ -1,16 +1,18 @@
 import { LPPoolCreate } from './LPPoolCreate'
 import { useState, createContext } from 'react'
 import { LPPoolsDisplay } from './LPPoolsDisplay'
-import abi from '../../public/static/exchangeFactory.json'
+import abi from '../../public/static/exFac.json'
 import {
   useNewExchangeCreatedEvent,
   useExchangeRemoved,
 } from '@/utils/metamask'
+import { useFetchAllFirestoreData } from '@/utils/firestore'
 
 export const PoolDetailsContext = createContext()
 
 export function LPPools() {
-  const EXCHANGE_FACTORY = '0xDBBB9ad31b0bf8Ab53a54Da6f62b10F7b4b1240e'
+  console.log('Pools')
+  const EXCHANGE_FACTORY = '0x6D7ED0eCd609097211d5144B55f36291959dDA26'
   const [isCreatePoolBoxOpen, setCreatePoolBoxOpen] = useState(false)
   const [isDepositBoxOpen, setDepositBoxOpen] = useState(false)
   const [isWithdrawBoxOpen, setWithdrawBoxOpen] = useState(false)
@@ -19,17 +21,9 @@ export function LPPools() {
     abi,
     EXCHANGE_FACTORY
   )
-  const [pairs, setPairs] = useState([
-    {
-      pair: 'TEST-TEST',
-      address: '0xb3b29E9C101C11821d0037482977aC5958253dae',
-      token1: 'ANNA',
-      token2: 'LOL',
-    },
-  ])
   // listening to any emitted events for exchange deletion
   const { exchangeRemoved } = useExchangeRemoved(abi, EXCHANGE_FACTORY)
-  //const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
+  const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
 
   return (
     <div className="my-60 px-4 sm:px-6 lg:px-8">

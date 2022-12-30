@@ -4,9 +4,11 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { PoolDetailsContext } from './LPPools'
 import { connectToContractUsingEthers } from '@/utils/metamask'
-import exchangeABI from '../../public/static/exchange.json'
+import exchangeABI from '../../public/static/ex.json'
+import erc20ABI from '../../public/static/erc20.json'
 
 export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
+  console.log('deposit')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -41,12 +43,16 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
           exchangeABI,
           exchangeAddress
         )
-        let data = await exchangeContract.getEstimateOfToken2(e.target.value)
-        let tokenEstimate = String(data).split(',')[0]
-        let lpTokens = String(data).split(',')[1]
+        let data = await exchangeContract.getEst(
+          inputToken.inputTokenSymbol,
+          e.target.value
+        )
+        let tokenSymbol = String(data).split(',')[0]
+        let tokenEstimate = String(data).split(',')[1]
+        let lpTokens = String(data).split(',')[2]
 
         setRequiredToken({
-          ...requiredToken,
+          requiredTokenSymbol: tokenSymbol,
           requiredTokenAmount: tokenEstimate,
           lpTokensToReceive: lpTokens,
         })
@@ -90,18 +96,50 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         toast('Cannot do this without metamask.')
         return
       }
+      // connect to factory
+      const exchangeFactory = await connectToContractUsingEthers(
+        abi,
+        EXCHANGE_FACTORY
+      )
+      // get addresses of the 2 ERC20 tokens
+      const inputAdr = await exchangeFactory.symbAdr(
+        inputToken.inputTokenSymbol
+      )
+      const requiredAdr = await exchangeFactory.symbAdr(
+        requiredToken.requiredTokenSymbol
+      )
+      // connecting to the input ERC20 token
+      const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
+      await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
+
+      // connecting to the required ERC20 token
+      const erc20required = await connectToContractUsingEthers(
+        erc20ABI,
+        requiredAdr
+      )
+      await erc20required.approve(
+        exchangeAddress,
+        requiredToken.requiredTokenAmount
+      )
+
+      // connect to exchange contract
       const exchangeContract = await connectToContractUsingEthers(
         exchangeABI,
         exchangeAddress
       )
-      const result = await exchangeContract.addLiquidity()
+
+      const result = await exchangeContract.add(
+        inputToken.inputTokenSymbol,
+        inputToken.inputTokenAmount
+      )
+
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
 
       setCreatePoolBoxOpen(false)
     } catch (error) {
-      toast(`Uups, somthing went wrong.`)
+      toast(`Uups, something went wrong.`)
     }
   }
 

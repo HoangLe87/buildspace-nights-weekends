@@ -44,7 +44,7 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
     if (window.ethereum) {
       const [newExchangeCreated, setNewExchangeCreated] = useState('')
       const [update, setUpdate] = useState(false)
-      const onExchangeCreated = async (exchangeAddress, t1, t2, timestamp) => {
+      const onAdd = async (exchangeAddress, t1, t2) => {
         const message = {
           address: exchangeAddress,
           token1: t1,
@@ -63,10 +63,10 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
       const listen = async () => {
         let contract = await connectToContractUsingEthers(abi, contractAddress)
         console.log(`listening to exchange creation... `)
-        contract.on('ExchangeCreated', onExchangeCreated)
+        contract.on('Add', onAdd)
         return () => {
           if (contract) {
-            contract.off('ExchangeCreated', onExchangeCreated)
+            contract.off('Add', onAdd)
           }
         }
       }
@@ -87,7 +87,7 @@ export const useExchangeRemoved = async (abi, contractAddress) => {
     if (window.ethereum) {
       const [exchangeRemoved, setExchangeRemoved] = useState('')
       const [update, setUpdate] = useState(false)
-      const onExchangeRemoved = async (isDone, t1, t2, timestamp) => {
+      const onRemove = async (isDone, t1, t2) => {
         const message = {
           isDone: isDone,
           token1: t1,
@@ -106,10 +106,10 @@ export const useExchangeRemoved = async (abi, contractAddress) => {
       const listen = async () => {
         let contract = await connectToContractUsingEthers(abi, contractAddress)
         console.log(`listening to exchange deletion... `)
-        contract.on('ExchangeRemoved', onExchangeRemoved)
+        contract.on('Remove', onRemove)
         return () => {
           if (contract) {
-            contract.off('ExchangeRemoved', onExchangeRemoved)
+            contract.off('Remove', onRemove)
           }
         }
       }

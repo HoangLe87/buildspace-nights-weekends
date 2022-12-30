@@ -17,7 +17,7 @@ export const useFetchAllFirestoreData = (collectionName) => {
   }
   useEffect(() => {
     fetch(collectionName)
-  }, [allData])
+  }, [])
   return [allData, setAllData]
 }
 
