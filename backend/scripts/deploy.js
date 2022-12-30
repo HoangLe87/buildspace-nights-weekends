@@ -1,31 +1,58 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
+const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
-async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
-
-  const lockedAmount = hre.ethers.utils.parseEther("1");
-
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+const main = async () => {
+  console.log("DEPLOYING");
+  const contractFactory = await hre.ethers.getContractFactory("Ex");
+  const contract = await contractFactory.deploy(
+    "ANNA",
+    "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8",
+    "GANNA",
+    "0xd9145CCE52D386f254917e481eB44e9943F39138",
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+    "0x7b96aF9Bd211cBf6BA5b0dd53aa61Dc5806b6AcE"
   );
-}
+  await contract.deployed();
+  console.log("=== contract deployed to ", contract.address);
+  console.log("ANNA" == (await contract.symb1()));
+  /*
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+  const contractAdr = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
+  const contractName = "ExFac";
+  const signer = await hre.ethers.getSigner();
+  const contract = await hre.ethers.getContractAt(
+    contractAdr,
+    contractName,
+    signer
+  );
+  */
+  /*
+  const tx1 = await contract.addEx(
+    "ANNA",
+    "0xe145Ac17716770f178abcAcf68e633bbBab4cDaB",
+    "GANNA",
+    "0x484AC746C5a960E6F9440D956A45CBe7ce4d123a"
+  );
+  console.log(await contract.getEx("ANNA", "GANNA"));
+
+  const signer = await hre.ethers.getSigner();
+  const exchnageContract = await hre.ethers.getContractAt(
+    "Ex",
+    "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+    signer
+  );
+  console.log("doing it now...");
+  const a = await exchnageContract.getEst("ANNA", 100);
+  console.log("res", a);*/
+  console.log("=== FINISH ===");
+};
+
+const runMain = (async () => {
+  try {
+    await main();
+    process.exit(0);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+})();
