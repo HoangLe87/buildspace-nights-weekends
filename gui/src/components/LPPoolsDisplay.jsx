@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { LPPoolWithdraw } from './LPPoolWithdraw'
 
 export function LPPoolsDisplay() {
-  console.log('display')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -59,14 +58,9 @@ export function LPPoolsDisplay() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Interest
+                      Fee
                     </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Address
-                    </th>
+
                     <th
                       scope="col"
                       className="relative py-3.5 pl-3 pr-4 sm:pr-6"
@@ -82,9 +76,7 @@ export function LPPoolsDisplay() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {pair.interest}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {pair.address}
-                      </td>
+
                       <td className="relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-6">
                         <a
                           href="#"

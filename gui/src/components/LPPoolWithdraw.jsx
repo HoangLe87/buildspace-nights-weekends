@@ -7,9 +7,9 @@ import { connectToContractUsingEthers } from '@/utils/metamask'
 import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 import { WalletContext } from '../pages/_app'
+import { Button } from './Button'
 
 export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
-  console.log('withdraw')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -24,13 +24,6 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
   ] = useContext(PoolDetailsContext)
 
   const [userLpBalance, setUserLpBalance] = useState('')
-
-  const [estimateTokens, setEstimateTokens] = useState({
-    requiredTokenSymbol: token2,
-    requiredTokenAmount: 0,
-    lpTokensToReceive: '',
-  })
-
   const [currentAccount, setCurrentAccount] = useContext(WalletContext)
 
   const getMaxLp = async (e) => {
@@ -41,23 +34,8 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
           erc20ABI,
           exchangeAddress
         )
-        let userLpBalance = await erc20lp.getbalanceOf(currentAccount)
-        setUserLpBalance(userLpBalance)
-      }
-    } catch (error) {
-      toast(error)
-    }
-  }
 
-  const getEstimateTokens = async (e) => {
-    try {
-      if (typeof window == 'undefined') return
-      if (window.ethereum) {
-        const erc20lp = await connectToContractUsingEthers(
-          erc20ABI,
-          exchangeAddress
-        )
-        let userLpBalance = await erc20lp.getWdrEst(e.target.value)
+        let userLpBalance = await erc20lp.balanceOf(currentAccount)
         setUserLpBalance(userLpBalance)
       }
     } catch (error) {
@@ -67,16 +45,8 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
 
   // close the input box
   const closeModal = () => {
-    setInputToken({
-      inputTokenSymbol: token1,
-      inputTokenAmount: '',
-    })
-    setRequiredToken({
-      requiredTokenSymbol: token2,
-      requiredTokenAmount: '',
-      lpTokensToReceive: '',
-    })
-    setDepositBoxOpen(false)
+    setUserLpBalance('')
+    setWithdrawBoxOpen(false)
   }
 
   const withdrawLp = async () => {
@@ -85,48 +55,19 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
         toast('Cannot do this without metamask.')
         return
       }
-      // connect to factory
-      const exchangeFactory = await connectToContractUsingEthers(
-        abi,
-        EXCHANGE_FACTORY
-      )
-      // get addresses of the 2 ERC20 tokens
-      const inputAdr = await exchangeFactory.symbAdr(
-        inputToken.inputTokenSymbol
-      )
-      const requiredAdr = await exchangeFactory.symbAdr(
-        requiredToken.requiredTokenSymbol
-      )
-      // connecting to the input ERC20 token
-      const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
-      await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
-
-      // connecting to the required ERC20 token
-      const erc20required = await connectToContractUsingEthers(
-        erc20ABI,
-        requiredAdr
-      )
-      await erc20required.approve(
-        exchangeAddress,
-        requiredToken.requiredTokenAmount
-      )
 
       // connect to exchange contract
       const exchangeContract = await connectToContractUsingEthers(
         exchangeABI,
         exchangeAddress
       )
-
-      const result = await exchangeContract.add(
-        inputToken.inputTokenSymbol,
-        inputToken.inputTokenAmount
-      )
+      const result = await exchangeContract.rem(userLpBalance)
 
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
 
-      setCreatePoolBoxOpen(false)
+      setWithdrawBoxOpen(false)
     } catch (error) {
       toast(`Uups, something went wrong.`)
     }
@@ -170,38 +111,21 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
                           Withdraw liquidity
                         </Dialog.Title>
                         <div className="mt-2">
-                          <button onClick={getMaxLp}>Max</button>
+                          <Button color="blue" onClick={(e) => getMaxLp(e)}>
+                            <span className="w-12 max-w-xs overflow-hidden px-1">
+                              Max
+                            </span>{' '}
+                          </Button>
                           <input
                             id="lpTokens"
                             type="number"
                             minLength="0"
                             maxLength="30"
+                            className="text-center"
                             required
                             value={userLpBalance}
-                            readOnly
-                          >
-                            {userLpBalance}
-                          </input>{' '}
-                        </div>
-                        <div className="mt-2">
-                          <select id="token2Symbol" className="w-28">
-                            <option value={requiredToken.requiredTokenSymbol}>
-                              {requiredToken.requiredTokenSymbol}
-                            </option>
-                          </select>{' '}
-                          <input
-                            id="token2Amount"
-                            type="number"
-                            minLength="0"
-                            maxLength="30"
-                            value={requiredToken.requiredTokenAmount}
-                            readOnly
+                            onChange={(e) => setUserLpBalance(e.target.value)}
                           ></input>{' '}
-                        </div>
-
-                        <div className="mt-2">
-                          Total lp tokens to be recieved:{' '}
-                          {requiredToken.lpTokensToReceive}
                         </div>
                       </div>
                     </div>

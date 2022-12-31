@@ -8,7 +8,6 @@ import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 
 export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
-  console.log('deposit')
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
