@@ -3,20 +3,12 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useEffect, useState } from 'react'
 
 export function SwapBox({ pairs, setPairs }) {
+  let result = pairs.map((pair) => pair.token2).concat('ANNA')
   const [tokens, setTokens] = useState({
-    unique: [],
-    tokenBuy: [],
-    tokenSell: [],
+    unique: result,
+    tokenBuy: result,
+    tokenSell: result,
   })
-  const fetchTokens = async () => {
-    let result = await pairs.map((pair) => pair.token2).concat('ANNA')
-    setTokens({
-      unique: result,
-      tokenBuy: result,
-      tokenSell: result,
-    })
-    console.log(tokens.result)
-  }
 
   const toggleToken1 = (e) => {
     setTokens({
@@ -30,12 +22,7 @@ export function SwapBox({ pairs, setPairs }) {
       tokenSell: tokens.unique.filter((token) => token != e.target.value),
     })
   }
-
-  useEffect(() => {
-    fetchTokens()
-    console.log(tokens.unique)
-  }, [])
-
+  console.log(tokens.tokenBuy)
   return (
     <div>
       <ToastContainer position="top-right" />
