@@ -179,7 +179,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
                         >
                           Deposit liquidity
                         </Dialog.Title>
-                        <div className="mt-2">
+                        <div className="mt-2 flex">
                           <select
                             onChange={(e) => toggleToken(e)}
                             id="token1Symbol"
@@ -200,7 +200,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
                             onChange={(e) => getEstimateToken(e)}
                           ></input>{' '}
                         </div>
-                        <div className="mt-2">
+                        <div className="mt-2 flex">
                           <select id="token2Symbol" className="w-28">
                             <option value={requiredToken.requiredTokenSymbol}>
                               {requiredToken.requiredTokenSymbol}

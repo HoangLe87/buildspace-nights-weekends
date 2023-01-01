@@ -1,51 +1,67 @@
-const tabs = [
-  { name: 'Swap', href: '#', current: false },
-  { name: 'Pools', href: '#', current: true },
-  { name: 'Stake', href: '#', current: false },
-  { name: 'Lend', href: '#', current: false },
-]
+import { NavLink } from './NavLink'
+import { useState } from 'react'
+import Router, { useRouter } from 'next/router'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+export function DexNavBar({ currentPage }) {
+  const router = useRouter()
+  const tabs = ['Swap', 'Pools', 'Stake', 'Lend']
+  const swap =
+    currentPage === tabs[0]
+      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
 
-export function DexNavBar() {
+  const pools =
+    currentPage === tabs[1]
+      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+
+  const stake =
+    currentPage === tabs[2]
+      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+
+  const lend =
+    currentPage === tabs[3]
+      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+
   return (
     <div className="flex w-screen justify-center px-4 sm:px-6 lg:px-8">
       <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
+
         <select
           id="tabs"
           name="tabs"
           className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          defaultValue={tabs.find((tab) => tab.current).name}
+          defaultValue={currentPage}
+          onChange={(e) => router.push(e.target.value)}
         >
           {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
+            <option key={tabs.indexOf(tab)}>{tab}</option>
           ))}
         </select>
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-            {tabs.map((tab) => (
-              <a
-                key={tab.name}
-                href={tab.href}
-                className={classNames(
-                  tab.current
-                    ? 'border-indigo-500 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                  'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
-                )}
-                aria-current={tab.current ? 'page' : undefined}
-              >
-                {tab.name}
-              </a>
-            ))}
+            <NavLink href="Swap" className={swap}>
+              {' '}
+              Swap{' '}
+            </NavLink>
+            <NavLink href="Pools" className={pools}>
+              Pools{' '}
+            </NavLink>
+            <NavLink href="Stake" className={stake}>
+              {' '}
+              Stake{' '}
+            </NavLink>
+            <NavLink href="Lend" className={lend}>
+              {' '}
+              Lend{' '}
+            </NavLink>
           </nav>
         </div>
       </div>

@@ -32,6 +32,9 @@ export const Header = () => {
     })
   }
 
+  const className =
+    'inline-block cursor-pointer rounded-lg py-1 px-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+
   const [currentAccount, setCurrentAccount] = useContext(WalletContext)
   return (
     <header className="py-10">
@@ -39,14 +42,22 @@ export const Header = () => {
         <div className="flex items-center md:gap-x-12">
           <Logo className="h-10 w-auto" />
           <div className=" md:flex md:gap-x-6">
-            <NavLink page={'Dex'}>Dex</NavLink>
-            <NavLink page={'Marketplace'}>Marketplace</NavLink>
-            <NavLink page={'Games'}>Games</NavLink>
+            <NavLink className={className} href={'Swap'}>
+              Dex
+            </NavLink>
+            <NavLink className={className} href={'Marketplace'}>
+              Marketplace
+            </NavLink>
+            <NavLink className={className} href={'Games'}>
+              Games
+            </NavLink>
           </div>
         </div>
         <div className="flex items-center gap-x-5 md:gap-x-8">
           <div className="hidden md:block">
-            <NavLink page={'/Dashboard'}>Dashboard</NavLink>
+            <NavLink className={className} href={'/Dashboard'}>
+              Dashboard
+            </NavLink>
           </div>
           {!currentAccount && (
             <Button onClick={() => connectWallet()} color="blue">

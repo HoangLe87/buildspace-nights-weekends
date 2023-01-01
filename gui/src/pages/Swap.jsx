@@ -1,10 +1,14 @@
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { LPPools } from '@/components/LPPools'
 import { DexNavBar } from '@/components/DexNavBar'
+import { SwapBox } from '@/components/SwapBox'
+import { useState } from 'react'
+import { useFetchAllFirestoreData } from '@/utils/firestore'
 
-export default function Dex() {
+export default function Swap() {
+  const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
+
   return (
     <>
       <Head>
@@ -16,8 +20,8 @@ export default function Dex() {
       </Head>
       <Header />
       <main>
-        <DexNavBar />
-        <LPPools />
+        <DexNavBar currentPage={'Swap'} />
+        <SwapBox pairs={pairs} setPairs={setPairs} />
       </main>
       <Footer />
     </>
