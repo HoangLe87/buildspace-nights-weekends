@@ -56,6 +56,7 @@ export function SwapBox({ pairs, setPairs }) {
       ...tokens,
       tokenSellAmount: e.target.value,
     })
+    if (e.target.value <= 0) return
     let buyToken = estimate.buyToken
     let sellToken = estimate.sellToken
     let sellAmount = e.target.value
@@ -126,6 +127,10 @@ export function SwapBox({ pairs, setPairs }) {
   }
   const swap = async (e) => {
     e.preventDefault()
+    if (e.target.token2Amount.value <= 0) {
+      toast(`Please enter a valid amount`)
+      return
+    }
     let buyToken = e.target.token1Symbol.value
     let buyAmount = e.target.token1Amount.value
     let sellToken = e.target.token2Symbol.value
@@ -147,44 +152,57 @@ export function SwapBox({ pairs, setPairs }) {
           index = tokensList.indexOf(buyToken) // find the pair
         }
         //transact
+
         const exAddress = pairs[index].address // find exchange address
         const exchange = await connectToContractUsingEthers(
           // connect to the exchange
           exchangeABI,
           exAddress
         )
+
         const buyTokenAmount = String(
-          await exchange.getEst(sellToken, sellAmount)
+          await exchange.sellEst(sellToken, sellAmount)
         ).split(',')[1] // get ANNA est
+
         const sellTokenAddress = await exchange.symbAdr(sellToken) // get adr of sell token
-        const erc20 = await connectToContractUsingEthers(
+
+        const sellErc20 = await connectToContractUsingEthers(
           // connect to the selltoken
           erc20ABI,
           sellTokenAddress
         )
+
         await sellErc20.approve(exAddress, sellAmount)
+
         await exchange.swap(sellToken, sellAmount)
+
         // buy XXX and sell ZZZ
       } else {
         // sell ZZZ buy ANNA
         const sellIndex = tokensList.indexOf(sellToken)
+
         const sellAddress = pairs[sellIndex].address
         const exchange1 = await connectToContractUsingEthers(
           exchangeABI,
           sellAddress
         )
         const annaAmount = String(
-          await exchange1.getEst(sellToken, sellAmount)
+          await exchange1.sellEst(sellToken, sellAmount)
         ).split(',')[1]
+
         const sellTokenAddress = await exchange1.symbAdr(sellToken)
+
         const sellErc20 = await connectToContractUsingEthers(
           // connect to the selltoken
           erc20ABI,
           sellTokenAddress
         )
-        await sellErc20.approve(exchange1, sellAmount)
+
+        await sellErc20.approve(sellAddress, sellAmount)
+
         await exchange1.swap(sellToken, sellAmount)
         // sell ANNA buy XXX
+        console.log('swapped sell token witg ANNA')
         const buyIndex = tokensList.indexOf(buyToken)
         const buyAddress = pairs[buyIndex].address
         const exchange2 = await connectToContractUsingEthers(
@@ -192,18 +210,21 @@ export function SwapBox({ pairs, setPairs }) {
           buyAddress
         )
         const buyTokenAmount = String(
-          await exchange2.getEst('ANNA', annaAmount)
+          await exchange2.sellEst('ANNA', annaAmount)
         ).split(',')[1]
+
         const annaTokenAddress = await exchange1.symbAdr('ANNA')
+
         const annaErc20 = await connectToContractUsingEthers(
           erc20ABI,
           annaTokenAddress
         )
-        await annaErc20.approve(exchange2, annaAmount)
+        await annaErc20.approve(buyAddress, annaAmount)
+
         await exchange2.swap('ANNA', annaAmount)
       }
       if (result) {
-        toast(`Hash: ${result.hash}`)
+        toast(`Transaction pending`)
       } else {
         toast(`Transaction uncessful`)
       }
