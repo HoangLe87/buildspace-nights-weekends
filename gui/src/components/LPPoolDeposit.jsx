@@ -8,6 +8,8 @@ import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 
 export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
+  console.log(token1)
+  console.log(token2)
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -110,7 +112,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
       // connecting to the input ERC20 token
       const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
       await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
-
+      console.log('approved', inputToken.inputTokenAmount)
       // connecting to the required ERC20 token
       const erc20required = await connectToContractUsingEthers(
         erc20ABI,
@@ -120,18 +122,20 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         exchangeAddress,
         requiredToken.requiredTokenAmount
       )
-
+      console.log('approved', requiredToken.requiredTokenAmount)
       // connect to exchange contract
+      console.log(exchangeAddress)
       const exchangeContract = await connectToContractUsingEthers(
         exchangeABI,
         exchangeAddress
       )
+      console.log('connected', exchangeAddress)
 
       const result = await exchangeContract.add(
         inputToken.inputTokenSymbol,
         inputToken.inputTokenAmount
       )
-
+      console.log('added', inputToken.inputTokenSymbol)
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
@@ -144,7 +148,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
 
   return (
     <>
-      {isDepositBoxOpen && window.ethereum && (
+      {window.ethereum && (
         <Transition.Root show={true} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={() => {}}>
             <Transition.Child

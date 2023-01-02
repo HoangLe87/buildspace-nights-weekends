@@ -32,7 +32,6 @@ export const checkIfWalletIsConnected = async (setCurrentAccount) => {
     if (accounts.length > 0) {
       let account = accounts[0]
       setCurrentAccount(account)
-      console.log(account)
     } else console.log('No authorized account found')
   }
 }
@@ -62,7 +61,7 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
       }
       const listen = async () => {
         let contract = await connectToContractUsingEthers(abi, contractAddress)
-        console.log(`listening to exchange creation... `)
+
         contract.on('Add', onAdd)
         return () => {
           if (contract) {
@@ -105,7 +104,7 @@ export const useExchangeRemoved = async (abi, contractAddress) => {
       }
       const listen = async () => {
         let contract = await connectToContractUsingEthers(abi, contractAddress)
-        console.log(`listening to exchange deletion... `)
+
         contract.on('Remove', onRemove)
         return () => {
           if (contract) {

@@ -10,6 +10,8 @@ import { WalletContext } from '../pages/_app'
 import { Button } from './Button'
 
 export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
+  console.log(token1)
+  console.log(token2)
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -75,7 +77,7 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
 
   return (
     <>
-      {isWithdrawBoxOpen && window.ethereum && (
+      {window.ethereum && (
         <Transition.Root show={true} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={() => {}}>
             <Transition.Child

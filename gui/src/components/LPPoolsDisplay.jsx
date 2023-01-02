@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { PoolDetailsContext } from './LPPools'
 import { LPPoolDeposit } from './LPPoolDeposit'
 import { ToastContainer, toast } from 'react-toastify'
@@ -18,6 +18,31 @@ export function LPPoolsDisplay() {
     isWithdrawBoxOpen,
     setWithdrawBoxOpen,
   ] = useContext(PoolDetailsContext)
+
+  const [selectedPair, setSelectedPair] = useState({
+    token1: '',
+    token2: '',
+    address: '',
+  })
+
+  const openWithdraw = (token1, token2, address) => {
+    setSelectedPair({
+      token1: token1,
+      token2: token2,
+      address: address,
+    })
+    setWithdrawBoxOpen(true)
+  }
+
+  const openDeposit = (token1, token2, address) => {
+    setSelectedPair({
+      token1: token1,
+      token2: token2,
+      address: address,
+    })
+    setDepositBoxOpen(true)
+  }
+
   return (
     <div className="my-60 px-4 sm:px-6 lg:px-8">
       <ToastContainer position="top-right" />
@@ -83,7 +108,11 @@ export function LPPoolsDisplay() {
                           className="text-indigo-600 hover:text-indigo-900"
                           onClick={() =>
                             window.ethereum
-                              ? setDepositBoxOpen(true)
+                              ? openDeposit(
+                                  pair.token1,
+                                  pair.token2,
+                                  pair.address
+                                )
                               : toast('Cannot do this without metamask!')
                           }
                         >
@@ -96,22 +125,16 @@ export function LPPoolsDisplay() {
                           className="text-indigo-600 hover:text-indigo-900"
                           onClick={() =>
                             window.ethereum
-                              ? setWithdrawBoxOpen(true)
+                              ? openWithdraw(
+                                  pair.token1,
+                                  pair.token2,
+                                  pair.address
+                                )
                               : toast('Cannot do this without metamask!')
                           }
                         >
                           Withdraw
                         </a>
-                        <LPPoolDeposit
-                          token1={pair.token1}
-                          token2={pair.token2}
-                          exchangeAddress={pair.address}
-                        />
-                        <LPPoolWithdraw
-                          token1={pair.token1}
-                          token2={pair.token2}
-                          exchangeAddress={pair.address}
-                        />
                       </td>
                     </tr>
                   ))}
@@ -121,6 +144,20 @@ export function LPPoolsDisplay() {
           </div>
         </div>
       </div>
+      {isWithdrawBoxOpen && (
+        <LPPoolWithdraw
+          token1={selectedPair.token1}
+          token2={selectedPair.token2}
+          exchangeAddress={selectedPair.address}
+        />
+      )}
+      {isDepositBoxOpen && (
+        <LPPoolDeposit
+          token1={selectedPair.token1}
+          token2={selectedPair.token2}
+          exchangeAddress={selectedPair.address}
+        />
+      )}
     </div>
   )
 }

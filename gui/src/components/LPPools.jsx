@@ -11,7 +11,6 @@ import { useFetchAllFirestoreData } from '@/utils/firestore'
 export const PoolDetailsContext = createContext()
 
 export function LPPools() {
-  console.log('Pools')
   const EXCHANGE_FACTORY = '0x6D7ED0eCd609097211d5144B55f36291959dDA26'
   const [isCreatePoolBoxOpen, setCreatePoolBoxOpen] = useState(false)
   const [isDepositBoxOpen, setDepositBoxOpen] = useState(false)
