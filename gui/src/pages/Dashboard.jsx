@@ -1,14 +1,8 @@
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { DexNavBar } from '@/components/DexNavBar'
-import { SwapBox } from '@/components/SwapBox'
-import { useState } from 'react'
-import { useFetchAllFirestoreData } from '@/utils/firestore'
 
-export default function Swap() {
-  const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
-
+export default function Dashboard() {
   return (
     <>
       <Head>
@@ -20,8 +14,7 @@ export default function Swap() {
       </Head>
       <Header />
       <main className='min-h-screen'>
-        <DexNavBar currentPage={'Swap'} />
-        <SwapBox pairs={pairs} setPairs={setPairs} />
+        <div className="flex justify-center">Comming soon in 2023</div>
       </main>
       <Footer />
     </>

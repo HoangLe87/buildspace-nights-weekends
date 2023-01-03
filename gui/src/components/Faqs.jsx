@@ -13,7 +13,7 @@ const faqs = [
     {
       question: 'What are the rewards for staking ANNA tokens?',
       answer:
-        'Staking ANNA tokens allows the protocol to share its profits with the holders. Furthermore, staking ANNA tokens rewards holders with gANNA tokens that allows some individual to claim ownership over this entire ecosystem once he has obtained 10k gANNA tokens.',
+        'Staking ANNA tokens allows the protocol to share its profits with the holders. Furthermore, staking ANNA tokens rewards holders with LOVE tokens that allows some individual to claim ownership of the entire ecosystem once he has obtained 10k LOVE tokens.',
     },
     {
       question: 'How does the protocol make money?',
@@ -23,9 +23,9 @@ const faqs = [
   ],
   [
     {
-      question: 'What is gAnna?',
+      question: 'What are LOVE tokens?',
       answer:
-        'gANNA tokens are ERC20 tokens with a fixed supply of 29.99k. gANNA tokens cannot be initially bought but only earned via staking ANNA tokens via the staking pool. The ownership of the entire ANNA ecosystem shall be claimed by the first user with 10k gANNA tokens.',
+        'They are ERC20 tokens with a fixed supply of 29.99k. LOVE tokens measure your progress and cannot be initially bought but only earned via staking ANNA tokens via the staking pool. The ownership of the entire ANNA ecosystem shall be claimed by the first user with 10k LOVE tokens.',
     },
   ],
 ]
@@ -35,7 +35,7 @@ export function Faqs() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative overflow-hidden bg-slate-50 py-20 sm:py-32"
+      className="relative overflow-hidden bg-slate-50 py-20sm:py-32"
     >
       <Image
         className="absolute top-0 left-1/2 max-w-none translate-x-[-30%] -translate-y-1/4"
@@ -45,7 +45,7 @@ export function Faqs() {
         height={946}
         unoptimized
       />
-      <div className="relative">
+      <div className="relative px-2">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2
             id="faq-title"

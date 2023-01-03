@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 import { connectToContractUsingEthers } from '@/utils/metamask'
+import { Button } from './Button'
 
 export function SwapBox({ pairs, setPairs }) {
   let result = pairs.map((pair) => pair.token2).concat('ANNA')
@@ -238,19 +239,19 @@ export function SwapBox({ pairs, setPairs }) {
       <ToastContainer position="top-right" />
 
       <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div className="relative transform overflow-hidden rounded-lg bg-gray-500 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+        <div className="relative transform overflow-hidden shadow-[0px_0px_10px_5px_#B794F4] rounded-lg bg-gray-500 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
           <form onSubmit={(e) => swap(e)}>
             <div>
               <div className="mt-3 text-center sm:mt-5">
                 <div className="text-md mb-2 font-medium leading-6 text-white">
                   Instant trades with low fees
                 </div>
-                <div className="mb-2 border-2 border-solid border-green-500 bg-gradient-to-r from-green-500 to-cyan-500 text-sm font-bold">
+                <div className="mb-2 border-2 rounded-xl border-solid border-green-500 bg-gradient-to-r from-green-400 to-cyan-500 text-sm font-bold">
                   <div className="text-white">You receive</div>
-                  <div className="mt-2 flex">
+                  <div className="mt-2 flex justify-between">
                     <select
                       id="token1Symbol"
-                      className="w-28"
+                      className="w-28 rounded-xl"
                       onChange={(e) => toggleToken1(e)}
                     >
                       {tokens.tokenBuy.map((token) => (
@@ -260,7 +261,7 @@ export function SwapBox({ pairs, setPairs }) {
                       ))}
                     </select>{' '}
                     <input
-                      className=" bg-gray-400"
+                      className=" rounded-xl bg-gray-400 p-0 text-center overflow-hidden"
                       id="token1Amount"
                       name="token1Amount"
                       type="text"
@@ -272,12 +273,12 @@ export function SwapBox({ pairs, setPairs }) {
                     ></input>{' '}
                   </div>
                 </div>
-                <div className="border-2 border-solid border-orange-400 bg-gradient-to-r from-rose-600 to-orange-300 text-sm font-bold">
+                <div className="border-2 rounded-xl border-solid border-red-400 bg-gradient-to-r from-red-400 to-purple-300 text-sm font-bold">
                   <div className=" text-white">You sell</div>
-                  <div className="mt-2 flex">
+                  <div className="mt-2 flex justify-between">
                     <select
                       id="token2Symbol"
-                      className="w-28"
+                      className="w-28 rounded-xl"
                       onChange={(e) => toggleToken2(e)}
                     >
                       {tokens.tokenSell.map((token) => (
@@ -288,6 +289,7 @@ export function SwapBox({ pairs, setPairs }) {
                     </select>{' '}
                     <input
                       id="token2Amount"
+                      className='rounded-xl p-0 text-center overflow-hidden'
                       type="text"
                       minLength="0"
                       maxLength="30"
@@ -300,12 +302,13 @@ export function SwapBox({ pairs, setPairs }) {
               </div>
             </div>
             <div className="mt-5 flex justify-center gap-3 sm:mt-6">
-              <button
+              <Button
                 type="submit"
-                className="inline-flex w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                color="gradient"
+
               >
                 Swap
-              </button>
+              </Button>
             </div>
           </form>
         </div>

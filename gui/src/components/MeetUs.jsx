@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
-import avatarImage1 from '@/images/avatars/avatar-1.png'
-import avatarImage2 from '@/images/avatars/avatar-2.png'
-import avatarImage3 from '@/images/avatars/avatar-3.png'
+import avatarImage1 from '@/images/avatars/anna.png'
+import avatarImage2 from '@/images/avatars/hoang.png'
+import avatarImage3 from '@/images/avatars/hien.png'
 
 const team = [
   [
@@ -45,7 +45,7 @@ export function MeetUs() {
       aria-label="What our customers are saying"
       className="bg-slate-50 py-20 sm:py-32"
     >
-      <div className="mx-auto max-w-2xl md:text-center">
+      <div className="px-2 mx-auto max-w-2xl md:text-center">
         <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
           <span className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text  text-transparent">
             Meet our team

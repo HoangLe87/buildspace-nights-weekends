@@ -15,7 +15,7 @@ export default function Pools() {
         />
       </Head>
       <Header />
-      <main>
+      <main className='min-h-screen'>
         <DexNavBar currentPage={'Pools'} />
         <LPPools />
       </main>

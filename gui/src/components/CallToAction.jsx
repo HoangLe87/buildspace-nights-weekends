@@ -23,9 +23,9 @@ export function CallToAction() {
             Invest today
           </h2>
           <p className="mt-4 text-lg tracking-tight text-white">
-            Buy ANNA and start staking. It's that simple. What's you excuse?
+            Buy ANNA and start earning LOVE. It's that simple. What's your excuse?
           </p>
-          <Button href="/register" color="white" className="mt-10">
+          <Button href="/register" color="white" className="mt-10 shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]">
             Buy ANNA
           </Button>
         </div>

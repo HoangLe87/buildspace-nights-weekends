@@ -1,17 +1,24 @@
-import img0 from '../images/services/0.png'
-import img1 from '../images/services/1.png'
-import img2 from '../images/services/2.png'
-import img4 from '../images/services/4.png'
-import img3 from '../images/services/3.png'
-import img5 from '../images/services/5.png'
-import img6 from '../images/services/6.png'
-import img7 from '../images/services/7.png'
-import img8 from '../images/services/8.png'
+import img0 from '../images/stock/0.png'
+import img1 from '../images/stock/1.png'
+import img2 from '../images/stock/2.png'
+import img4 from '../images/stock/4.png'
+import img3 from '../images/stock/3.png'
+import img5 from '../images/stock/5.png'
+import img6 from '../images/stock/6.png'
+import img7 from '../images/stock/7.png'
+import img8 from '../images/stock/8.png'
+import img9 from '../images/stock/9.png'
+import img10 from '../images/stock/10.png'
+import img11 from '../images/stock/11.png'
+import img12 from '../images/stock/12.png'
+import img13 from '../images/stock/13.png'
+import img14 from '../images/stock/14.png'
+import img15 from '../images/stock/15.png'
 import Image from 'next/image'
 import { useState } from 'react'
 
 const Carousel = () => {
-  const images = [img0, img1, img2, img3, img4, img5, img6, img7, img8]
+  const images = [img0, img1, img2, img3, img4, img5, img6, img7, img8,img9, img10, img11, img12, img13, img14, img15]
   const [currentImg, setCurrentImg] = useState(1)
   const next = () => {
     if (currentImg < images.length - 2) {
@@ -29,30 +36,41 @@ const Carousel = () => {
   }
   return (
     <>
-      <div className="m-auto max-w-2xl ">
+
+
+
+     
+      
+
+           <div className="m-auto max-w-2xl">
+          
         <div
           id="default-carousel"
-          className="relative mb-4 mt-4 ml-4"
+          className="relative"
           data-carousel="static"
         >
-          <div className="relative flex h-56 items-center  justify-center overflow-hidden rounded-lg sm:h-64 xl:h-80 2xl:h-96">
+           
+          <div className="relative flex h-56 items-center transition-all justify-center overflow-hidden rounded-lg sm:h-64 xl:h-80 2xl:h-96">
+        
             <div
-              className=" flex justify-center overflow-hidden transition-all duration-700 ease-in-out"
+              className="rounded-xl border-gray border-solid border-1 shadow-[-10px_-10px_20px_5px_#d53f8c,10px_10px_20px_5px_#4299e1] flex justify-center overflow-hidden transition-all duration-700 ease-in-out"
               data-carousel-item
             >
+              
+              
               <Image
                 src={images[currentImg - 1]}
-                className="h-40 w-40 rounded-xl"
+                className="h-40 w-40"
                 alt=""
               />
               <Image
                 src={images[currentImg]}
-                className="h-40 w-40 rounded-xl"
+                className="h-40 w-40 "
                 alt=""
               />
               <Image
                 src={images[currentImg + 1]}
-                className="h-40 w-40 rounded-xl"
+                className="h-40 w-40 "
                 alt=""
               />
             </div>
@@ -103,6 +121,13 @@ const Carousel = () => {
           </button>
         </div>
       </div>
+          
+
+
+ 
+ 
+
+
     </>
   )
 }

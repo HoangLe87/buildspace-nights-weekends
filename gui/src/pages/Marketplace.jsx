@@ -13,7 +13,7 @@ export default function Marketplace() {
         />
       </Head>
       <Header />
-      <main>
+      <main className='min-h-screen'>
         <div className="flex justify-center">Comming soon in 2023</div>
       </main>
       <Footer />

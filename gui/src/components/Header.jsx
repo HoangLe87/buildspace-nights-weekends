@@ -39,7 +39,7 @@ export const Header = () => {
   return (
     <header className="py-10">
       <nav className="relative z-50 flex justify-between">
-        <div className="flex items-center md:gap-x-16">
+        <div className="flex items-center gap-x-6 md:gap-x-16">
           <Logo className="h-10 w-auto" />
           <div className=" md:flex md:gap-x-8">
             <NavLink className={className} href={'Swap'}>
@@ -60,7 +60,7 @@ export const Header = () => {
             </NavLink>
           </div>
           {!currentAccount && (
-            <Button onClick={() => connectWallet()} color="gradient">
+            <Button onClick={() => connectWallet()} className="shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]" color="gradient">
               <svg
                 aria-hidden="true"
                 className="mr-2 -ml-1 h-5 w-6"

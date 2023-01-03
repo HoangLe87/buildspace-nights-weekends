@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import logo1 from '../images/logos/logo1.svg'
+import logo from '../images/logos//vector/default-monochrome.svg'
 
 import { useRouter } from 'next/router'
 
@@ -11,7 +11,7 @@ export function Logo(props) {
       className="ml-2 flex items-center gap-2"
       onClick={() => router.push('/')}
     >
-      <Image src={logo1} className="h-32 w-32 hover:cursor-pointer" alt="" />
+      <Image src={logo} className="h-20 w-24 hover:cursor-pointer " alt="" />
     </div>
   )
 }

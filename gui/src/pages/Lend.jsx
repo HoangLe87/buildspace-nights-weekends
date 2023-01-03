@@ -14,7 +14,7 @@ export default function Lend() {
         />
       </Head>
       <Header />
-      <main>
+      <main className='min-h-screen'>
         <DexNavBar currentPage={'Lend'} />
         <div className="flex justify-center">Comming soon in 2023</div>
       </main>

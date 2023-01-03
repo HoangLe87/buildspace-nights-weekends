@@ -90,6 +90,10 @@ export function LPPoolsDisplay() {
                       scope="col"
                       className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                     ></th>
+                                     <th
+                      scope="col"
+                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                    ></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
