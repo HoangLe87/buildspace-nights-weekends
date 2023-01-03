@@ -5,24 +5,26 @@ import img4 from '../images/services/4.png'
 import img3 from '../images/services/3.png'
 import img5 from '../images/services/5.png'
 import img6 from '../images/services/6.png'
+import img7 from '../images/services/7.png'
+import img8 from '../images/services/8.png'
 import Image from 'next/image'
 import { useState } from 'react'
 
 const Carousel = () => {
-  const images = [img0, img1, img2, img3, img4, img5, img6]
-  const [currentImg, setCurrentImg] = useState(0)
+  const images = [img0, img1, img2, img3, img4, img5, img6, img7, img8]
+  const [currentImg, setCurrentImg] = useState(1)
   const next = () => {
-    if (currentImg < images.length - 1) {
+    if (currentImg < images.length - 2) {
       setCurrentImg(currentImg + 1)
     } else {
-      setCurrentImg(0)
+      setCurrentImg(1)
     }
   }
   const previous = () => {
-    if (currentImg >= 1) {
+    if (currentImg >= 2) {
       setCurrentImg(currentImg - 1)
     } else {
-      setCurrentImg(images.length - 1)
+      setCurrentImg(images.length - 2)
     }
   }
   return (
@@ -34,9 +36,22 @@ const Carousel = () => {
           data-carousel="static"
         >
           <div className="relative flex h-56 items-center  justify-center overflow-hidden rounded-lg sm:h-64 xl:h-80 2xl:h-96">
-            <div className=" duration-700 ease-in-out" data-carousel-item>
+            <div
+              className=" flex justify-center overflow-hidden transition-all duration-700 ease-in-out"
+              data-carousel-item
+            >
+              <Image
+                src={images[currentImg - 1]}
+                className="h-40 w-40 rounded-xl"
+                alt=""
+              />
               <Image
                 src={images[currentImg]}
+                className="h-40 w-40 rounded-xl"
+                alt=""
+              />
+              <Image
+                src={images[currentImg + 1]}
                 className="h-40 w-40 rounded-xl"
                 alt=""
               />

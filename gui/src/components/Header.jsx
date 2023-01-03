@@ -39,9 +39,9 @@ export const Header = () => {
   return (
     <header className="py-10">
       <nav className="relative z-50 flex justify-between">
-        <div className="flex items-center md:gap-x-12">
+        <div className="flex items-center md:gap-x-16">
           <Logo className="h-10 w-auto" />
-          <div className=" md:flex md:gap-x-6">
+          <div className=" md:flex md:gap-x-8">
             <NavLink className={className} href={'Swap'}>
               Dex
             </NavLink>

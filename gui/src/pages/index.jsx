@@ -12,6 +12,10 @@ export default function Home() {
   return (
     <>
       <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Modak&display=swap"
+          rel="stylesheet"
+        />
         <title>ANNA - DeFi made simple fun and simple</title>
         <meta
           name="description"
