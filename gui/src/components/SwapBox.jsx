@@ -245,7 +245,7 @@ export function SwapBox({ pairs, setPairs }) {
                 <div className="text-md mb-2 font-medium leading-6 text-white">
                   Instant trades with low fees
                 </div>
-                <div className="mb-2 border-2 border-solid border-green-500 bg-green-500 text-sm font-bold">
+                <div className="mb-2 border-2 border-solid border-green-500 bg-gradient-to-r from-green-500 to-cyan-500 text-sm font-bold">
                   <div className="text-white">You receive</div>
                   <div className="mt-2 flex">
                     <select
@@ -272,7 +272,7 @@ export function SwapBox({ pairs, setPairs }) {
                     ></input>{' '}
                   </div>
                 </div>
-                <div className="border-2 border-solid border-red-500 bg-red-500 text-sm font-bold">
+                <div className="border-2 border-solid border-orange-400 bg-gradient-to-r from-rose-600 to-orange-300 text-sm font-bold">
                   <div className=" text-white">You sell</div>
                   <div className="mt-2 flex">
                     <select

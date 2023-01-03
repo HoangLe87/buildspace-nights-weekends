@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import logo from '../images/logos/logoPic.png'
+import logo from '../images/nnneon.svg'
 import { useRouter } from 'next/router'
 
 export function Logo(props) {
