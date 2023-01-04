@@ -35,14 +35,14 @@ export function Faqs() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative overflow-hidden bg-slate-50 py-20sm:py-32"
+      className="py-20sm:py-32 relative my-10 overflow-hidden bg-slate-50"
     >
       <Image
-        className="absolute top-0 left-1/2 max-w-none translate-x-[-30%] -translate-y-1/4"
+        className="max-w-screen absolute top-0 left-1/2 translate-x-[-50%] -translate-y-1/4"
         src={backgroundImage}
         alt=""
         width={1558}
-        height={946}
+        height={1000}
         unoptimized
       />
       <div className="relative px-2">
@@ -81,10 +81,9 @@ export function Faqs() {
         </ul>
       </div>
       <Image
-        className="mt-10"
+        className="mt-10 w-screen"
         src={roadmap}
         alt=""
-        width={2245}
         height={1636}
         unoptimized
       />

@@ -3,6 +3,8 @@ import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import { useContext } from 'react'
 import { WalletContext } from '../pages/_app'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const Header = () => {
   const connectWallet = async () => {
@@ -17,19 +19,23 @@ export const Header = () => {
       })
       setCurrentAccount(accounts[0])
     } catch (error) {
-      console.log(error)
+      toast(`Opps: ${error}`)
     }
   }
 
   const changeAccount = async () => {
-    await window.ethereum.request({
-      method: 'wallet_requestPermissions',
-      params: [
-        {
-          eth_accounts: {},
-        },
-      ],
-    })
+    try {
+      await window.ethereum.request({
+        method: 'wallet_requestPermissions',
+        params: [
+          {
+            eth_accounts: {},
+          },
+        ],
+      })
+    } catch (error) {
+      toast(`Opps: ${error}`)
+    }
   }
 
   const className =
@@ -38,6 +44,7 @@ export const Header = () => {
   const [currentAccount, setCurrentAccount] = useContext(WalletContext)
   return (
     <header className="py-10">
+      <ToastContainer position="top-right" />
       <nav className="relative z-50 flex justify-between">
         <div className="flex items-center gap-x-6 md:gap-x-16">
           <Logo className="h-10 w-auto" />
@@ -60,7 +67,11 @@ export const Header = () => {
             </NavLink>
           </div>
           {!currentAccount && (
-            <Button onClick={() => connectWallet()} className="shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]" color="gradient">
+            <Button
+              onClick={() => connectWallet()}
+              className="shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]"
+              color="gradient"
+            >
               <svg
                 aria-hidden="true"
                 className="mr-2 -ml-1 h-5 w-6"

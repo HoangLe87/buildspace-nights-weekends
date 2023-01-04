@@ -112,7 +112,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
       // connecting to the input ERC20 token
       const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
       await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
-      console.log('approved', inputToken.inputTokenAmount)
+
       // connecting to the required ERC20 token
       const erc20required = await connectToContractUsingEthers(
         erc20ABI,
@@ -122,20 +122,19 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         exchangeAddress,
         requiredToken.requiredTokenAmount
       )
-      console.log('approved', requiredToken.requiredTokenAmount)
+
       // connect to exchange contract
-      console.log(exchangeAddress)
+
       const exchangeContract = await connectToContractUsingEthers(
         exchangeABI,
         exchangeAddress
       )
-      console.log('connected', exchangeAddress)
 
       const result = await exchangeContract.add(
         inputToken.inputTokenSymbol,
         inputToken.inputTokenAmount
       )
-      console.log('added', inputToken.inputTokenSymbol)
+
       if (result) {
         toast(`Hash: ${result.hash}`)
       }
@@ -183,11 +182,11 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
                         >
                           Deposit liquidity
                         </Dialog.Title>
-                        <div className="mt-2 flex">
+                        <div className="mt-2 flex justify-center">
                           <select
                             onChange={(e) => toggleToken(e)}
                             id="token1Symbol"
-                            className="w-28"
+                            className="w-28 rounded-xl"
                           >
                             <option value={token1} defaultValue>
                               {token1}
@@ -199,13 +198,14 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
                             type="number"
                             minLength="0"
                             maxLength="30"
+                            className="overflow-hidden rounded-xl p-0 text-center"
                             required
                             value={inputToken.inputTokenAmount}
                             onChange={(e) => getEstimateToken(e)}
                           ></input>{' '}
                         </div>
-                        <div className="mt-2 flex">
-                          <select id="token2Symbol" className="w-28">
+                        <div className="mt-2 flex justify-center">
+                          <select id="token2Symbol" className="w-28 rounded-xl">
                             <option value={requiredToken.requiredTokenSymbol}>
                               {requiredToken.requiredTokenSymbol}
                             </option>
@@ -215,6 +215,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
                             type="number"
                             minLength="0"
                             maxLength="30"
+                            className="overflow-hidden rounded-xl bg-gray-400 p-0 text-center"
                             value={requiredToken.requiredTokenAmount}
                             readOnly
                           ></input>{' '}

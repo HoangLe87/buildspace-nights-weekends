@@ -68,7 +68,10 @@ export function SwapBox({ pairs, setPairs }) {
         return
       }
       // if ANNA is one of the swap tokens
-      if (buyToken === 'ANNA' || sellToken === 'ANNA') {
+      if (
+        (buyToken === 'ANNA' || sellToken === 'ANNA') &&
+        (buyToken !== 'ANNA' || sellToken !== 'ANNA')
+      ) {
         let index = ''
         // buy ANNA with XXX
         if (buyToken === 'ANNA') {
@@ -79,7 +82,6 @@ export function SwapBox({ pairs, setPairs }) {
           index = tokensList.indexOf(buyToken) // find the pair
         }
         //transact
-
         const exAddress = pairs[index].address // find exchange address
 
         const exchange = await connectToContractUsingEthers(
@@ -96,7 +98,7 @@ export function SwapBox({ pairs, setPairs }) {
         })
 
         // buy XXX and sell ZZZ
-      } else {
+      } else if (buyToken !== 'ANNA' && sellToken !== 'ANNA') {
         // sell ZZZ buy ANNA
         const sellIndex = tokensList.indexOf(sellToken)
         const sellAddress = pairs[sellIndex].address
@@ -121,6 +123,8 @@ export function SwapBox({ pairs, setPairs }) {
           ...estimate,
           buyAmount: buyTokenAmount,
         })
+      } else {
+        return
       }
     } catch (error) {
       console.log(error)
@@ -223,6 +227,11 @@ export function SwapBox({ pairs, setPairs }) {
         await annaErc20.approve(buyAddress, annaAmount)
 
         await exchange2.swap('ANNA', annaAmount)
+        setEstimate({
+          ...estimate,
+          buyAmount: '',
+          sellAmount: '',
+        })
       }
       if (result) {
         toast(`Transaction pending`)
@@ -239,14 +248,14 @@ export function SwapBox({ pairs, setPairs }) {
       <ToastContainer position="top-right" />
 
       <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div className="relative transform overflow-hidden shadow-[0px_0px_10px_5px_#B794F4] rounded-lg bg-gray-500 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+        <div className="relative transform overflow-hidden rounded-lg bg-gray-500 px-4 pt-5 pb-4 text-left shadow-[0px_0px_10px_5px_#B794F4] shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
           <form onSubmit={(e) => swap(e)}>
             <div>
               <div className="mt-3 text-center sm:mt-5">
                 <div className="text-md mb-2 font-medium leading-6 text-white">
                   Instant trades with low fees
                 </div>
-                <div className="mb-2 border-2 rounded-xl border-solid border-green-500 bg-gradient-to-r from-green-400 to-cyan-500 text-sm font-bold">
+                <div className="mb-2 rounded-xl border-2 border-solid border-green-500 bg-gradient-to-r from-green-400 to-cyan-500 text-sm font-bold">
                   <div className="text-white">You receive</div>
                   <div className="mt-2 flex justify-between">
                     <select
@@ -261,7 +270,7 @@ export function SwapBox({ pairs, setPairs }) {
                       ))}
                     </select>{' '}
                     <input
-                      className=" rounded-xl bg-gray-400 p-0 text-center overflow-hidden"
+                      className=" overflow-hidden rounded-xl bg-gray-400 p-0 text-center"
                       id="token1Amount"
                       name="token1Amount"
                       type="text"
@@ -273,7 +282,7 @@ export function SwapBox({ pairs, setPairs }) {
                     ></input>{' '}
                   </div>
                 </div>
-                <div className="border-2 rounded-xl border-solid border-red-400 bg-gradient-to-r from-red-400 to-purple-300 text-sm font-bold">
+                <div className="rounded-xl border-2 border-solid border-red-400 bg-gradient-to-r from-red-400 to-purple-300 text-sm font-bold">
                   <div className=" text-white">You sell</div>
                   <div className="mt-2 flex justify-between">
                     <select
@@ -289,7 +298,7 @@ export function SwapBox({ pairs, setPairs }) {
                     </select>{' '}
                     <input
                       id="token2Amount"
-                      className='rounded-xl p-0 text-center overflow-hidden'
+                      className="overflow-hidden rounded-xl p-0 text-center"
                       type="text"
                       minLength="0"
                       maxLength="30"
@@ -302,11 +311,7 @@ export function SwapBox({ pairs, setPairs }) {
               </div>
             </div>
             <div className="mt-5 flex justify-center gap-3 sm:mt-6">
-              <Button
-                type="submit"
-                color="gradient"
-
-              >
+              <Button type="submit" color="gradient">
                 Swap
               </Button>
             </div>
