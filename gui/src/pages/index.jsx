@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <>
       <Head>
+  
 
-<link href="https://fonts.googleapis.com/css2?family=Elsie&display=swap" rel="stylesheet"/>
-        <title>ANNA - DeFi made simple fun and simple</title>
+        <title>Win ANNA's heart</title>
         <meta
           name="description"
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
