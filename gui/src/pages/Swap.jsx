@@ -3,7 +3,6 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { DexNavBar } from '@/components/DexNavBar'
 import { SwapBox } from '@/components/SwapBox'
-import { useState } from 'react'
 import { useFetchAllFirestoreData } from '@/utils/firestore'
 
 export default function Swap() {
@@ -19,7 +18,7 @@ export default function Swap() {
         />
       </Head>
       <Header />
-      <main className='min-h-screen'>
+      <main className="min-h-screen">
         <DexNavBar currentPage={'Swap'} />
         <SwapBox pairs={pairs} setPairs={setPairs} />
       </main>

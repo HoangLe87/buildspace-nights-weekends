@@ -283,7 +283,7 @@ export function SwapBox({ pairs, setPairs }) {
                   </div>
                 </div>
                 <div className="rounded-xl border-2 border-solid border-red-400 bg-gradient-to-r from-red-400 to-purple-300 text-sm font-bold">
-                  <div className=" text-white">You sell</div>
+                  <div className=" text-white">You pay</div>
                   <div className="mt-2 flex justify-between">
                     <select
                       id="token2Symbol"

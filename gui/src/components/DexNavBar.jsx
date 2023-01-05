@@ -4,7 +4,7 @@ import Router, { useRouter } from 'next/router'
 
 export function DexNavBar({ currentPage }) {
   const router = useRouter()
-  const tabs = ['Swap', 'Pools', 'Stake', 'Lend']
+  const tabs = ['Swap', 'Pools', 'Stake', 'Lend', 'Anna']
   const swap =
     currentPage === tabs[0]
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
@@ -22,6 +22,11 @@ export function DexNavBar({ currentPage }) {
 
   const lend =
     currentPage === tabs[3]
+      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+
+  const anna =
+    currentPage === tabs[4]
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
       : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
 
@@ -61,6 +66,10 @@ export function DexNavBar({ currentPage }) {
             <NavLink href="Lend" className={lend}>
               {' '}
               Lend{' '}
+            </NavLink>
+            <NavLink href="Anna" className={anna}>
+              {' '}
+              Anna{' '}
             </NavLink>
           </nav>
         </div>
