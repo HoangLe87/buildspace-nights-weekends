@@ -125,7 +125,7 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
                             maxLength="30"
                             className="text-center"
                             required
-                            value={userLpBalance}
+                            value={userLpBalance || 0}
                             onChange={(e) => setUserLpBalance(e.target.value)}
                           ></input>{' '}
                         </div>
