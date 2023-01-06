@@ -207,7 +207,7 @@ export function SwapBox({ pairs, setPairs }) {
 
         await exchange1.swap(sellToken, sellAmount)
         // sell ANNA buy XXX
-        console.log('swapped sell token witg ANNA')
+
         const buyIndex = tokensList.indexOf(buyToken)
         const buyAddress = pairs[buyIndex].address
         const exchange2 = await connectToContractUsingEthers(
@@ -232,11 +232,7 @@ export function SwapBox({ pairs, setPairs }) {
           buyAmount: '',
           sellAmount: '',
         })
-      }
-      if (result) {
         toast(`Transaction pending`)
-      } else {
-        toast(`Transaction uncessful`)
       }
     } catch (error) {
       toast(`Uups, something went wrong`)
@@ -311,7 +307,7 @@ export function SwapBox({ pairs, setPairs }) {
               </div>
             </div>
             <div className="mt-5 flex justify-center gap-3 sm:mt-6">
-              <Button type="submit" color="gradient">
+              <Button type="submit" color="gradient" className="w-28">
                 Swap
               </Button>
             </div>

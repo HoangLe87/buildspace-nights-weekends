@@ -6,18 +6,42 @@ import { DexNavBar } from '@/components/DexNavBar'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@/components/Button'
+import annaABI from '../../public/static/anna.json'
+import { connectToContractUsingEthers } from '@/utils/metamask'
+import { ethers } from 'ethers'
 
 export default function Anna() {
-  const [buyAmount, setbuyAmount] = useState('')
+  const annaAddress = '0xe145Ac17716770f178abcAcf68e633bbBab4cDaB'
+  const [buyAmount, setBuyAmount] = useState('')
   const [displayAmount, setDisplayAmount] = useState('')
 
   const calculateAmount = (e) => {
-    setbuyAmount(e.target.value)
+    setBuyAmount(e.target.value)
     if (e.target.value > 0) {
-      setDisplayAmount(e.target.value * 0.01)
+      setDisplayAmount(e.target.value * 0.1)
     }
   }
-  const buy = () => {}
+
+  const buy = async (e) => {
+    e.preventDefault()
+    try {
+      if (!window.ethereum) {
+        toast('Cannot do this without metamask.')
+        return
+      }
+
+      const contract = await connectToContractUsingEthers(annaABI, annaAddress)
+      await contract.buyAnna(buyAmount, {
+        value: ethers.utils.parseEther(String(displayAmount)),
+      })
+      setBuyAmount('')
+      setDisplayAmount('')
+      toast('Transaction pending')
+    } catch (error) {
+      toast('Opps something went wrong')
+    }
+  }
+
   return (
     <>
       <Head>
@@ -53,7 +77,7 @@ export default function Anna() {
                           <option value={'ANNA'}>{'ANNA'}</option>
                         </select>{' '}
                         <input
-                          className=" overflow-hidden rounded-xl p-0 text-center"
+                          className="overflow-hidden rounded-xl p-0 text-center"
                           id="token1Amount"
                           name="token1Amount"
                           type="text"
@@ -77,7 +101,7 @@ export default function Anna() {
                         </select>{' '}
                         <input
                           id="token2Amount"
-                          className="overflow-hidden  rounded-xl bg-gray-400 p-0 text-center"
+                          className="overflow-hidden rounded-xl bg-gray-400 p-0 text-center"
                           type="text"
                           minLength="0"
                           maxLength="30"
@@ -90,7 +114,7 @@ export default function Anna() {
                   </div>
                 </div>
                 <div className="mt-5 flex justify-center gap-3 sm:mt-6">
-                  <Button type="submit" color="gradient">
+                  <Button type="submit" color="gradient" className="w-28">
                     Buy
                   </Button>
                 </div>

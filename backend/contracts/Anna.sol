@@ -51,7 +51,7 @@ contract Anna is ERC20, Ownable {
         );
         // check that the contract actually recived the payment
         require(address(this).balance >= msg.value, "Money not yet recieved");
-        _mint(msg.sender, _amount);
+        _mint(msg.sender, _amount * (10**18));
         emit Minted(msg.sender, _amount, block.timestamp);
     }
 

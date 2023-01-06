@@ -4,30 +4,30 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract GAnna is ERC20, Ownable {
+contract LOVE is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
     uint128 public maxSupply = 29_999 * 10**18; // 29.99k max supply
     uint128 public price = 1 ether;
-    // whoever has 15k gANNA can lock or unlock the contract
+    // whoever has 15k LOVE can lock or unlock the contract
     bool public isLocked = false;
 
     // constructor
-    constructor() ERC20("Golden Anna", "GANNA") {
+    constructor() ERC20("LOVE Anna", "LOVE") {
         // mint all to owner (to be deposited into staking pools as reward
         _mint(owner(), 29_999 * 10**decimals());
     }
 
     // events
-    event Minted(address indexed to, uint256 amount, uint256 time);
+    event BuyOut(address indexed to, uint256 amount, uint256 time);
     event OwnerChanged(address indexed to, uint256 time);
     event WithdrawalDone(address indexed to, uint256 amount, uint256 time);
 
     // ---------------------- functions ------------------ //
 
     /**
-     * @dev mint gANNA
+     * @dev mint LOVE
      */
-    function mint() external payable {
+    function buyOut() external payable {
         require(
             (msg.value >= 10_000 ether),
             "You need to send at least 10k ether to do this"
@@ -37,8 +37,8 @@ contract GAnna is ERC20, Ownable {
         require(sucess, "Eth transfer failed");
         _mint(msg.sender, amount);
         maxSupply += amount;
-        // emit the minting to see who received, how much and when
-        emit Minted(msg.sender, amount, block.timestamp);
+        // emit the BuyOut to see who received, how much and when
+        emit BuyOut(msg.sender, amount, block.timestamp);
     }
 
     // get max supply
@@ -65,20 +65,20 @@ contract GAnna is ERC20, Ownable {
 
     // unlock the contract
     function unlock() external {
-        // need 15k gANNA to lock or unlock
+        // need 15k LOVE to lock or unlock
         require(
             balanceOf(msg.sender) >= 15000 * 10**18,
-            "You need at least 15k gANNA to do this"
+            "You need at least 15k LOVE to do this"
         );
         isLocked = !isLocked;
     }
 
-    // let user claim ownership if the user's balance is 10k gAnna or more
+    // let user claim ownership if the user's balance is 10k LOVE or more
     function claimOwner() external {
-        // check to see if user has at least 10k gAnna
+        // check to see if user has at least 10k LOVE
         require(
             balanceOf(msg.sender) >= 10000 * 10**18,
-            "You need at least 10k gANNA to do this"
+            "You need at least 10k LOVE to do this"
         );
         require(isLocked == false, "The contract is locked, please unlock");
         _transferOwnership(msg.sender);

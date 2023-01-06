@@ -3,15 +3,14 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 error TransferFailed();
 error NeedsMoreThanZero();
 
-contract Staking is ReentrancyGuard {
+contract Staking is ERC20, ReentrancyGuard {
     address payable public owner;
-    // token to be rewarded - ANNA
     IERC20 public rewardsToken;
-    // token to be staked - ANNA
     IERC20 public stakingToken;
 
     // 1% reward
@@ -22,12 +21,12 @@ contract Staking is ReentrancyGuard {
     uint256 public rewardPerTokenStaked;
     // total supply of stakingToken that are currently staked
     uint256 private totalSupply;
-    // mapping of individual rewardPerTokenStaked per address
-    mapping(address => uint256) public userRewardPerTokenStaked;
-    // mapping of rewards to be paid per address
-    mapping(address => uint256) public rewards;
-    // mapping of stakingToken balances that are currently staked per address
-    mapping(address => uint256) public balances;
+    // individual reward rate per address
+    mapping(address => uint256) public userRewardPaid;
+    // reward to be paid per address
+    mapping(address => uint256) public rewardsToBePaid;
+    // stakingToken balances currently staked per address
+    mapping(address => uint256) public stakedBalances;
 
     // events
     event Staked(address indexed user, uint256 indexed amount);
@@ -127,12 +126,6 @@ contract Staking is ReentrancyGuard {
         }
     }
 
-    // Function to receive Ether. msg.data must be empty
-    receive() external payable {}
-
-    // Fallback function is called when msg.data is not empty
-    fallback() external payable {}
-
     // destruct the contract
     function destruct() external onlyOwner {
         selfdestruct(owner);
@@ -164,9 +157,6 @@ contract Staking is ReentrancyGuard {
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");
-        // Underscore is a special character only used inside
-        // a function modifier and it tells Solidity to
-        // execute the rest of the code.
         _;
     }
 }
