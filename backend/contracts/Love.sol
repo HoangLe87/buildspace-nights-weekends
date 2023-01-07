@@ -12,7 +12,7 @@ contract Love is ERC20, Ownable {
     bool public isLocked = false;
 
     // constructor
-    constructor() ERC20("Love Anna", "LOVE") {
+    constructor() ERC20("Love", "LOVE") {
         // mint all to owner (to be deposited into staking pools as reward
         _mint(owner(), 29_999 * 10**decimals());
     }

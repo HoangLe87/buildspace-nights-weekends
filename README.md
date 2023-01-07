@@ -33,10 +33,11 @@ category: Games (adventure capitalist)
 - ULTIMATE DONATION Donate your fortune away and start your adventure all over again. Why? You get bigger profits, better upgrades, and obviously bragging rights.
 
 
-## deploy steps:
-1 - deploy GANNA - 0x484AC746C5a960E6F9440D956A45CBe7ce4d123a
-2 - deploy ANNA with input GANNA address - 0xe145Ac17716770f178abcAcf68e633bbBab4cDaB
-3 - amend GANNA address in EXfactory then deploy - 0x6D7ED0eCd609097211d5144B55f36291959dDA26
+## deploy steps and addresses:
+1 - deploy LOVE - 0xE129970DEAA685Ee0142D5DDd086780EB2bf2607
+2 - deploy ANNA with input LOVE address - 0xefD535B91D30d59492BB2569225d8307fa6b747b
+3 - amend LOVE address in EXfac then deploy - 0xc9c16a388c878EEda31ec5F7592413339A4F0099
+4 - investments contract 0xf263166449cff8F9D8B32bD51a38ee0bEFF282F6
 
 WETH - 0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6
 USDT - 0x509Ee0d083DdF8AC028f2a56731412edD63223B9

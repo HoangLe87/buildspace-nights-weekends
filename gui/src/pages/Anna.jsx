@@ -6,12 +6,14 @@ import { DexNavBar } from '@/components/DexNavBar'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@/components/Button'
-import annaABI from '../../public/static/anna.json'
+import { WalletContext } from './_app'
+import { useContext } from 'react'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 import { ethers } from 'ethers'
 
 export default function Anna() {
-  const annaAddress = '0xe145Ac17716770f178abcAcf68e633bbBab4cDaB'
+  const [currentAccount, setCurrentAccount, accountsStatic] =
+    useContext(WalletContext)
   const [buyAmount, setBuyAmount] = useState('')
   const [displayAmount, setDisplayAmount] = useState('')
 
@@ -30,8 +32,11 @@ export default function Anna() {
         return
       }
 
-      const contract = await connectToContractUsingEthers(annaABI, annaAddress)
-      await contract.buyAnna(buyAmount, {
+      const contract = await connectToContractUsingEthers(
+        accountsStatic.anna.json,
+        accountsStatic.anna.address
+      )
+      await contract.buyAnna(ethers.utils.parseEther(String(buyAmount)), {
         value: ethers.utils.parseEther(String(displayAmount)),
       })
       setBuyAmount('')

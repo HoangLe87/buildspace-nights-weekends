@@ -65,7 +65,7 @@ contract ExFac is Ownable {
 
     function claimOwner() external {
         require(
-            ERC20(0x484AC746C5a960E6F9440D956A45CBe7ce4d123a).balanceOf(
+            ERC20(0xE129970DEAA685Ee0142D5DDd086780EB2bf2607).balanceOf(
                 msg.sender
             ) >= 15000 * 10**18,
             "Need at least 15k gANNA"

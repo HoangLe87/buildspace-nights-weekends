@@ -5,6 +5,7 @@ import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 import { Button } from './Button'
+import { ethers } from 'ethers'
 
 export function SwapBox({ pairs, setPairs }) {
   let result = pairs.map((pair) => pair.token2).concat('ANNA')
@@ -166,7 +167,10 @@ export function SwapBox({ pairs, setPairs }) {
         )
 
         const buyTokenAmount = String(
-          await exchange.sellEst(sellToken, sellAmount)
+          await exchange.sellEst(
+            sellToken,
+            ethers.utils.parseEther(String(sellAmount))
+          )
         ).split(',')[1] // get ANNA est
 
         const sellTokenAddress = await exchange.symbAdr(sellToken) // get adr of sell token
@@ -177,9 +181,15 @@ export function SwapBox({ pairs, setPairs }) {
           sellTokenAddress
         )
 
-        await sellErc20.approve(exAddress, sellAmount)
+        await sellErc20.approve(
+          exAddress,
+          ethers.utils.parseEther(String(sellAmount))
+        )
 
-        await exchange.swap(sellToken, sellAmount)
+        await exchange.swap(
+          sellToken,
+          ethers.utils.parseEther(String(sellAmount))
+        )
 
         // buy XXX and sell ZZZ
       } else {
@@ -192,7 +202,10 @@ export function SwapBox({ pairs, setPairs }) {
           sellAddress
         )
         const annaAmount = String(
-          await exchange1.sellEst(sellToken, sellAmount)
+          await exchange1.sellEst(
+            sellToken,
+            ethers.utils.parseEther(String(sellAmount))
+          )
         ).split(',')[1]
 
         const sellTokenAddress = await exchange1.symbAdr(sellToken)
@@ -203,9 +216,15 @@ export function SwapBox({ pairs, setPairs }) {
           sellTokenAddress
         )
 
-        await sellErc20.approve(sellAddress, sellAmount)
+        await sellErc20.approve(
+          sellAddress,
+          ethers.utils.parseEther(String(sellAmount))
+        )
 
-        await exchange1.swap(sellToken, sellAmount)
+        await exchange1.swap(
+          sellToken,
+          ethers.utils.parseEther(String(sellAmount))
+        )
         // sell ANNA buy XXX
 
         const buyIndex = tokensList.indexOf(buyToken)
@@ -215,7 +234,10 @@ export function SwapBox({ pairs, setPairs }) {
           buyAddress
         )
         const buyTokenAmount = String(
-          await exchange2.sellEst('ANNA', annaAmount)
+          await exchange2.sellEst(
+            'ANNA',
+            ethers.utils.parseEther(String(annaAmount))
+          )
         ).split(',')[1]
 
         const annaTokenAddress = await exchange1.symbAdr('ANNA')
@@ -224,9 +246,15 @@ export function SwapBox({ pairs, setPairs }) {
           erc20ABI,
           annaTokenAddress
         )
-        await annaErc20.approve(buyAddress, annaAmount)
+        await annaErc20.approve(
+          buyAddress,
+          ethers.utils.parseEther(String(annaAmount))
+        )
 
-        await exchange2.swap('ANNA', annaAmount)
+        await exchange2.swap(
+          'ANNA',
+          ethers.utils.parseEther(String(annaAmount))
+        )
         setEstimate({
           ...estimate,
           buyAmount: '',

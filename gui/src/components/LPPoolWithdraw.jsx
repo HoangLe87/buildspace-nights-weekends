@@ -8,10 +8,9 @@ import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
 import { WalletContext } from '../pages/_app'
 import { Button } from './Button'
+import { ethers } from 'ethers'
 
 export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
-  console.log(token1)
-  console.log(token2)
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -37,7 +36,9 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
           exchangeAddress
         )
 
-        let userLpBalance = await erc20lp.balanceOf(currentAccount)
+        let userLpBalance = ethers.utils.formatEther(
+          await erc20lp.balanceOf(currentAccount)
+        )
         setUserLpBalance(userLpBalance)
       }
     } catch (error) {
@@ -63,7 +64,9 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
         exchangeABI,
         exchangeAddress
       )
-      const result = await exchangeContract.rem(userLpBalance)
+      const result = await exchangeContract.rem(
+        ethers.utils.partseEther(userLpBalance)
+      )
 
       if (result) {
         toast(`Hash: ${result.hash}`)

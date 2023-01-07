@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { submitDataToFireStore, deleteDataFromFireStore } from './firestore'
 
 // get the contract using ethers with abi and address as input
-export const connectToContractUsingEthers = async (abi, contractAddress) => {
+export const connectToContractUsingEthers = async (json, contractAddress) => {
   try {
     if (!window.ethereum) {
       return
@@ -12,7 +12,7 @@ export const connectToContractUsingEthers = async (abi, contractAddress) => {
     const signer = provider.getSigner()
     const connectedContract = new ethers.Contract(
       contractAddress,
-      abi.abi,
+      json.abi,
       signer
     )
     return connectedContract
@@ -37,7 +37,7 @@ export const checkIfWalletIsConnected = async (setCurrentAccount) => {
 }
 
 // creates a new exchange via factory and uploads the new contract address and tokens into firestore upon sucessfull emitted event
-export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
+export const useNewExchangeCreatedEvent = async (json, contractAddress) => {
   try {
     if (typeof window == 'undefined') return
     if (window.ethereum) {
@@ -60,7 +60,7 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
         )
       }
       const listen = async () => {
-        let contract = await connectToContractUsingEthers(abi, contractAddress)
+        let contract = await connectToContractUsingEthers(json, contractAddress)
 
         contract.on('Add', onAdd)
         return () => {
@@ -80,7 +80,7 @@ export const useNewExchangeCreatedEvent = async (abi, contractAddress) => {
 }
 
 // delete exchange listener
-export const useExchangeRemoved = async (abi, contractAddress) => {
+export const useExchangeRemoved = async (json, contractAddress) => {
   try {
     if (typeof window == 'undefined') return
     if (window.ethereum) {
@@ -103,7 +103,7 @@ export const useExchangeRemoved = async (abi, contractAddress) => {
         )
       }
       const listen = async () => {
-        let contract = await connectToContractUsingEthers(abi, contractAddress)
+        let contract = await connectToContractUsingEthers(json, contractAddress)
 
         contract.on('Remove', onRemove)
         return () => {

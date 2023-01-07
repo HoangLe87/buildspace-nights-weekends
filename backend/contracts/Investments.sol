@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Investments is Ownable, ReentrancyGuard {
     IERC20 public Anna;
+    IERC20 public Love;
 
     struct Pool {
         uint256 id;
@@ -21,8 +22,9 @@ contract Investments is Ownable, ReentrancyGuard {
     Pool[5] public pools;
 
     // input address for staking and rewards tokens
-    constructor(address _annaAddress) {
+    constructor(address _annaAddress, address _loveAddress) {
         Anna = IERC20(_annaAddress);
+        Love = IERC20(_loveAddress);
         pools[0].id = 0;
         pools[0].price = 1;
         pools[0].rewardRate = 1000; // 10%
@@ -165,9 +167,7 @@ contract Investments is Ownable, ReentrancyGuard {
     function claimOwner() external {
         // check to see if user has at least 10k LOVE
         require(
-            IERC20(0x484AC746C5a960E6F9440D956A45CBe7ce4d123a).balanceOf(
-                msg.sender
-            ) >= 10000 * 10**18,
+            Love.balanceOf(msg.sender) >= 10000 * 10**18,
             "You need at least 10k LOVE to do this"
         );
         _transferOwnership(msg.sender);

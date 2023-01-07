@@ -1,27 +1,31 @@
 import { LPPoolCreate } from './LPPoolCreate'
 import { useState, createContext } from 'react'
 import { LPPoolsDisplay } from './LPPoolsDisplay'
-import abi from '../../public/static/exFac.json'
 import {
   useNewExchangeCreatedEvent,
   useExchangeRemoved,
 } from '@/utils/metamask'
 import { useFetchAllFirestoreData } from '@/utils/firestore'
+import { WalletContext } from '@/pages/_app'
+import { useContext } from 'react'
 
 export const PoolDetailsContext = createContext()
 
 export function LPPools() {
-  const EXCHANGE_FACTORY = '0x6D7ED0eCd609097211d5144B55f36291959dDA26'
+  const [currentAccount, setCurrentAccount, accountsStatic] =
+    useContext(WalletContext)
+  const EXCHANGE_FACTORY = accountsStatic.exFac.address
+  const exFacJson = accountsStatic.exFac.json
   const [isCreatePoolBoxOpen, setCreatePoolBoxOpen] = useState(false)
   const [isDepositBoxOpen, setDepositBoxOpen] = useState(false)
   const [isWithdrawBoxOpen, setWithdrawBoxOpen] = useState(false)
   // listening to any emitted events for exchange creation
   const { newExchangeCreated } = useNewExchangeCreatedEvent(
-    abi,
+    exFacJson,
     EXCHANGE_FACTORY
   )
   // listening to any emitted events for exchange deletion
-  const { exchangeRemoved } = useExchangeRemoved(abi, EXCHANGE_FACTORY)
+  const { exchangeRemoved } = useExchangeRemoved(exFacJson, EXCHANGE_FACTORY)
   const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
 
   return (
@@ -32,7 +36,7 @@ export function LPPools() {
           setCreatePoolBoxOpen,
           pairs,
           setPairs,
-          abi,
+          exFacJson,
           EXCHANGE_FACTORY,
           isDepositBoxOpen,
           setDepositBoxOpen,

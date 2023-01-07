@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -6,16 +6,15 @@ import { PoolDetailsContext } from './LPPools'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 import exchangeABI from '../../public/static/ex.json'
 import erc20ABI from '../../public/static/erc20.json'
+import { ethers } from 'ethers'
 
 export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
-  console.log(token1)
-  console.log(token2)
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
     pairs,
     setPairs,
-    abi,
+    exFacJson,
     EXCHANGE_FACTORY,
     isDepositBoxOpen,
     setDepositBoxOpen,
@@ -49,8 +48,8 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
           e.target.value
         )
         let tokenSymbol = String(data).split(',')[0]
-        let tokenEstimate = String(data).split(',')[1]
-        let lpTokens = String(data).split(',')[2]
+        let tokenEstimate = ethers.utils.formatEther(data.split(',')[1])
+        let lpTokens = ethers.utils.formatEther(data.split(',')[2])
 
         setRequiredToken({
           requiredTokenSymbol: tokenSymbol,
@@ -99,7 +98,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
       }
       // connect to factory
       const exchangeFactory = await connectToContractUsingEthers(
-        abi,
+        exFacJson,
         EXCHANGE_FACTORY
       )
       // get addresses of the 2 ERC20 tokens
@@ -120,7 +119,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
       )
       await erc20required.approve(
         exchangeAddress,
-        requiredToken.requiredTokenAmount
+        ethers.parseEther(requiredToken.requiredTokenAmount)
       )
 
       // connect to exchange contract
@@ -132,7 +131,7 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
 
       const result = await exchangeContract.add(
         inputToken.inputTokenSymbol,
-        inputToken.inputTokenAmount
+        ethers.parseEther(inputToken.inputTokenAmount)
       )
 
       if (result) {
