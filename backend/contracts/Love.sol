@@ -4,15 +4,15 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LOVE is ERC20, Ownable {
+contract Love is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
-    uint128 public maxSupply = 29_999 * 10**18; // 29.99k max supply
-    uint128 public price = 1 ether;
+    uint256 public maxSupply = 29_999 * 10**18; // 29.99k max supply
+    uint256 public price = 1 ether;
     // whoever has 15k LOVE can lock or unlock the contract
     bool public isLocked = false;
 
     // constructor
-    constructor() ERC20("LOVE Anna", "LOVE") {
+    constructor() ERC20("Love Anna", "LOVE") {
         // mint all to owner (to be deposited into staking pools as reward
         _mint(owner(), 29_999 * 10**decimals());
     }
@@ -25,15 +25,16 @@ contract LOVE is ERC20, Ownable {
     // ---------------------- functions ------------------ //
 
     /**
-     * @dev mint LOVE
+     * buy out for fixed price
      */
     function buyOut() external payable {
+        uint256 buyOutPrice = 10_000 * price;
         require(
-            (msg.value >= 10_000 ether),
+            (msg.value >= buyOutPrice),
             "You need to send at least 10k ether to do this"
         );
         uint128 amount = (10_000 * 10**18);
-        (bool sucess, ) = owner().call{value: 9_999 ether}("");
+        (bool sucess, ) = owner().call{value: (buyOutPrice - (0.1 ether))}("");
         require(sucess, "Eth transfer failed");
         _mint(msg.sender, amount);
         maxSupply += amount;
@@ -46,9 +47,9 @@ contract LOVE is ERC20, Ownable {
         return maxSupply;
     }
 
-    // get max supply
-    function getPrice() public view returns (uint256) {
-        return price;
+    // set the buyout price
+    function setPrice(uint256 _price) external onlyOwner {
+        price = _price;
     }
 
     // withdrawal

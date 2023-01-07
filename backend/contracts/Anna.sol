@@ -6,15 +6,15 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Anna is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
-    uint128 public price = 0.1 ether;
+    uint256 public price = 0.1 ether;
     // additional security for claiming ownership
     bool public isLocked = false;
-    address GANNA;
+    ERC20 public LOVE;
 
     // constructor
-    constructor(address _GANNA) ERC20("Anna", "ANNA") {
+    constructor(address _LOVE) ERC20("Anna", "ANNA") {
         _mint(owner(), 1000000 * 10**decimals()); // 1mil pre-mint
-        GANNA = _GANNA;
+        LOVE = ERC20(_LOVE);
     }
 
     // events
@@ -30,6 +30,10 @@ contract Anna is ERC20, Ownable {
     function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
         emit Minted(to, amount, block.timestamp); // emit the minting to see who received, how much and when
+    }
+
+    function setPrice(uint256 _price) external onlyOwner {
+        price = _price;
     }
 
     /**
@@ -55,11 +59,6 @@ contract Anna is ERC20, Ownable {
         emit Minted(msg.sender, _amount, block.timestamp);
     }
 
-    // get price
-    function getPrice() external view returns (uint256) {
-        return price;
-    }
-
     // withdrawal
     function withdraw() external onlyOwner {
         uint256 amount = address(this).balance;
@@ -71,20 +70,20 @@ contract Anna is ERC20, Ownable {
 
     // unlock the contract
     function unlock() external {
-        // need 15k gANNA to lock or unlock
+        // need 15k LOVE to lock or unlock
         require(
-            ERC20(GANNA).balanceOf(msg.sender) >= 15000 * 10**18,
-            "You need at least 15k gANNA to do this"
+            LOVE.balanceOf(msg.sender) >= 15000 * 10**18,
+            "You need at least 15k LOVE to do this"
         );
         isLocked = !isLocked;
     }
 
-    // let user claim ownership if the user's balance is 10k gAnna or more
+    // let user claim ownership if the user's balance is 10k LOVE or more
     function claimOwner() external {
-        // check to see if user has at least 10k gAnna
+        // check to see if user has at least 10k LOVE
         require(
-            ERC20(GANNA).balanceOf(msg.sender) >= 10000 * 10**18,
-            "You need at least 10k gANNA to do this"
+            LOVE.balanceOf(msg.sender) >= 10000 * 10**18,
+            "You need at least 10k LOVE to do this"
         );
         require(isLocked == false, "The contract is locked, please unlock");
         _transferOwnership(msg.sender);
