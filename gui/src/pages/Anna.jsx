@@ -16,7 +16,7 @@ export default function Anna() {
     useContext(WalletContext)
   const [buyAmount, setBuyAmount] = useState('')
   const [displayAmount, setDisplayAmount] = useState('')
-
+  console.log(currentAccount)
   const calculateAmount = (e) => {
     setBuyAmount(e.target.value)
     if (e.target.value > 0) {

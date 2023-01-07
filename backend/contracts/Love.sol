@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Love is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
     uint256 public maxSupply = 29_999 * 10**18; // 29.99k max supply
-    uint256 public price = 1 ether;
+    uint256 public price = 100;
     // whoever has 15k LOVE can lock or unlock the contract
     bool public isLocked = false;
 
@@ -28,13 +28,15 @@ contract Love is ERC20, Ownable {
      * buy out for fixed price
      */
     function buyOut() external payable {
-        uint256 buyOutPrice = 10_000 * price;
+        uint256 buyOutPrice = (10_000 * price * 10**18) / 100;
         require(
             (msg.value >= buyOutPrice),
             "You need to send at least 10k ether to do this"
         );
         uint128 amount = (10_000 * 10**18);
-        (bool sucess, ) = owner().call{value: (buyOutPrice - (0.1 ether))}("");
+        (bool sucess, ) = owner().call{value: (buyOutPrice - (0.1 * 10**18))}(
+            ""
+        );
         require(sucess, "Eth transfer failed");
         _mint(msg.sender, amount);
         maxSupply += amount;

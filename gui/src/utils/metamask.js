@@ -40,9 +40,11 @@ export const checkIfWalletIsConnected = async (setCurrentAccount) => {
 export const useNewExchangeCreatedEvent = async (json, contractAddress) => {
   try {
     if (typeof window == 'undefined') return
+
     if (window.ethereum) {
       const [newExchangeCreated, setNewExchangeCreated] = useState('')
       const [update, setUpdate] = useState(false)
+
       const onAdd = async (exchangeAddress, t1, t2) => {
         const message = {
           address: exchangeAddress,
@@ -59,6 +61,9 @@ export const useNewExchangeCreatedEvent = async (json, contractAddress) => {
           newExchangeCreated.token2
         )
       }
+
+
+
       const listen = async () => {
         let contract = await connectToContractUsingEthers(json, contractAddress)
 

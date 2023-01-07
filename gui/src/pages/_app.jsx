@@ -15,11 +15,11 @@ export default function App({ Component, pageProps }) {
   const [currentAccount, setCurrentAccount] = useState('')
   const contractsStatic = {
     anna: {
-      address: '0xefD535B91D30d59492BB2569225d8307fa6b747b',
+      address: '0xbAd23F5E81049a4d5b74097Cf5d00db92574995a',
       json: annaJson,
     },
     love: {
-      address: '0xE129970DEAA685Ee0142D5DDd086780EB2bf2607',
+      address: '0x6b0b607951fd708ACc9836e90D15D4331c0d61e9',
       json: loveJson,
     },
     erc20: {
@@ -29,7 +29,7 @@ export default function App({ Component, pageProps }) {
       json: exJson,
     },
     exFac: {
-      address: '0xc9c16a388c878EEda31ec5F7592413339A4F0099',
+      address: '0xf80a2e20Ac6b0A6b54AA94C97dDEaA8Ac0C67CCd',
       json: exFacJson,
     },
     investments: {

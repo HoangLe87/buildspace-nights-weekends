@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Anna is ERC20, Ownable {
     // ---------------------- definitions ------------------ //
-    uint256 public price = 0.1 ether;
+    uint256 public price = 100;
     // additional security for claiming ownership
     bool public isLocked = false;
     ERC20 public LOVE;
@@ -47,7 +47,7 @@ contract Anna is ERC20, Ownable {
             _amount > 0,
             "Please insert a positive amount of token to be purchased"
         );
-        uint256 amountToBePaid = price * _amount;
+        uint256 amountToBePaid = (price * _amount) / 1000;
         // check that the payment sent is enough for the purchase
         require(
             msg.value >= amountToBePaid,
