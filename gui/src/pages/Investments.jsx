@@ -86,10 +86,10 @@ export default function Investments() {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-xl font-semibold text-gray-900">
-                Available investments
+                ANNA investments
               </h1>
               <p className="mt-2 text-sm text-gray-700">
-                Buy the below with Anna to earn and start eaning. There is 50%
+                Buy the below with ANNA to start eaning ANNA. There is 50%
                 selling tax so it makes only sense to leave these for long term.
                 The longer you hold the more you earn.
               </p>
