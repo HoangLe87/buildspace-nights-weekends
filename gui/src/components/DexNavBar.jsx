@@ -4,7 +4,7 @@ import Router, { useRouter } from 'next/router'
 
 export function DexNavBar({ currentPage }) {
   const router = useRouter()
-  const tabs = ['Swap', 'Pools', 'Stake', 'Lend', 'Anna']
+  const tabs = ['Swap', 'Pools', 'Investments', 'Anna']
   const swap =
     currentPage === tabs[0]
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
@@ -15,18 +15,13 @@ export function DexNavBar({ currentPage }) {
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
       : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
 
-  const stake =
+  const investments =
     currentPage === tabs[2]
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
       : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
 
-  const lend =
-    currentPage === tabs[3]
-      ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
-      : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
-
   const anna =
-    currentPage === tabs[4]
+    currentPage === tabs[3]
       ? 'border-indigo-500 text-indigo-600 text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
       : 'border-transparent text-gray-500 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
 
@@ -59,13 +54,9 @@ export function DexNavBar({ currentPage }) {
             <NavLink href="Pools" className={pools}>
               Pools{' '}
             </NavLink>
-            <NavLink href="Stake" className={stake}>
+            <NavLink href="Investments" className={investments}>
               {' '}
-              Stake{' '}
-            </NavLink>
-            <NavLink href="Lend" className={lend}>
-              {' '}
-              Lend{' '}
+              Investments{' '}
             </NavLink>
             <NavLink href="Anna" className={anna}>
               {' '}

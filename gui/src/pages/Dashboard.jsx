@@ -89,20 +89,21 @@ export default function Dashboard() {
         </div>
         <div className="mt-10 grid place-items-center">
           <h1 className=" grid place-items-center">
-            <span>Your name: Baby boy!</span>
-            <span>Your age: 1</span>
+            <span>Name: Baby</span>
+            <span>Gender: boy</span>
+            <span>Age: 1</span>
           </h1>
           <Image
             src={baby}
             width={500}
             height={500}
             alt="avatar"
-            className="h-40 w-40 rounded-full"
+            className="my-10 h-40 w-40 rounded-full"
             priority
           />
         </div>
 
-        <div className="mt-10 grid place-items-center">
+        <div className="grid place-items-center">
           <div>Lemonade stands: {stats.lemonadeStands | '0'}</div>
           <div>Coffee shops: {stats.coffeeShops | '0'}</div>
           <div>Grocery stores: {stats.groceryStores | '0'}</div>

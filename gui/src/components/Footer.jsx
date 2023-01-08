@@ -7,17 +7,14 @@ import { SiGitbook } from 'react-icons/si'
 export function Footer() {
   return (
     <footer className="bg-slate-50">
-      <div className="py-16">
-        <Logo className="mx-auto h-10 w-auto" />
-        <nav className="mt-10 text-sm" aria-label="quick links">
-          <div className="-my-1 flex justify-center gap-x-6">
-            <NavLink href="#features">Dex</NavLink>
-            <NavLink href="#testimonials">Marketplace</NavLink>
-            <NavLink href="#pricing">Games</NavLink>
-            <NavLink href="#pricing">Dashboard</NavLink>
-          </div>
-        </nav>
-      </div>
+      <nav className="mt-10 text-sm" aria-label="quick links">
+        <div className="-my-1 flex justify-center gap-x-6">
+          <NavLink href="/">About us</NavLink>
+          <NavLink href="/">Career</NavLink>
+          <NavLink href="/">Partnerships</NavLink>
+          <NavLink href="/">Guides</NavLink>
+        </div>
+      </nav>
       <div className="flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between">
         <div className="flex gap-x-6">
           <Link

@@ -15,7 +15,7 @@ export function Logo(props) {
         alt=""
       />
 
-      <span className="relative inline-block bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-2xl text-transparent hover:cursor-pointer ">
+      <span className="invisible relative bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-2xl text-transparent hover:cursor-pointer sm:visible ">
         ANNA{' '}
       </span>
     </div>

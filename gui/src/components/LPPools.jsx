@@ -31,7 +31,7 @@ export function LPPools() {
   const [pairs, setPairs] = useFetchAllFirestoreData('LiquidityPools')
 
   return (
-    <div className="my-60 px-4 sm:px-6 lg:px-8">
+    <div>
       <PoolDetailsContext.Provider
         value={[
           isCreatePoolBoxOpen,
