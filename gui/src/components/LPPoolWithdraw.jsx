@@ -65,7 +65,7 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
         exchangeAddress
       )
       const result = await exchangeContract.rem(
-        ethers.utils.partseEther(userLpBalance)
+        ethers.utils.parseEther(userLpBalance)
       )
 
       if (result) {

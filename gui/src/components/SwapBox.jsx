@@ -90,9 +90,14 @@ export function SwapBox({ pairs, setPairs }) {
           exchangeABI,
           exAddress
         )
-        const buyTokenAmount = String(
-          await exchange.sellEst(sellToken, sellAmount)
-        ).split(',')[1] // get ANNA est
+        const buyTokenAmount = ethers.utils.formatEther(
+          String(
+            await exchange.sellEst(
+              sellToken,
+              ethers.utils.parseEther(sellAmount)
+            )
+          ).split(',')[1]
+        ) // get ANNA est
         setEstimate({
           ...estimate,
           buyAmount: buyTokenAmount,
@@ -107,9 +112,14 @@ export function SwapBox({ pairs, setPairs }) {
           exchangeABI,
           sellAddress
         )
-        const annaAmount = String(
-          await exchange1.sellEst(sellToken, sellAmount)
-        ).split(',')[1]
+        const annaAmount = ethers.utils.formatEther(
+          String(
+            await exchange1.sellEst(
+              sellToken,
+              ethers.utils.parseEther(sellAmount)
+            )
+          ).split(',')[1]
+        )
         // sell ANNA buy XXX
         const buyIndex = tokensList.indexOf(buyToken)
         const buyAddress = pairs[buyIndex].address
@@ -117,9 +127,11 @@ export function SwapBox({ pairs, setPairs }) {
           exchangeABI,
           buyAddress
         )
-        const buyTokenAmount = String(
-          await exchange2.sellEst('ANNA', annaAmount)
-        ).split(',')[1]
+        const buyTokenAmount = ethers.utils.formatEther(
+          String(
+            await exchange2.sellEst('ANNA', ethers.utils.parseEther(annaAmount))
+          ).split(',')[1]
+        )
         setEstimate({
           ...estimate,
           buyAmount: buyTokenAmount,
@@ -166,12 +178,14 @@ export function SwapBox({ pairs, setPairs }) {
           exAddress
         )
 
-        const buyTokenAmount = String(
-          await exchange.sellEst(
-            sellToken,
-            ethers.utils.parseEther(String(sellAmount))
-          )
-        ).split(',')[1] // get ANNA est
+        const buyTokenAmount = ethers.utils.formatEther(
+          String(
+            await exchange.sellEst(
+              sellToken,
+              ethers.utils.parseEther(String(sellAmount))
+            )
+          ).split(',')[1]
+        ) // get ANNA est
 
         const sellTokenAddress = await exchange.symbAdr(sellToken) // get adr of sell token
 
@@ -190,7 +204,12 @@ export function SwapBox({ pairs, setPairs }) {
           sellToken,
           ethers.utils.parseEther(String(sellAmount))
         )
-
+        toast('Transaction pending')
+        setEstimate({
+          ...estimate,
+          buyAmount: '',
+          sellAmount: '',
+        })
         // buy XXX and sell ZZZ
       } else {
         // sell ZZZ buy ANNA
@@ -201,12 +220,14 @@ export function SwapBox({ pairs, setPairs }) {
           exchangeABI,
           sellAddress
         )
-        const annaAmount = String(
-          await exchange1.sellEst(
-            sellToken,
-            ethers.utils.parseEther(String(sellAmount))
-          )
-        ).split(',')[1]
+        const annaAmount = ethers.utils.formatEther(
+          String(
+            await exchange1.sellEst(
+              sellToken,
+              ethers.utils.parseEther(String(sellAmount))
+            )
+          ).split(',')[1]
+        )
 
         const sellTokenAddress = await exchange1.symbAdr(sellToken)
 
@@ -233,12 +254,14 @@ export function SwapBox({ pairs, setPairs }) {
           exchangeABI,
           buyAddress
         )
-        const buyTokenAmount = String(
-          await exchange2.sellEst(
-            'ANNA',
-            ethers.utils.parseEther(String(annaAmount))
-          )
-        ).split(',')[1]
+        const buyTokenAmount = ethers.utils.formatEther(
+          String(
+            await exchange2.sellEst(
+              'ANNA',
+              ethers.utils.parseEther(String(annaAmount))
+            )
+          ).split(',')[1]
+        )
 
         const annaTokenAddress = await exchange1.symbAdr('ANNA')
 

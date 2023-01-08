@@ -45,11 +45,12 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         )
         let data = await exchangeContract.getEst(
           inputToken.inputTokenSymbol,
-          e.target.value
+          ethers.utils.parseEther(e.target.value)
         )
-        let tokenSymbol = String(data).split(',')[0]
-        let tokenEstimate = ethers.utils.formatEther(data.split(',')[1])
-        let lpTokens = ethers.utils.formatEther(data.split(',')[2])
+
+        let tokenSymbol = String(data[0])
+        let tokenEstimate = ethers.utils.formatEther(data[1])
+        let lpTokens = ethers.utils.formatEther(data[2])
 
         setRequiredToken({
           requiredTokenSymbol: tokenSymbol,
@@ -97,29 +98,38 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         return
       }
       // connect to factory
+
       const exchangeFactory = await connectToContractUsingEthers(
         exFacJson,
         EXCHANGE_FACTORY
       )
+
       // get addresses of the 2 ERC20 tokens
       const inputAdr = await exchangeFactory.symbAdr(
         inputToken.inputTokenSymbol
       )
+
       const requiredAdr = await exchangeFactory.symbAdr(
         requiredToken.requiredTokenSymbol
       )
+
       // connecting to the input ERC20 token
       const erc20input = await connectToContractUsingEthers(erc20ABI, inputAdr)
-      await erc20input.approve(exchangeAddress, inputToken.inputTokenAmount)
+
+      await erc20input.approve(
+        exchangeAddress,
+        ethers.utils.parseEther(inputToken.inputTokenAmount)
+      )
 
       // connecting to the required ERC20 token
       const erc20required = await connectToContractUsingEthers(
         erc20ABI,
         requiredAdr
       )
+
       await erc20required.approve(
         exchangeAddress,
-        ethers.parseEther(requiredToken.requiredTokenAmount)
+        ethers.utils.parseEther(requiredToken.requiredTokenAmount)
       )
 
       // connect to exchange contract
@@ -128,17 +138,16 @@ export function LPPoolDeposit({ token1, token2, exchangeAddress }) {
         exchangeABI,
         exchangeAddress
       )
-
+      console.log('exchangeContract', exchangeContract)
       const result = await exchangeContract.add(
         inputToken.inputTokenSymbol,
-        ethers.parseEther(inputToken.inputTokenAmount)
+        ethers.utils.parseEther(inputToken.inputTokenAmount)
       )
 
       if (result) {
+        setDepositBoxOpen(false)
         toast(`Hash: ${result.hash}`)
       }
-
-      setCreatePoolBoxOpen(false)
     } catch (error) {
       toast(`Uups, something went wrong.`)
     }
