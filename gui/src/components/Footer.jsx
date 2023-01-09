@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import { SiGitbook } from 'react-icons/si'
+import { TfiTwitter } from 'react-icons/Tfi'
 
 export function Footer() {
   return (
@@ -18,11 +19,18 @@ export function Footer() {
       <div className="flex flex-col items-center border-t border-slate-400/10 py-10 sm:flex-row-reverse sm:justify-between">
         <div className="flex gap-x-6">
           <Link
+            href="https://twitter.com/anna_defi_/"
+            className="group"
+            aria-label="ANNA on Twitter"
+          >
+            <TfiTwitter className="h-5 w-5" />
+          </Link>
+          <Link
             href="https://anna-21.gitbook.io/product-docs/"
             className="group"
             aria-label="ANNA on GitBook"
           >
-            <SiGitbook className="h-8 w-8" />
+            <SiGitbook className="h-5 w-5" />
           </Link>
         </div>
         <p className="mt-6 text-sm text-slate-500 sm:mt-0">

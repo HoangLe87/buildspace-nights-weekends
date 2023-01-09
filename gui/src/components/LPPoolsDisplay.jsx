@@ -52,8 +52,8 @@ export function LPPoolsDisplay() {
             Liquidity pools
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            Earn trading feed and stake LP tokens. Simply provide liquidity in
-            the pools below to allow trading in ANNA's Dex.
+            Earn DEX trading fees by providing liquidity. No hidden costs,
+            charges or commission. It's all yours!
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">

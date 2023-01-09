@@ -9,6 +9,7 @@ import Image from 'next/image'
 import baby from '../images/profile/baby.png'
 import logo from '../../public/favicon.png'
 import logo1 from '../images/logos/profile.png'
+import { Button } from '@/components/Button'
 
 export default function Dashboard() {
   const [currentAccount, setCurrentAccount, accountsStatic] =
@@ -111,6 +112,12 @@ export default function Dashboard() {
           <div>Fast food stores: {stats.stores | '0'}</div>
           <div>Michelin star restaurants: {stats.restaurants | '0'}</div>
           <div>Luxury 5-star hotels: {stats.hotels | '0'}</div>
+        </div>
+        <div className="mt-10 grid place-items-center">
+          <Button color="gradient">Claim ownership</Button>
+          <div>
+            ( claim onwehips of the entire ecosystem - 10k LOVE required)
+          </div>
         </div>
       </main>
       <Footer />

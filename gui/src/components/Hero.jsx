@@ -7,19 +7,17 @@ export function Hero() {
     <>
       <div className="pt-20 pb-16 text-center lg:pt-32 ">
         <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl ">
-          
-            Win{' '}
-
+          DeFi to{' '}
           <span className="relative whitespace-nowrap">
-            <span className="relative inline-block bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-transparent ">ANNA's </span>
+            <span className="relative inline-block bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-transparent ">
+              ANNA's{' '}
+            </span>
           </span>
-         
-            <span> heart by exploring DeFi and Web3</span>
-        
+          <span> heart</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-          With just 10k LOVE tokens, ANNA is truly yours. Claim ownership of the entire 
-          ecosystem including all rights and profits.
+          With just 10k LOVE tokens, ANNA is truly yours. Claim ownership of the
+          entire ecosystem including all rights and profits.
         </p>
         <div className="mt-10 flex justify-center gap-x-6">
           <Button href="">Documentation</Button>
@@ -36,14 +34,7 @@ export function Hero() {
           </p>
         </div>
 
-        
-
-
-
-<Carousel />
-
-
-
+        <Carousel />
       </div>
     </>
   )
