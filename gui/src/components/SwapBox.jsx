@@ -200,11 +200,11 @@ export function SwapBox({ pairs, setPairs }) {
           ethers.utils.parseEther(String(sellAmount))
         )
 
-        await exchange.swap(
+        const result = await exchange.swap(
           sellToken,
           ethers.utils.parseEther(String(sellAmount))
         )
-        toast('Transaction pending')
+        if (result) toast(`transaction pending ${result.hash}`)
         setEstimate({
           ...estimate,
           buyAmount: '',
@@ -274,7 +274,7 @@ export function SwapBox({ pairs, setPairs }) {
           ethers.utils.parseEther(String(annaAmount))
         )
 
-        await exchange2.swap(
+        const result = await exchange2.swap(
           'ANNA',
           ethers.utils.parseEther(String(annaAmount))
         )
@@ -283,7 +283,7 @@ export function SwapBox({ pairs, setPairs }) {
           buyAmount: '',
           sellAmount: '',
         })
-        toast(`Transaction pending`)
+        if (result) toast(`transaction pending ${result.hash}`)
       }
     } catch (error) {
       toast(`Uups, something went wrong`)

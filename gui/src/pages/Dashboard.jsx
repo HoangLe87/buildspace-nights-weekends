@@ -1,14 +1,14 @@
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { GrMoney } from 'react-icons/gr'
-import { FaHeartbeat } from 'react-icons/fa'
 import { useContext, useEffect, useState } from 'react'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 import { ethers } from 'ethers'
 import { WalletContext } from './_app'
 import Image from 'next/image'
 import baby from '../images/profile/baby.png'
+import logo from '../../public/favicon.png'
+import logo1 from '../images/logos/profile.png'
 
 export default function Dashboard() {
   const [currentAccount, setCurrentAccount, accountsStatic] =
@@ -16,9 +16,9 @@ export default function Dashboard() {
   const [stats, setStats] = useState({
     annaBalance: '',
     loveBalance: '',
-    lemonadeStands: '',
-    coffeeShops: '',
-    groceryStores: '',
+    stands: '',
+    shops: '',
+    stores: '',
     restaurants: '',
     hotels: '',
   })
@@ -53,9 +53,9 @@ export default function Dashboard() {
         ...stats,
         annaBalance: annaBalance,
         loveBalance: loveBalance,
-        lemonadeStands: String(await investments.pools('0')),
-        coffeeShops: String(await investments.pools('1')),
-        groceryStores: String(await investments.pools('2')),
+        stands: String(await investments.pools('0')),
+        shops: String(await investments.pools('1')),
+        stores: String(await investments.pools('2')),
         restaurants: String(await investments.pools('3')),
         hotels: String(await investments.pools('4')),
       })
@@ -80,11 +80,13 @@ export default function Dashboard() {
       <Header />
       <main className="min-h-screen">
         <div className="m-2 flex justify-center gap-10">
-          <div className="flex gap-2">
-            {stats.annaBalance | '0'} <GrMoney />
+          <div className="flex items-center gap-2">
+            {stats.annaBalance | '0'}
+            <Image src={logo1} width={75} height={75} alt="" />
           </div>
-          <div className="flex gap-2">
-            {stats.loveBalance | '0'} <FaHeartbeat />
+          <div className="flex items-center gap-2">
+            {stats.loveBalance | '0'}
+            <Image src={logo} width={50} height={50} alt="" />
           </div>
         </div>
         <div className="mt-10 grid place-items-center">
@@ -104,11 +106,11 @@ export default function Dashboard() {
         </div>
 
         <div className="grid place-items-center">
-          <div>Lemonade stands: {stats.lemonadeStands | '0'}</div>
-          <div>Coffee shops: {stats.coffeeShops | '0'}</div>
-          <div>Grocery stores: {stats.groceryStores | '0'}</div>
-          <div>Restaurants: {stats.restaurants | '0'}</div>
-          <div>Hotels: {stats.hotels | '0'}</div>
+          <div>Street food stands: {stats.stands | '0'}</div>
+          <div>Urban coffee shops: {stats.shops | '0'}</div>
+          <div>Fast food stores: {stats.stores | '0'}</div>
+          <div>Michelin star restaurants: {stats.restaurants | '0'}</div>
+          <div>Luxury 5-star hotels: {stats.hotels | '0'}</div>
         </div>
       </main>
       <Footer />

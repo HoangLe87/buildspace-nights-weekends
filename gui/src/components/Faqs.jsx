@@ -81,7 +81,7 @@ export function Faqs() {
         </ul>
       </div>
       <Image
-        className="mt-10 w-screen"
+        className="mt-60 w-screen"
         src={roadmap}
         alt=""
         height={1636}

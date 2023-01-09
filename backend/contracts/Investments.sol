@@ -26,19 +26,19 @@ contract Investments is Ownable, ReentrancyGuard {
         Anna = IERC20(_annaAddress);
         Love = IERC20(_loveAddress);
         pools[0].id = 0;
-        pools[0].price = 1;
+        pools[0].price = 1 * (10**18);
         pools[0].rewardRate = 1000; // 10%
         pools[1].id = 1;
-        pools[1].price = 10;
+        pools[1].price = 10 * (10**18);
         pools[1].rewardRate = 2500; // 25%
         pools[2].id = 2;
-        pools[2].price = 100;
+        pools[2].price = 100 * (10**18);
         pools[2].rewardRate = 5000; // 50%
         pools[3].id = 3;
-        pools[3].price = 1000;
+        pools[3].price = 1000 * (10**18);
         pools[3].rewardRate = 7500; // 75%
         pools[4].id = 4;
-        pools[4].price = 10000;
+        pools[4].price = 10000 * (10**18);
         pools[4].rewardRate = 10000; // 100%
     }
 
@@ -95,7 +95,8 @@ contract Investments is Ownable, ReentrancyGuard {
         pools[_pid].amtPerAdrEarned[msg.sender] = 0;
         require((toGet + earned) <= getReserves(), "Insufficient funds");
         Anna.transfer(msg.sender, (toGet + earned));
-        pools[_pid].totalIssued += ((_amount + earned));
+        pools[_pid].totalIssued -= _amount;
+        pools[_pid].amtPerAdrStaked[msg.sender] -= _amount;
         pools[_pid].amtPerAdrEarned[msg.sender] = 0;
         emit Sold(msg.sender, _pid, _amount);
         return true;

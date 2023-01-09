@@ -3,70 +3,172 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { DexNavBar } from '@/components/DexNavBar'
 import { WalletContext } from './_app'
-import { useContext } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { connectToContractUsingEthers } from '@/utils/metamask'
 import { ethers } from 'ethers'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Button } from '@/components/Button'
+import { _fetchData } from 'ethers/lib/utils'
 
 export default function Investments() {
   const [currentAccount, setCurrentAccount, accountsStatic] =
     useContext(WalletContext)
 
-  const investments = [
+  const [options, setOptions] = useState([
     {
-      id: [0],
+      id: '0',
       investment: 'Street food stand',
       apr: '10%',
-      price: '1',
-      info: 'low cost for low earnings',
+      price: 1,
+      owned: '',
+      earned: '',
     },
     {
-      id: [1],
+      id: '1',
       investment: 'Urban coffee shop',
       apr: '25%',
-      price: '10',
-      info: 'moderate investment for moderate returns',
+      price: 10,
+      owned: '',
+      earned: '',
     },
     {
-      id: [2],
+      id: '2',
       investment: 'Fast food store',
       apr: '50%',
-      price: '100',
-      info: 'the rich are now getting serious',
+      price: 100,
+      owned: '',
+      earned: '',
     },
     {
-      id: [3],
-      investment: 'Michelin restaurant',
+      id: '3',
+      investment: 'Michelin star restaurant',
       apr: '75%',
-      price: '1000',
-      info: 'only the elite can afford this',
+      price: 1000,
+      owned: '',
+      earned: '',
     },
     {
-      id: [4],
-      investment: 'Luxury 5-star experience',
+      id: '4',
+      investment: 'Luxury 5-star hotel',
       apr: '100%',
-      price: '10000',
-      info: 'top earnings for the top Gs',
+      price: 10000,
+      owned: '',
+      earned: '',
     },
-  ]
+  ])
 
   const buy = async (id) => {
     try {
-      console.log('buying id', id)
       if (!window.ethereum) return
-      const investmentContract = connectToContractUsingEthers(
+
+      const annaContract = await connectToContractUsingEthers(
+        // connect to the selltoken
+        accountsStatic.anna.json,
+        accountsStatic.anna.address
+      )
+
+      await annaContract.approve(
+        accountsStatic.investments.address,
+        ethers.utils.parseEther(String(options[id].price))
+      )
+
+      const investmentContract = await connectToContractUsingEthers(
         accountsStatic.investments.json,
         accountsStatic.investments.address
       )
-      console.log('contract', investmentContract)
-      console.log(await investmentContract.pools(id))
-      //investmentContract.buyPool(id,'1')
+
+      const result = await investmentContract.buyPool(id, '1')
+
+      if (result) toast(`transaction pending ${result.hash}`)
     } catch (error) {
       toast(error)
     }
   }
+
+  const sell = async (id) => {
+    try {
+      if (!window.ethereum) return
+      const investmentContract = await connectToContractUsingEthers(
+        accountsStatic.investments.json,
+        accountsStatic.investments.address
+      )
+      const result = await investmentContract.sellPool(id, 1)
+      if (result) toast(`transaction pending ${result.hash}`)
+    } catch (error) {
+      toast(error)
+    }
+  }
+
+  const claim = async (id) => {
+    try {
+      if (!window.ethereum) return
+      const investmentContract = await connectToContractUsingEthers(
+        accountsStatic.investments.json,
+        accountsStatic.investments.address
+      )
+
+      const result = await investmentContract.claim(id)
+      if (result) toast(`transaction pending ${result.hash}`)
+    } catch (error) {
+      toast(error)
+    }
+  }
+
+  const fetchData = async () => {
+    if (!window.ethereum) return
+    let data = []
+    try {
+      const investmentContract = await connectToContractUsingEthers(
+        accountsStatic.investments.json,
+        accountsStatic.investments.address
+      )
+
+      for (let i = 0; i < options.length; i++) {
+        data.push({
+          earned: ethers.utils.formatEther(
+            await investmentContract.getTotalEarnedPerPoolPerAdrl(i)
+          ),
+          staked: String(
+            await investmentContract.getTotalStakedPerPoolPerAdrl(i)
+          ),
+        })
+      }
+
+      setOptions([
+        {
+          ...options[0],
+          owned: data[0].staked,
+          earned: data[0].earned,
+        },
+        {
+          ...options[1],
+          owned: data[1].staked,
+          earned: data[1].earned,
+        },
+        {
+          ...options[2],
+          owned: data[2].staked,
+          earned: data[2].earned,
+        },
+        {
+          ...options[3],
+          owned: data[3].staked,
+          earned: data[3].earned,
+        },
+        {
+          ...options[4],
+          owned: data[4].staked,
+          earned: data[4].earned,
+        },
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <>
@@ -121,38 +223,58 @@ export default function Investments() {
                         >
                           Price
                         </th>
-
-                        <th
-                          scope="col"
-                          className="hidden py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 sm:inline-block"
-                        >
-                          Info
-                        </th>
                         <th
                           scope="col"
                           className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
                         >
                           Owned
                         </th>
+                        <th
+                          scope="col"
+                          className="hidden py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 sm:inline-block"
+                        >
+                          Earned
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
+                        ></th>
+                        <th
+                          scope="col"
+                          className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
+                        ></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                      {investments.map((investment) => (
-                        <tr key={investment.investment}>
+                      {options.map((option) => (
+                        <tr key={option.id}>
                           <td className="whitespace-nowrap py-4 pl-4 pr-3  text-sm font-medium text-gray-900 sm:pl-6">
-                            {`${investment.investment}`}
+                            {`${option.investment}`}
                           </td>
                           <td className="hidden whitespace-nowrap py-4 pr-3  text-sm text-gray-500 sm:inline-block">
-                            {investment.apr}
+                            {option.apr}
                           </td>
                           <td className="whitespace-nowrap py-4 pr-3  text-sm text-gray-500">
-                            {investment.price}
-                          </td>
-                          <td className="hidden whitespace-nowrap py-4 pr-3  text-sm text-gray-500 sm:inline-block">
-                            {investment.info}
+                            {new Intl.NumberFormat().format(option.price)}
                           </td>
                           <td className="whitespace-nowrap py-4 pr-3 text-sm text-gray-500">
-                            0
+                            {option.owned | 0}
+                          </td>
+                          <td className="whitespace-nowrap py-4 pr-3 text-sm text-gray-500">
+                            {option.earned | 0}
+                          </td>
+                          <td className="relative whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
+                            <a
+                              href="#"
+                              className="text-indigo-600 hover:text-indigo-900"
+                              onClick={() =>
+                                window.ethereum
+                                  ? claim(option.id)
+                                  : toast('Cannot do this without metamask!')
+                              }
+                            >
+                              Claim
+                            </a>
                           </td>
 
                           <td className="relative whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
@@ -161,7 +283,7 @@ export default function Investments() {
                               className="text-indigo-600 hover:text-indigo-900"
                               onClick={() =>
                                 window.ethereum
-                                  ? buy(investment.id)
+                                  ? buy(option.id)
                                   : toast('Cannot do this without metamask!')
                               }
                             >
@@ -174,11 +296,7 @@ export default function Investments() {
                               className="text-indigo-600 hover:text-indigo-900"
                               onClick={() =>
                                 window.ethereum
-                                  ? openWithdraw(
-                                      investments.token1,
-                                      investments.token2,
-                                      investments.address
-                                    )
+                                  ? sell(option.id)
                                   : toast('Cannot do this without metamask!')
                               }
                             >

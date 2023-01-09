@@ -37,7 +37,7 @@ category: Games (adventure capitalist)
 1 - deploy LOVE - 0x6b0b607951fd708ACc9836e90D15D4331c0d61e9
 2 - deploy ANNA with input LOVE address - 0xbAd23F5E81049a4d5b74097Cf5d00db92574995a
 3 - amend LOVE address in EXfac then deploy - 0xf80a2e20Ac6b0A6b54AA94C97dDEaA8Ac0C67CCd
-4 - investments contract 0xf263166449cff8F9D8B32bD51a38ee0bEFF282F6
+4 - investments contract 0x84A4d6fc25431F1C7bd21799464FC0f98985377a
 
 WETH - 0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6
 USDT - 0x509Ee0d083DdF8AC028f2a56731412edD63223B9

@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
       json: exFacJson,
     },
     investments: {
-      address: '0xf263166449cff8F9D8B32bD51a38ee0bEFF282F6',
+      address: '0x84A4d6fc25431F1C7bd21799464FC0f98985377a',
       json: investmentsJson,
     },
   }

@@ -36,12 +36,15 @@ export default function Anna() {
         accountsStatic.anna.json,
         accountsStatic.anna.address
       )
-      await contract.buyAnna(ethers.utils.parseEther(String(buyAmount)), {
-        value: ethers.utils.parseEther(String(displayAmount)),
-      })
+      const result = await contract.buyAnna(
+        ethers.utils.parseEther(String(buyAmount)),
+        {
+          value: ethers.utils.parseEther(String(displayAmount)),
+        }
+      )
       setBuyAmount('')
       setDisplayAmount('')
-      toast('Transaction pending')
+      if (result) toast(`transaction pending ${result.hash}`)
     } catch (error) {
       toast('Opps something went wrong')
     }
