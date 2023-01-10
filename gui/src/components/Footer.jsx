@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import { SiGitbook } from 'react-icons/si'
-import { TfiTwitter } from 'react-icons/Tfi'
+import { TfiTwitter } from 'react-icons/tfi'
 
 export function Footer() {
   return (
