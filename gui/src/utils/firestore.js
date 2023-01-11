@@ -1,4 +1,12 @@
-import { getDocs, collection, setDoc, doc, deleteDoc } from 'firebase/firestore'
+import {
+  getDocs,
+  collection,
+  setDoc,
+  doc,
+  deleteDoc,
+  getDoc,
+  serverTimestamp,
+} from 'firebase/firestore'
 import { db } from '../../firebase/firebaseConfig'
 import { useState, useEffect } from 'react'
 
@@ -29,6 +37,21 @@ export const submitDataToFireStore = async (id, token1, token2) => {
       address: id,
       token1: token1,
       token2: token2,
+    })
+  }
+}
+
+// uploads accounts data to firestore
+export const checkIdExistsAndCreate = async (account) => {
+  const docRef = doc(db, 'Users', account)
+  const docSnap = await getDoc(docRef)
+
+  if (!docSnap.exists()) {
+    const userRef = collection(db, 'Users')
+    await setDoc(doc(userRef, account), {
+      address: account,
+      level: '1',
+      timestamp: serverTimestamp(),
     })
   }
 }

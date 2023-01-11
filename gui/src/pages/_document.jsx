@@ -9,11 +9,13 @@ export default function Document(props) {
       lang="en"
     >
       <Head>
-      <link rel="icon" type="image/x-icon" href="/favicon.png" />
-<link href="https://fonts.googleapis.com/css2?family=Elsie&display=swap" rel="stylesheet"/>
-   
+        <link rel="icon" type="image/x-icon" href="/favicon.png" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Elsie&display=swap"
+          rel="stylesheet"
+        />
       </Head>
-      <body className="flex h-full flex-col">
+      <body className="flex h-full flex-col font-mono">
         <Main />
         <NextScript />
       </body>

@@ -7,7 +7,10 @@ import { useRouter } from 'next/router'
 export function Logo(props) {
   const router = useRouter()
   return (
-    <div className="ml-2 flex items-center" onClick={() => router.push('/')}>
+    <div
+      className=" flex items-center justify-between"
+      onClick={() => router.push('/')}
+    >
       <Image
         src={logo}
         priority

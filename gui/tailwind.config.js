@@ -27,6 +27,13 @@ module.exports = {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
         display: ['Lexend', ...defaultTheme.fontFamily.sans],
         elsie: ['Elsie', ...defaultTheme.fontFamily.sans],
+        mono: [
+          'Monospace',
+          'ui-monospace',
+          'SFMono-Regular',
+
+          ...defaultTheme.fontFamily.sans,
+        ],
       },
       maxWidth: {
         '2xl': '40rem',

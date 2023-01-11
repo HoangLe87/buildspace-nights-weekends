@@ -70,8 +70,8 @@ export function Services() {
       />
       <div className="relative">
         <div className="max-w-2xl px-2 md:mx-auto md:text-center xl:max-w-none">
-          <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            The all inclusive DeFi protocol you'd probably ever need.
+          <h2 className=" text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
+            The all inclusive DeFi protocol you'd probably ever need
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
             Check out our roadmap to see the release dates and features
@@ -128,7 +128,7 @@ export function Services() {
                   <Tab.Panel key={feature.title} unmount={false}>
                     <div className="relative sm:px-6 lg:hidden">
                       <div className="absolute -inset-x-4 top-[-6.5rem] bottom-[-4.25rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
-                      <p className="relative px-2 mx-auto max-w-2xl text-base text-white sm:text-center">
+                      <p className="relative mx-auto max-w-2xl px-2 text-base text-white sm:text-center">
                         {feature.description}
                       </p>
                     </div>

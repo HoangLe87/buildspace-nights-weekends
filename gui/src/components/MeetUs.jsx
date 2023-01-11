@@ -45,8 +45,8 @@ export function MeetUs() {
       aria-label="What our customers are saying"
       className="bg-slate-50 py-20 sm:py-32"
     >
-      <div className="px-2 mx-auto max-w-2xl md:text-center">
-        <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+      <div className="mx-auto max-w-2xl px-2 md:text-center">
+        <h2 className=" text-3xl tracking-tight text-slate-900 sm:text-4xl">
           <span className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text  text-transparent">
             Meet our team
           </span>
