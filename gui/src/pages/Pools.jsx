@@ -15,7 +15,7 @@ export default function Pools() {
         />
       </Head>
       <Header />
-      <main className='min-h-screen'>
+      <main className="grid h-screen bg-[url('../images/background/8.jpeg')] bg-cover">
         <DexNavBar currentPage={'Pools'} />
         <LPPools />
       </main>

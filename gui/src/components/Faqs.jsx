@@ -35,7 +35,7 @@ export function Faqs() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="py-20sm:py-32 relative my-10 overflow-hidden bg-slate-50"
+      className="relative h-screen overflow-hidden bg-slate-50 pt-16"
     >
       <Image
         className="max-w-screen absolute top-0 left-1/2 translate-x-[-50%] -translate-y-1/4"
@@ -80,13 +80,6 @@ export function Faqs() {
           ))}
         </ul>
       </div>
-      <Image
-        className="mt-60 w-screen"
-        src={roadmap}
-        alt=""
-        height={1636}
-        unoptimized
-      />
     </section>
   )
 }

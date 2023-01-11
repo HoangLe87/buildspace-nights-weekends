@@ -1,7 +1,4 @@
-import Image from 'next/image'
-
 import { Button } from '@/components/Button'
-import backgroundImage from '../images/background/1.jpeg'
 
 export function CallToAction() {
   return (

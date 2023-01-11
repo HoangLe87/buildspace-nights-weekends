@@ -1,4 +1,4 @@
-import Carousel from './Carousel'
+import { Carousel } from './Carousel'
 
 import { Button } from '@/components/Button'
 
@@ -18,7 +18,7 @@ export function Hero() {
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-white">
             With just 10k LOVE tokens, ANNA is truly yours. Claim ownership of
-            the entire ecosystem including all rights and profits.
+            the entire ecosystem with one click
           </p>
 
           <div className="mt-10 flex justify-center gap-x-6">
@@ -33,9 +33,6 @@ export function Hero() {
         </div>
         <div className="w-screen">
           <Carousel />
-          <p className="font-medium text-white">
-            There will be only one champion. Do you have what it takes to win?
-          </p>
         </div>
       </div>
     </>

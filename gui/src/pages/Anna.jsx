@@ -60,14 +60,14 @@ export default function Anna() {
         />
       </Head>
       <Header />
-      <main className="min-h-screen">
+      <main className="grid min-h-screen bg-[url('../images/background/4.jpeg')] bg-cover">
         <DexNavBar currentPage={'Anna'} />
 
         <div>
           <ToastContainer position="top-right" />
 
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform overflow-hidden rounded-lg bg-gray-500 px-4 pt-5 pb-4 text-left shadow-[0px_0px_10px_5px_#B794F4] transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+            <div className="relative transform overflow-hidden rounded-lg bg-gradient-to-br from-indigo-200 via-slate-600 to-indigo-200 px-4 pt-5 pb-4 text-left shadow-[0px_0px_10px_5px_#B794F4] transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
               <form onSubmit={(e) => buy(e)}>
                 <div>
                   <div className="mt-3 text-center sm:mt-5">

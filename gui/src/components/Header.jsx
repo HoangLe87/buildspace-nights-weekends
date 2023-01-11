@@ -49,8 +49,8 @@ export const Header = () => {
 
   const [currentAccount, setCurrentAccount] = useContext(WalletContext)
   return (
-    <header className="absolute w-screen border-white shadow-[0px_0px_10px_5px_#805ad5]">
-      <div className=" w-screen bg-gray-700/80 py-5 pr-5">
+    <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
+      <div className="w-full bg-gray-700/80 py-5 pr-5">
         <ToastContainer position="top-right" />
         <nav className="z-1 relative flex justify-between">
           <div className="flex items-center gap-x-6 md:gap-x-16">

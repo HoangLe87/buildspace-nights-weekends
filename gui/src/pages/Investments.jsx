@@ -180,17 +180,16 @@ export default function Investments() {
         />
       </Head>
       <Header />
-      <main className="min-h-screen ">
-        <DexNavBar currentPage={'Stake'} />
-
-        <div className="my-60 px-4 sm:px-6 lg:px-8 ">
+      <main className="grid h-screen w-screen bg-[url('../images/background/9.jpeg')] bg-cover">
+        <DexNavBar currentPage={'Investments'} />
+        <div className="px-4 sm:px-6 lg:px-8 ">
           <ToastContainer position="top-right" />
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-white">
                 ANNA investments
               </h1>
-              <p className="mt-2 text-sm text-gray-700">
+              <p className="mt-2 text-sm text-white">
                 Buy the below with ANNA to start eaning ANNA. There is 50%
                 selling tax so it makes only sense to leave these for long term.
                 The longer you hold the more you earn.
@@ -202,68 +201,72 @@ export default function Investments() {
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-300">
-                    <thead className="bg-gray-50">
+                    <thead className="w-full bg-gray-50">
                       <tr>
                         <th
                           scope="col"
-                          className="py-3.5 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                          className=" py-3.5 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                         >
                           Investment
                         </th>
 
                         <th
                           scope="col"
-                          className="hidden py-3.5 pr-3  text-left text-sm font-semibold text-gray-900  sm:inline-block"
+                          className="mr-3 hidden py-3.5  text-left text-sm font-semibold text-gray-900  sm:table-cell"
                         >
                           APR
                         </th>
                         <th
                           scope="col"
-                          className="py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 "
+                          className="mr-3 hidden py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell "
                         >
                           Price
                         </th>
                         <th
                           scope="col"
-                          className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
+                          className="mr-3 hidden py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                         >
                           Owned
                         </th>
                         <th
                           scope="col"
-                          className="hidden py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 sm:inline-block"
+                          className="mr-3 hidden py-3.5  text-left text-sm font-semibold text-gray-900 sm:table-cell"
                         >
                           Earned
                         </th>
                         <th
                           scope="col"
-                          className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
+                          className=" py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 "
                         ></th>
                         <th
                           scope="col"
-                          className="py-3.5  pr-3  text-left text-sm font-semibold text-gray-900"
+                          className=" py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 "
+                        ></th>
+                        <th
+                          scope="col"
+                          className=" py-3.5 pr-3  text-left text-sm font-semibold text-gray-900 "
                         ></th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
+                    <tbody className=" divide-y divide-gray-200 bg-white">
                       {options.map((option) => (
                         <tr key={option.id}>
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3  text-sm font-medium text-gray-900 sm:pl-6">
+                          <td className=" whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                             {`${option.investment}`}
                           </td>
-                          <td className="hidden whitespace-nowrap py-4 pr-3  text-sm text-gray-500 sm:inline-block">
+                          <td className="mr-3 hidden whitespace-nowrap py-4 text-sm text-gray-500 sm:table-cell">
                             {option.apr}
                           </td>
-                          <td className="whitespace-nowrap py-4 pr-3  text-sm text-gray-500">
+                          <td className="mr-3 hidden whitespace-nowrap py-4 text-sm  text-gray-500 sm:table-cell">
                             {new Intl.NumberFormat().format(option.price)}
                           </td>
-                          <td className="whitespace-nowrap py-4 pr-3 text-sm text-gray-500">
+                          <td className="mr-3 hidden whitespace-nowrap py-4 text-sm text-gray-500 sm:table-cell">
                             {option.owned | 0}
                           </td>
-                          <td className="whitespace-nowrap py-4 pr-3 text-sm text-gray-500">
+                          <td className=" mr-3 hidden whitespace-nowrap py-4 text-sm text-gray-500 sm:table-cell">
                             {option.earned | 0}
                           </td>
-                          <td className="relative whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
+                          <td className=" whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
                             <a
                               href="#"
                               className="text-indigo-600 hover:text-indigo-900"
@@ -277,7 +280,7 @@ export default function Investments() {
                             </a>
                           </td>
 
-                          <td className="relative whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
+                          <td className=" whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
                             <a
                               href="#"
                               className="text-indigo-600 hover:text-indigo-900"
@@ -290,7 +293,7 @@ export default function Investments() {
                               +
                             </a>
                           </td>
-                          <td className="relative whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
+                          <td className=" whitespace-nowrap py-4 pr-6 text-right text-sm font-medium">
                             <a
                               href="#"
                               className="text-indigo-600 hover:text-indigo-900"

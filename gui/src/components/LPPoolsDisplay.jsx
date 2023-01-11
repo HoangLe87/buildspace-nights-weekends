@@ -44,14 +44,12 @@ export function LPPoolsDisplay() {
   }
 
   return (
-    <div className="my-60 px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8">
       <ToastContainer position="top-right" />
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">
-            Liquidity pools
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-xl font-semibold text-white">Liquidity pools</h1>
+          <p className="mt-2 text-sm text-white">
             Earn DEX trading fees by providing liquidity. No hidden costs,
             charges or commission. It's all yours!
           </p>

@@ -18,7 +18,7 @@ export default function Swap() {
         />
       </Head>
       <Header />
-      <main className="grid min-h-screen items-center bg-[url('../images/background/3.jpeg')] bg-cover">
+      <main className="grid h-screen bg-[url('../images/background/3.jpeg')] bg-cover">
         <DexNavBar currentPage={'Swap'} />
         <SwapBox pairs={pairs} setPairs={setPairs} />
       </main>

@@ -3,11 +3,10 @@ import Image from 'next/image'
 import { Tab } from '@headlessui/react'
 import clsx from 'clsx'
 
-import backgroundImage from '@/images/background-services.jpg'
-import dex from '@/images/stock/15.png'
-import education from '@/images/stock/12.png'
-import marketplace from '@/images/stock/13.png'
-import games from '@/images/stock/14.png'
+import dex from '@/images/stock/15.jpeg'
+import education from '@/images/stock/12.jpeg'
+import marketplace from '@/images/stock/13.jpeg'
+import games from '@/images/stock/14.jpeg'
 
 const features = [
   {
@@ -58,16 +57,8 @@ export function Services() {
     <section
       id="features"
       aria-label="Features for running your books"
-      className="relative overflow-hidden bg-blue-600 pt-20 pb-28 sm:py-32"
+      className="relative overflow-hidden bg-[url('../images/background/9.jpeg')] bg-cover text-center shadow-[0px_0px_10px_5px_#805ad5] sm:pt-32"
     >
-      <Image
-        className="absolute top-1/2 left-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
-        src={backgroundImage}
-        alt=""
-        width={2245}
-        height={1636}
-        unoptimized
-      />
       <div className="relative">
         <div className="max-w-2xl px-2 md:mx-auto md:text-center xl:max-w-none">
           <h2 className=" text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
@@ -99,7 +90,7 @@ export function Services() {
                       <h3>
                         <Tab
                           className={clsx(
-                            'font-display text-lg [&:not(:focus-visible)]:focus:outline-none',
+                            ' text-lg [&:not(:focus-visible)]:focus:outline-none',
                             selectedIndex === featureIndex
                               ? 'text-blue-600 lg:text-white'
                               : 'text-blue-100 hover:text-white lg:text-white'
