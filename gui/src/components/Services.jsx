@@ -125,7 +125,7 @@ export function Services() {
                     </div>
                     <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
                       <Image
-                        className="w-2/3 sm:w-full"
+                        className="w-2/3 shadow-[0px_0px_10px_5px_#B794F4] sm:w-full"
                         src={feature.image}
                         alt=""
                         priority
