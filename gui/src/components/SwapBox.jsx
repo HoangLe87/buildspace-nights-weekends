@@ -294,8 +294,8 @@ export function SwapBox({ pairs, setPairs }) {
     <div>
       <ToastContainer position="top-right" />
 
-      <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div className="relative transform overflow-hidden rounded-lg bg-gradient-to-br from-indigo-200 via-slate-600 to-indigo-200 px-4 pt-5 pb-4 text-left shadow-[0px_0px_10px_5px_#B794F4] transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+      <div className="flex min-h-full items-end justify-center py-4 text-center sm:items-center sm:p-0">
+        <div className="relative transform overflow-hidden rounded-lg bg-gradient-to-br from-indigo-200 via-slate-600 to-indigo-200 px-2 pt-5 pb-4 text-left shadow-[0px_0px_10px_5px_#B794F4] transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:px-4">
           <form onSubmit={(e) => swap(e)}>
             <div>
               <div className="mt-3 text-center sm:mt-5">
@@ -307,7 +307,7 @@ export function SwapBox({ pairs, setPairs }) {
                   <div className="mt-2 flex justify-between">
                     <select
                       id="token1Symbol"
-                      className="w-28 rounded-xl"
+                      className="w-22 rounded-xl sm:w-28"
                       onChange={(e) => toggleToken1(e)}
                     >
                       {tokens.tokenBuy.map((token) => (
@@ -334,7 +334,7 @@ export function SwapBox({ pairs, setPairs }) {
                   <div className="mt-2 flex justify-between">
                     <select
                       id="token2Symbol"
-                      className="w-28 rounded-xl"
+                      className=" w-22 rounded-xl sm:w-28"
                       onChange={(e) => toggleToken2(e)}
                     >
                       {tokens.tokenSell.map((token) => (

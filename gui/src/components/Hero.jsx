@@ -1,8 +1,10 @@
 import { Carousel } from './Carousel'
+import { useRouter } from 'next/router'
 
 import { Button } from '@/components/Button'
 
 export function Hero() {
+  const router = useRouter()
   return (
     <>
       <div className="grid h-screen items-center bg-[url('../images/background/6.jpeg')] bg-cover text-center shadow-[0px_0px_10px_5px_#805ad5] lg:pt-32">
@@ -17,8 +19,14 @@ export function Hero() {
             <span> heart</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-white">
-            With just 10k LOVE tokens, ANNA is truly yours. Claim ownership of
-            the entire ecosystem with one click
+            With 10k LOVE tokens, ANNA is truly yours. Claim ownership of the
+            entire ecosystem with just one click from the{' '}
+            <span
+              className="bg-gradient-to-br from-pink-400 to-red-600 bg-clip-text font-extrabold text-transparent hover:cursor-pointer"
+              onClick={() => router.push('Dashboard')}
+            >
+              Dashboard
+            </span>
           </p>
 
           <div className="mt-10 flex justify-center gap-x-6">

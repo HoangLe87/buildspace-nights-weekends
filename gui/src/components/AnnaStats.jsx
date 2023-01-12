@@ -2,19 +2,21 @@ export const AnnaStats = () => {
   return (
     <div className="grid h-screen w-full items-center text-center">
       <div className="grid gap-3">
-        <h1 className="font-bold">Stake ANNA to earn LOVE</h1>
+        <h1 className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-3xl text-transparent  sm:text-4xl">
+          Stake ANNA to earn LOVE
+        </h1>
         Learn web3, enjoy digital art, grow your assests and most importantly
         have fun at the same time! There will be only one champion.
         <div>Do you have what it takes to win?</div>
         <div className="rounded-xl bg-gradient-to-br from-indigo-200 via-slate-600 to-indigo-200 p-5 text-white">
           <div className="grid grid-cols-3 items-center gap-10 text-white">
-            <div className="rounded-xl border border-solid border-slate-400 py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className=" rounded-xl border border-solid border-slate-400 py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
               Total locked: <div>1k</div>
             </div>
-            <div className="rounded-xl border border-solid border-slate-400 py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className=" rounded-xl border border-solid border-slate-400 py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
               Market cap: <div>2k</div>
             </div>
-            <div className="rounded-xl border border-solid border-slate-400 py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className=" rounded-xl border border-solid border-slate-400 py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
               Current owner:
               <div>Anna.eth</div>
             </div>

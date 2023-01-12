@@ -180,28 +180,28 @@ export default function Investments() {
         />
       </Head>
       <Header />
-      <main className="grid h-screen w-screen bg-[url('../images/background/9.jpeg')] bg-cover">
+      <main className="grid min-h-screen w-screen bg-[url('../images/background/9.jpeg')] bg-cover">
         <DexNavBar currentPage={'Investments'} />
         <div className="px-4 sm:px-6 lg:px-8 ">
           <ToastContainer position="top-right" />
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="text-xl font-semibold text-white">
+              <h1 className="mt-4 text-xl font-semibold text-white">
                 ANNA investments
               </h1>
-              <p className="mt-2 text-sm text-white">
+              <p className="mt-4 text-sm text-white">
                 Buy the below with ANNA to start eaning ANNA. There is 50%
                 selling tax so it makes only sense to leave these for long term.
                 The longer you hold the more you earn.
               </p>
             </div>
           </div>
-          <div className="mt-8 flex flex-col">
+          <div className="mt-8  flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-300">
-                    <thead className="w-full bg-gray-50">
+                <div className="overflow-hidden  shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                  <table className="min-w-full  divide-y divide-gray-300">
+                    <thead className="w-full  bg-gray-50">
                       <tr>
                         <th
                           scope="col"

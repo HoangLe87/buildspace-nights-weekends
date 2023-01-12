@@ -1,10 +1,14 @@
 import Image from 'next/image'
 
 import backgroundImage from '@/images/background-faqs.jpg'
-import roadmap from '@/images/roadmap.png'
 
 const faqs = [
   [
+    {
+      question: 'What are ANNA tokens?',
+      answer:
+        'ANNA are ERC20 tokens are the main currency that is used within this protocol for staking, transaction payments and other services.',
+    },
     {
       question: 'What do I do with the ANNA token?',
       answer:
@@ -27,6 +31,16 @@ const faqs = [
       answer:
         'They are ERC20 tokens with a fixed supply of 29.99k. LOVE tokens measure your progress and cannot be initially bought but only earned via staking ANNA tokens via the staking pool. The ownership of the entire ANNA ecosystem shall be claimed by the first user with 10k LOVE tokens.',
     },
+    {
+      question: 'Which network is ANNA operating on?',
+      answer:
+        'We are currently on Goerli testnet and plan to launch on Mainnet in Spring 2023. The chains that we would like to launch on but are not limited to are Polygon, Fantom and BSC.',
+    },
+    {
+      question: 'How do I get started?',
+      answer:
+        "Check out our gitBook and guides to get familiar with the protocol, our mission and vision. Once you are happy, buy ANNA and let's DeFi!",
+    },
   ],
 ]
 
@@ -35,7 +49,7 @@ export function Faqs() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative h-screen overflow-hidden bg-slate-50 pt-16"
+      className="relative min-h-screen overflow-hidden bg-slate-50 py-10 pt-16"
     >
       <Image
         className="max-w-screen absolute top-0 left-1/2 translate-x-[-50%] -translate-y-1/4"
