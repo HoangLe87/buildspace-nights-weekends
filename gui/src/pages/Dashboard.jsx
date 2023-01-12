@@ -130,7 +130,7 @@ export default function Dashboard() {
               Claim ownership
             </Button>
             <div className=" text-center text-white">
-              ( claim ownership of the entire ecosystem - 10k LOVE required)
+              (claim ownership of the entire ecosystem - 10k LOVE required)
             </div>
           </div>
         </div>
