@@ -30,9 +30,11 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex justify-center gap-x-6">
-            <Button href="">Documentation</Button>
+            <Button href="https://anna-21.gitbook.io/product-docs/">
+              Documentation
+            </Button>
             <Button
-              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              href="https://twitter.com/_anna_defi/status/1612889267247751168"
               variant="outline"
             >
               <span className="ml-3 text-white">Watch video</span>

@@ -81,7 +81,7 @@ export function LPPoolsDisplay() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Trading Fee
+                      Fee
                     </th>
 
                     <th
@@ -121,7 +121,7 @@ export function LPPoolsDisplay() {
                           Deposit
                         </a>
                       </td>
-                      <td className="relative whitespace-nowrap py-4 text-right text-sm font-medium sm:pr-6">
+                      <td className="relative whitespace-nowrap py-4 pr-2 text-right text-sm font-medium sm:pr-6">
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"

@@ -10,6 +10,8 @@ import baby from '../images/profile/baby.png'
 import logo from '../../public/favicon.png'
 import logo1 from '../images/logos/profile.png'
 import { Button } from '@/components/Button'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Dashboard() {
   const [currentAccount, setCurrentAccount, accountsStatic] =
@@ -23,7 +25,7 @@ export default function Dashboard() {
     restaurants: '',
     hotels: '',
   })
-  console.log(currentAccount)
+
   const getAnnaBalance = async () => {
     if (!window.ethereum) return
     if (!accountsStatic.anna.address || !accountsStatic.love.address) return
@@ -69,6 +71,14 @@ export default function Dashboard() {
     getAnnaBalance()
   }, [stats.annaBalance, stats.loveBalance])
 
+  const claim = () => {
+    try {
+      toast('Oops, insufficient LOVE tokens')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Head>
@@ -80,6 +90,7 @@ export default function Dashboard() {
       </Head>
       <Header />
       <main className="min-h-screen bg-[url('../images/background/10.jpeg')] bg-cover">
+        <ToastContainer position="top-right" />
         <div className="w-full bg-gray-700/80 py-60 pr-5">
           <div className="flex justify-center gap-10 text-white">
             <div className="flex items-center gap-2">
@@ -115,8 +126,10 @@ export default function Dashboard() {
             <div>Luxury 5-star hotels: {stats.hotels | '0'}</div>
           </div>
           <div className="mt-10 grid place-items-center">
-            <Button color="gradient">Claim ownership</Button>
-            <div className=" text-white">
+            <Button onClick={() => claim()} color="gradient">
+              Claim ownership
+            </Button>
+            <div className=" text-center text-white">
               ( claim ownership of the entire ecosystem - 10k LOVE required)
             </div>
           </div>

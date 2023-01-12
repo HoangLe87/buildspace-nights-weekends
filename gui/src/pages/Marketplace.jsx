@@ -13,8 +13,10 @@ export default function Marketplace() {
         />
       </Head>
       <Header />
-      <main className="h-screen">
-        <div className="flex justify-center">Comming soon in 2023</div>
+      <main className="min-h-screen">
+        <div className="mt-60 flex justify-center">
+          Comming soon in Spring 2023
+        </div>
       </main>
       <Footer />
     </>
