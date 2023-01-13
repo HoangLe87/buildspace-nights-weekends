@@ -34,6 +34,7 @@ export default function Dashboard() {
         accountsStatic.anna.json,
         accountsStatic.anna.address
       )
+
       const annaBalance = ethers.utils.formatEther(
         String(await anna.balanceOf(currentAccount))
       )
@@ -56,11 +57,13 @@ export default function Dashboard() {
         ...stats,
         annaBalance: annaBalance,
         loveBalance: loveBalance,
-        stands: String(await investments.pools('0')),
-        shops: String(await investments.pools('1')),
-        stores: String(await investments.pools('2')),
-        restaurants: String(await investments.pools('3')),
-        hotels: String(await investments.pools('4')),
+        stands: String(await investments.getTotalStakedPerPoolPerAdrl('0')),
+        shops: String(await investments.getTotalStakedPerPoolPerAdrl('1')),
+        stores: String(await investments.getTotalStakedPerPoolPerAdrl('2')),
+        restaurants: String(
+          await investments.getTotalStakedPerPoolPerAdrl('3')
+        ),
+        hotels: String(await investments.getTotalStakedPerPoolPerAdrl('4')),
       })
     } catch (error) {
       console.log(error)
