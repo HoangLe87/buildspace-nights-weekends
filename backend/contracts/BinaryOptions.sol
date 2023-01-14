@@ -23,7 +23,9 @@ contract BinaryOptions {
     uint256 public endTime;
     bool public inProgress;
     uint256 totalTrue;
+    uint256 startPrice;
     uint256 totalFalse;
+    uint256 endPrice;
 
     event Bet(address, uint256, bool);
 
@@ -76,6 +78,7 @@ contract BinaryOptions {
                 totalTrue > 1 * 10**18 &&
                 !inProgress &&
                 (((totalTrue * 100) / totalFalse) >= 50)
+
             ) {
                 startTime = block.timestamp;
                 endTime = block.timestamp + 30 minutes;
