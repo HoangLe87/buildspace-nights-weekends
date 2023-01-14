@@ -4,13 +4,13 @@
 
 ### NFT marketplace
 
-- buy and sell and bid
-- royalties with each NFT sale
+- buy and sell and bid, create
 
 ### DEX + LP
 ### Lottery game
 ### Binary options
 ### Fund me
+### Connect web3 learners
 ### Staking and DAO governance
 
 ### General

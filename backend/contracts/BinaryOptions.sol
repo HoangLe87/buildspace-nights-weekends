@@ -58,10 +58,21 @@ contract BinaryOptions {
         return price;
     }
 
+    function getLatestPrice() public view returns (int) {
+        (
+            ,
+            /*uint80 roundID*/ int price /*uint startedAt*/ /*uint timeStamp*/ /*uint80 answeredInRound*/,
+            ,
+            ,
+
+        ) = priceFeed.latestRoundData();
+        return price;
+    }
+
     function bet(uint256 _amount, bool _prediction) external {
         require(
             players[msg.sender].madeABet == false &&
-                block.timestamp < (startTime + 15 minutes),
+                block.timestamp > (endTime),
             "Unable to place bets now"
         );
         require(
@@ -72,7 +83,7 @@ contract BinaryOptions {
         players[msg.sender].madeABet = true;
         players[msg.sender].betAmount = _amount;
         players[msg.sender].prediction = _prediction;
-        if (_prediction == false) {
+        if (_prediction == false  && !inProgress) {
             totalFalse += _amount;
             if (
                 totalTrue > 1 * 10**18 &&
@@ -83,6 +94,7 @@ contract BinaryOptions {
                 startTime = block.timestamp;
                 endTime = block.timestamp + 30 minutes;
                 inProgress = true;
+                startPrice=getLatestPrice();
             }
         } else if (_prediction == true && !inProgress) {
             totalTrue += _amount;
@@ -90,14 +102,32 @@ contract BinaryOptions {
                 totalFalse > 1 * 10**18 &&
                 !inProgress &&
                 (((totalFalse * 100) / totalTrue) >= 50)
+
             ) {
                 startTime = block.timestamp;
                 endTime = block.timestamp + 30 minutes;
                 inProgress = true;
+                startPrice=getLatestPrice();
             }
         }
         emit Bet(msg.sender, _amount, _prediction);
     }
 
-    function resolve() private {}
+    function resolve() external {
+        require(inProgress &&  endTime<block.timestamp, "Must way till the game finishes");
+        endPrice=getLatestPrice();
+        if (endPrice>startPrice) {
+            uint256 payout = (totalFalse)*90/100;
+              for (address player in players) {
+                if (players[player].prediction==true) {
+                    ANNA.transfer(player, (betAmount*betAmount/totalTrue));
+                }
+              }
+     
+        } else if (endPrice<startPrice) {
+            uint256 payout = (totalTrue)*90/100;
+  
+        }
+        ANNA.transfer(owner(), ANNA.balanceOf(address(this)));
+    } 
 }
