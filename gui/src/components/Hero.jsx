@@ -13,7 +13,6 @@ export function Hero() {
   const auth = getAuth()
   const router = useRouter()
   const sdk = useSDK()
-  console.log(auth.currentUser)
 
   const logOut = async () => {
     console.log('singing out')
@@ -74,7 +73,7 @@ export function Hero() {
             <span> game to learn DeFi </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-white">
-            Complete quests to earn ANNA, then stake these to earn LOVE. The
+            Complete quests to earn ANNA and then stake ANNA to earn LOVE. The
             first user to get 10k LOVE claims ownership of this game.{' '}
           </p>
 

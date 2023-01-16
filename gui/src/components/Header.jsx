@@ -75,7 +75,7 @@ export function HamburgerMenu() {
       </button>
       {isOpen && (
         <div>
-          <div className="absolute ml-2 grid gap-2 bg-black p-4 shadow-[0px_0px_10px_5px_#805ad5] ">
+          <div className="absolute z-10 ml-2 grid gap-2 bg-black p-4 shadow-[0px_0px_10px_5px_#805ad5] ">
             <NavLink className={style} href={'/'}>
               Home
             </NavLink>

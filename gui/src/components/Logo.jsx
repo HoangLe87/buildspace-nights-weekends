@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import logo from '../images/logo.png'
+import logo from '../images/logos/logo.png'
 
 import { useRouter } from 'next/router'
 
@@ -8,17 +8,17 @@ export function Logo(props) {
   const router = useRouter()
   return (
     <div
-      className=" flex items-center justify-between"
+      className="ml-2 flex items-center justify-between gap-2"
       onClick={() => router.push('/')}
     >
       <Image
         src={logo}
         priority
-        className="h-16 w-16 hover:cursor-pointer "
+        className="h-8 w-8 hover:cursor-pointer "
         alt=""
       />
 
-      <span className="invisible relative bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-2xl text-transparent hover:cursor-pointer sm:visible ">
+      <span className="invisible relative text-2xl   text-orange-400 hover:cursor-pointer sm:visible ">
         ANNA{' '}
       </span>
     </div>
