@@ -78,7 +78,7 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex justify-center gap-x-6">
-            {auth.currentUser && (
+            {auth.currentUser ? (
               <Button
                 onClick={() => logOut()}
                 className="rounded-xl px-8 shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]"
@@ -523,8 +523,7 @@ export function Hero() {
                 </svg>
                 <span> Sign Out </span>
               </Button>
-            )}
-            {!auth.currentUser && (
+            ) : (
               <Button
                 onClick={() => signIn()}
                 className="rounded-xl px-8 shadow-[0px_0px_5px_3px_#B794F4] hover:shadow-[0px_0px_10px_5px_#805AD5]"
@@ -970,6 +969,7 @@ export function Hero() {
                 <span> Sign In </span>
               </Button>
             )}
+
             <Button
               href="https://twitter.com/_anna_defi/status/1612889267247751168"
               variant="outline"

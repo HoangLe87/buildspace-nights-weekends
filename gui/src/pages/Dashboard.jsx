@@ -7,13 +7,12 @@ import { ethers } from 'ethers'
 import { WalletContext } from './_app'
 import Image from 'next/image'
 import baby from '../images/profile/baby.png'
-import logo from '../../public/favicon.png'
-import logo1 from '../images/logos/logo.png'
+import logo from '../images/logos/logo.png'
+import logo1 from '../images/logos/logo1.png'
 import { Button } from '@/components/Button'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { getAuth } from 'firebase/auth'
-import { useRouter } from 'next/router'
 
 export default function Dashboard() {
   const auth = getAuth()
@@ -97,23 +96,16 @@ export default function Dashboard() {
       <Header />
       <main className="min-h-screen bg-[url('../images/background/10.jpeg')] bg-cover">
         <ToastContainer position="top-right" />
-        {!auth.currentUser && (
-          <div className="w-full bg-gray-700/80 py-60 pr-5">
-            <div className="flex h-full w-full items-center justify-center py-60 text-center text-white">
-              Please sign using the metamask "Sign In" button on the Homepage
-            </div>
-          </div>
-        )}
-        {auth.currentUser && (
+        {auth.currentUser ? (
           <div className="w-full bg-gray-700/80 py-60 pr-5">
             <div className="flex justify-center gap-10 text-white">
               <div className="flex items-center gap-2">
                 {stats.annaBalance | '0'}
-                <Image src={logo1} width={75} height={75} alt="" />
+                <Image src={logo} width={45} height={45} alt="" />
               </div>
               <div className="flex items-center gap-2">
                 {stats.loveBalance | '0'}
-                <Image src={logo} width={50} height={50} alt="" />
+                <Image src={logo1} width={50} height={50} alt="" />
               </div>
             </div>
             <div className="mt-10 grid place-items-center">
@@ -146,6 +138,12 @@ export default function Dashboard() {
               <div className=" text-center text-white">
                 (claim ownership of the entire ecosystem - 10k LOVE required)
               </div>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full bg-gray-700/80 py-60 pr-5">
+            <div className="flex h-full w-full items-center justify-center py-60 text-center text-white">
+              Please sign using the metamask "Sign In" button on the Homepage
             </div>
           </div>
         )}
