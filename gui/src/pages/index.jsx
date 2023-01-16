@@ -30,7 +30,6 @@ export default function Home() {
         <Faqs />
         <Roadmap />
       </main>
-      <Footer />
     </>
   )
 }
