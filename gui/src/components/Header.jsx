@@ -6,7 +6,6 @@ import { useState } from 'react'
 export const Header = () => {
   const className =
     'inline-block cursor-pointer rounded-lg py-1 px-2 text-sm text-slate-100 font-bold hover:bg-slate-100 hover:text-slate-900'
-
   return (
     <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
       <div className="w-full bg-gray-700/80 py-5 pr-5">
@@ -77,6 +76,9 @@ export function HamburgerMenu() {
       {isOpen && (
         <div>
           <div className="absolute ml-2 grid gap-2 bg-black p-4 shadow-[0px_0px_10px_5px_#805ad5] ">
+            <NavLink className={style} href={'/'}>
+              Home
+            </NavLink>
             <NavLink className={style} href={'Swap'}>
               Dex
             </NavLink>
@@ -88,6 +90,9 @@ export function HamburgerMenu() {
             </NavLink>
             <NavLink className={style} href={'Dashboard'}>
               Dashboard
+            </NavLink>
+            <NavLink className={style} href={'secure'}>
+              Secure
             </NavLink>
           </div>
         </div>

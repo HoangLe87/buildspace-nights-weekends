@@ -1,53 +1,52 @@
-import { ConnectWallet, useAddress, useSDK } from '@thirdweb-dev/react'
-import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
-import { signInWithCustomToken } from 'firebase/auth'
+import jwt from 'jsonwebtoken'
+import { getAuth } from 'firebase/auth'
 import initializeFirebaseClient from '../../../firebase/firebaseConfig'
+import {
+  getDocs,
+  collection,
+  setDoc,
+  doc,
+  deleteDoc,
+  getDoc,
+  serverTimestamp,
+} from 'firebase/firestore'
+import { useEffect } from 'react'
 
-export default function SingIn() {
-  const address = useAddress()
-  const sdk = useSDK()
-  const { db, auth } = initializeFirebaseClient()
+export default function Secure({ user }) {
+  const auth = getAuth()
 
-  const singIn = async () => {
-    const payload = await sdk?.auth.login('anna-defi.com')
-
-    const res = await fetch('api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ payload }),
-    })
-
-    const { token } = await res.json()
-
-    signInWithCustomToken(auth, token)
-      .then((userCredential) => {
-        const user = userCredential.user
-        const usersRef = doc(db, 'Users', user.uid)
-        getDoc(usersRef).then((doc) => {
-          if (!doc.exists()) {
-            // User now has permission to update their own document outlined in the Firestore rules.
-            setDoc(
-              usersRef,
-              { address: user.uid, level: 1, createdAt: serverTimestamp() },
-              { merge: true }
-            )
-          }
-        })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    console.log(token)
+  const checkUser = async () => {
+    try {
+      const user = auth.currentUser.uid
+      console.log(user)
+      const { db, authServer } = initializeFirebaseClient()
+      // uploads accounts data to firestore
+      console.log('connecting to DB')
+      const docRef = doc(db, 'Users', user)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        console.log(docSnap.data())
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('unknown')
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
-  return (
-    <div>
-      {address ? (
-        <button onClick={() => singIn()}>Sing in with ethereum</button>
-      ) : (
-        <ConnectWallet />
-      )}
-    </div>
-  )
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  return <div> Restricted access {user}</div>
+
+  /* if (!auth.currentUser) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }*/
 }
