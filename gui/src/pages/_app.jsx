@@ -8,11 +8,13 @@ import loveJson from '../../public/static/love.json'
 import exJson from '../../public/static/ex.json'
 import exFacJson from '../../public/static/exFac.json'
 import investmentsJson from '../../public/static/investments.json'
+import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
 
 export const WalletContext = createContext()
 
 export default function App({ Component, pageProps }) {
   const [currentAccount, setCurrentAccount] = useState('')
+  const activeChainId = ChainId.Goerli
   const contractsStatic = {
     anna: {
       address: '0xbAd23F5E81049a4d5b74097Cf5d00db92574995a',
@@ -45,7 +47,9 @@ export default function App({ Component, pageProps }) {
     <WalletContext.Provider
       value={[currentAccount, setCurrentAccount, contractsStatic]}
     >
-      <Component {...pageProps} />
+      <ThirdwebProvider desiredChainId={activeChainId}>
+        <Component {...pageProps} />
+      </ThirdwebProvider>
     </WalletContext.Provider>
   )
 }

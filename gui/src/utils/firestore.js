@@ -7,8 +7,10 @@ import {
   getDoc,
   serverTimestamp,
 } from 'firebase/firestore'
-import { db } from '../../firebase/firebaseConfig'
+import initializeFirebaseClient from '../../firebase/firebaseConfig'
 import { useState, useEffect } from 'react'
+
+const { db } = initializeFirebaseClient()
 
 // fetches all data from firestore
 export const useFetchAllFirestoreData = (collectionName) => {
@@ -26,6 +28,7 @@ export const useFetchAllFirestoreData = (collectionName) => {
   useEffect(() => {
     fetch(collectionName)
   }, [])
+  console.log(allData)
   return [allData, setAllData]
 }
 
