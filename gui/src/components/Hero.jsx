@@ -66,7 +66,7 @@ export function Hero() {
           <h1 className="max-w-4xl text-5xl font-medium tracking-tight text-white sm:text-7xl ">
             A life{' '}
             <span className="relative whitespace-nowrap">
-              <span className="relative inline-block bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text font-elsie text-transparent ">
+              <span className="relative inline-block text-orange-400 ">
                 simulator{' '}
               </span>
             </span>

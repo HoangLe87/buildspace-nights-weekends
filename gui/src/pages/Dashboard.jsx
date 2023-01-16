@@ -142,8 +142,8 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="w-full bg-gray-700/80 py-60 pr-5">
-            <div className="flex h-full w-full items-center justify-center py-60 text-center text-white">
-              Please sign using the metamask "Sign In" button on the Homepage
+            <div className="flex h-full w-full items-center justify-center py-60 text-center font-bold text-white">
+              Please sign in using the metamask "Sign In" button on the Homepage
             </div>
           </div>
         )}
