@@ -8,21 +8,21 @@ export const AnnaStats = () => {
         Learn web3, enjoy digital art, grow your assets and most importantly
         have fun at the same time! There will be only one champion.
         <div>Do you have what it takes to win?</div>
-        <div className="rounded-xl bg-gradient-to-br from-indigo-200 via-slate-600 to-indigo-200 p-5 text-white">
+        <div className="rounded-xl bg-slate-900 p-5 text-white">
           <div className="grid grid-cols-3 items-center gap-10 text-white">
-            <div className=" py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className="flex flex-col items-center py-10 text-center text-xs font-bold xl:px-10 xl:text-left">
               <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
                 Total locked:
               </div>{' '}
               <div className="text-sm sm:text-2xl">1k</div>
             </div>
-            <div className="  py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className=" flex flex-col items-center py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
               <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
                 ANNA Market cap:{' '}
               </div>
               <div className="text-sm sm:text-2xl">2k</div>
             </div>
-            <div className="  py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
+            <div className=" flex flex-col items-center py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
               <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
                 Current owner:{' '}
               </div>

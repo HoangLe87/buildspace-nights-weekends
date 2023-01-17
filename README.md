@@ -45,3 +45,20 @@ LINK - 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
 UNI - 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984
 
 liquidity pools done
+
+
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /Users/{UserId} {
+      allow create: if request.auth != null && !exists(/databases/$(database)/documents/Users/$(request.auth.uid)) && request.resource.data.level == 1;
+     allow read: if true
+    }
+    match /LiquidityPools/{LiquidityPoolId} {
+      allow create: if request.auth != null && !exists(/databases/$(database)/documents/LiquidityPools/$(request.auth.uid));
+      allow read: if true
+    }
+  }
+}
+  

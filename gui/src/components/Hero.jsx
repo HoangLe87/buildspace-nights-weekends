@@ -521,7 +521,7 @@ export function Hero() {
                     </clipPath>{' '}
                   </defs>{' '}
                 </svg>
-                <span> Sign Out </span>
+                <span> Log Out </span>
               </Button>
             ) : (
               <Button
@@ -966,7 +966,7 @@ export function Hero() {
                     </clipPath>{' '}
                   </defs>{' '}
                 </svg>
-                <span> Sign In </span>
+                <span> Log In </span>
               </Button>
             )}
 

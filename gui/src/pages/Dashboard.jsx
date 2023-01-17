@@ -13,8 +13,10 @@ import { Button } from '@/components/Button'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { getAuth } from 'firebase/auth'
+import { useRouter } from 'next/router'
 
 export default function Dashboard() {
+  const router = useRouter()
   const auth = getAuth()
   const [currentAccount, setCurrentAccount, accountsStatic] =
     useContext(WalletContext)
@@ -101,7 +103,7 @@ export default function Dashboard() {
             <div className="flex justify-center gap-10 text-white">
               <div className="flex items-center gap-2">
                 {stats.annaBalance | '0'}
-                <Image src={logo} width={45} height={45} alt="" />
+                <Image src={logo} width={30} height={30} alt="" />
               </div>
               <div className="flex items-center gap-2">
                 {stats.loveBalance | '0'}
@@ -141,11 +143,7 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          <div className="w-full bg-gray-700/80 py-60 pr-5">
-            <div className="flex h-full w-full items-center justify-center py-60 text-center font-bold text-white">
-              Please sign in using the metamask "Sign In" button on the Homepage
-            </div>
-          </div>
+          <div className="flex min-h-screen w-screen items-center justify-between bg-gray-700/80 text-center font-bold text-white"></div>
         )}
       </main>
       <Footer />
