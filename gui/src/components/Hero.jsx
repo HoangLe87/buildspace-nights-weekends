@@ -64,17 +64,17 @@ export function Hero() {
         <ToastContainer position="top-right" />
         <div className="place-self-top mt-36 grid justify-center  bg-gray-700/80 py-2">
           <h1 className="max-w-4xl text-5xl font-medium tracking-tight text-white sm:text-7xl ">
-            A life{' '}
+            Earn and learn{' '}
             <span className="relative whitespace-nowrap">
               <span className="relative inline-block text-orange-400 ">
-                simulator{' '}
+                DeFi{' '}
               </span>
             </span>
-            <span> game to learn DeFi </span>
+            <span> by playing a life simulator </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-white">
-            Complete quests to earn ANNA and then stake ANNA to earn LOVE. The
-            first user to get 10k LOVE claims ownership of this game.{' '}
+            Complete quests to earn ANNA. Stake them to earn LOVE. The first
+            user to get 10k LOVE claims ownership of this game.{' '}
           </p>
 
           <div className="mt-10 flex justify-center gap-x-6">

@@ -14,11 +14,11 @@ export function Logo(props) {
       <Image
         src={logo}
         priority
-        className="h-8 w-8 hover:cursor-pointer "
+        className="h-8 w-8 shadow-[0px_0px_10px_5px_#805ad5] hover:cursor-pointer "
         alt=""
       />
 
-      <span className="invisible relative text-2xl   text-orange-400 hover:cursor-pointer sm:visible ">
+      <span className="invisible relative text-2xl   text-slate-100 hover:cursor-pointer sm:visible ">
         ANNA{' '}
       </span>
     </div>
