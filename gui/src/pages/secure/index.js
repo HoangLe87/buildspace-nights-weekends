@@ -1,13 +1,41 @@
 import { getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
+import initializeFirebaseServer from '../../../firebase/firebaseAdmin'
 
-export default function Secure() {
+export async function getServerSideProps(context) {
+  try {
+    const JWT = context.req.cookies.JWT
+    console.log('JWT', JWT)
+    const { auth } = initializeFirebaseServer()
+    const meta = await auth.verifySessionCookie(JWT)
+    const user = meta.uid
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      }
+    }
+    return {
+      props: { user },
+    }
+  } catch (error) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+}
+
+export default function Secure({ user }) {
   const router = useRouter()
   const auth = getAuth()
   const sendApi = async () => {
     try {
       const token = await auth.currentUser.getIdToken()
-      console.log(token)
       const data = await fetch('api/auth/user', {
         method: 'POST',
         headers: {
@@ -24,10 +52,11 @@ export default function Secure() {
 
   return (
     <>
-      {auth.currentUser ? (
+      {user ? (
         <div>
           {' '}
           <button onClick={sendApi}>test API</button>
+          <button onClick={() => router.push('/')}>Home</button>
         </div>
       ) : (
         <>Restricted access</>

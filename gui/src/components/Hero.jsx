@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { Button } from '@/components/Button'
+import { getServerSideProps } from '@/pages/secure'
 
 export function Hero() {
   const auth = getAuth()
@@ -18,8 +19,19 @@ export function Hero() {
 
   const logOut = async () => {
     signOut(auth)
+
+    const data = await fetch('api/auth/logOut', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const response = await data.json()
+    console.log(response)
     router.push('/')
   }
+
+  /*
   const signIn = async () => {
     try {
       const { db, auth } = initializeFirebaseClient()
@@ -50,12 +62,21 @@ export function Hero() {
         .catch((error) => {
           toast('Oops', error)
         })
-
+      const token1 = await auth.currentUser.getIdToken()
+      const data = await fetch('api/auth/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(token1),
+      })
+      const response = await data.json()
+      console.log(response)
       router.push('/Dashboard')
     } catch (error) {
       toast('Please connect metamask first')
     }
-  }
+  }*/
 
   return (
     <>
