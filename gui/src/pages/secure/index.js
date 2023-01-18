@@ -1,45 +1,39 @@
-import jwt from 'jsonwebtoken'
 import { getAuth } from 'firebase/auth'
-import initializeFirebaseClient from '../../../firebase/firebaseConfig'
-import {
-  getDocs,
-  collection,
-  setDoc,
-  doc,
-  deleteDoc,
-  getDoc,
-  serverTimestamp,
-} from 'firebase/firestore'
-import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-export default function Secure({ user }) {
+export default function Secure() {
+  const router = useRouter()
   const auth = getAuth()
-
-  const checkUser = async () => {
+  const sendApi = async () => {
     try {
-      const user = auth.currentUser.uid
-      console.log(user)
-      const { db, authServer } = initializeFirebaseClient()
-      // uploads accounts data to firestore
-      console.log('connecting to DB')
-      const docRef = doc(db, 'Users', user)
-      const docSnap = await getDoc(docRef)
-      if (docSnap.exists()) {
-        console.log(docSnap.data())
-      } else {
-        // doc.data() will be undefined in this case
-        console.log('unknown')
-      }
-    } catch (err) {
-      console.error(err)
+      const token = await auth.currentUser.getIdToken()
+      console.log(token)
+      const data = await fetch('api/auth/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(token),
+      })
+      const response = await data.json()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
     }
   }
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  return <div> Restricted access {user}</div>
+  return (
+    <>
+      {auth.currentUser ? (
+        <div>
+          {' '}
+          <button onClick={sendApi}>test API</button>
+        </div>
+      ) : (
+        <>Restricted access</>
+      )}{' '}
+    </>
+  )
 
   /* if (!auth.currentUser) {
     return {

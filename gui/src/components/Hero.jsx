@@ -1,4 +1,5 @@
 import { Carousel } from './Carousel'
+
 import { useRouter } from 'next/router'
 import { useAddress, useSDK } from '@thirdweb-dev/react'
 import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
@@ -11,20 +12,18 @@ import { Button } from '@/components/Button'
 
 export function Hero() {
   const auth = getAuth()
+  console.log('hero', auth.currentUser)
   const router = useRouter()
   const sdk = useSDK()
 
   const logOut = async () => {
-    console.log('singing out')
     signOut(auth)
     router.push('/')
   }
   const signIn = async () => {
     try {
       const { db, auth } = initializeFirebaseClient()
-
       const payload = await sdk?.auth.login('anna-defi.com')
-
       const res = await fetch('api/auth/login', {
         method: 'POST',
         headers: {
