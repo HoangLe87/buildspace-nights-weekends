@@ -95,7 +95,7 @@ export default function Dashboard() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header />
+      <Header currentPage={'Dashboard'} />
       <main className="min-h-screen bg-[url('../images/background/10.jpeg')] bg-cover">
         <ToastContainer position="top-right" />
         {auth.currentUser ? (

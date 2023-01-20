@@ -14,6 +14,11 @@ export default function Document(props) {
           href="https://fonts.googleapis.com/css2?family=Elsie&display=swap"
           rel="stylesheet"
         />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <body className="flex h-full flex-col font-mono">
         <Main />

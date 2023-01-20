@@ -4,7 +4,7 @@ import logo from '../images/logos/logo.png'
 
 import { useRouter } from 'next/router'
 
-export function Logo(props) {
+export function Logo(isGlowing) {
   const router = useRouter()
   return (
     <div
@@ -14,11 +14,17 @@ export function Logo(props) {
       <Image
         src={logo}
         priority
-        className="h-8 w-8 shadow-[0px_0px_10px_5px_#805ad5] hover:cursor-pointer "
+        className="glow h-8 w-8 hover:cursor-pointer "
         alt=""
       />
 
-      <span className="invisible relative text-2xl   text-slate-100 hover:cursor-pointer sm:visible ">
+      <span
+        className={
+          isGlowing === true
+            ? ' glow invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible '
+            : ' invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible '
+        }
+      >
         ANNA{' '}
       </span>
     </div>

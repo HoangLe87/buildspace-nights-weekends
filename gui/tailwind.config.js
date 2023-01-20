@@ -26,7 +26,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
         display: ['Lexend', ...defaultTheme.fontFamily.sans],
-        elsie: ['Elsie', ...defaultTheme.fontFamily.sans],
+        cinzel: ['Cinzel', ...defaultTheme.fontFamily.sans],
         mono: [
           'Monospace',
           'ui-monospace',

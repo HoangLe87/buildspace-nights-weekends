@@ -13,7 +13,6 @@ import { getServerSideProps } from '@/pages/secure'
 
 export function Hero() {
   const auth = getAuth()
-  console.log('hero', auth.currentUser)
   const router = useRouter()
   const sdk = useSDK()
 
@@ -31,6 +30,50 @@ export function Hero() {
     router.push('/')
   }
 
+  const signIn = async () => {
+    try {
+      const payload = '0x4cEE6B545906e927Ea1f9f2f271f7db7e41328D9'
+      const res = await fetch('api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ payload }),
+      })
+      const { token } = await res.json()
+      const { db, auth } = initializeFirebaseClient()
+      signInWithCustomToken(auth, token)
+        .then((userCredential) => {
+          const user = userCredential.user
+          const usersRef = doc(db, 'Users', user.uid)
+          getDoc(usersRef).then((doc) => {
+            if (!doc.exists()) {
+              setDoc(
+                usersRef,
+                { address: user.uid, level: 1, createdAt: serverTimestamp() },
+                { merge: true }
+              )
+            }
+          })
+        })
+        .catch((error) => {
+          toast('Oops', error)
+        })
+      const token1 = await auth.currentUser.getIdToken()
+      const data = await fetch('api/auth/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(token1),
+      })
+      const response = await data.json()
+      console.log(response)
+      router.push('/Dashboard')
+    } catch (error) {
+      toast('Please connect metamask first')
+    }
+  }
   /*
   const signIn = async () => {
     try {
