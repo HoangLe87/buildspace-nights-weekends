@@ -1,10 +1,10 @@
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useEffect, useState } from 'react'
-import exchangeABI from '../../public/static/ex.json'
-import erc20ABI from '../../public/static/erc20.json'
+import exchangeABI from '../../../public/static/ex.json'
+import erc20ABI from '../../../public/static/erc20.json'
 import { connectToContractUsingEthers } from '@/utils/metamask'
-import { Button } from './Button'
+import { Button } from '../reusable/Button'
 import { ethers } from 'ethers'
 
 export function SwapBox({ pairs, setPairs }) {

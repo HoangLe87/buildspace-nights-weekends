@@ -1,10 +1,10 @@
-import { NavLink } from './NavLink'
-import { Logo } from '@/components/Logo'
+import { NavLink } from '../reusable/NavLink'
+import { Logo } from '@/components/layout/Logo'
 import { ConnectWallet } from '@thirdweb-dev/react'
 import { useState } from 'react'
-import { Button } from './Button'
+import { Button } from '../reusable/Button'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import profileWhite from '../images/icons/profileWhite.png'
+import profileWhite from '../../images/icons/profileWhite.png'
 import Image from 'next/image'
 
 const current =
@@ -13,7 +13,7 @@ const notCurrent =
   'inline-block text-slate-600 transition delay-150 hover:text-slate-400 font-cinzel  cursor-pointer rounded-lg py-1 px-2 text-sm text-slate-100 font-bold'
 
 export const Header = ({ currentPage }) => {
-  const pages = ['Swap', 'Marketplace', 'Games', 'Dashboard']
+  const pages = ['DeFi', 'Marketplace', 'Games', 'Dashboard']
 
   return (
     <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
@@ -25,7 +25,8 @@ export const Header = ({ currentPage }) => {
               {pages.map((page) => (
                 <NavLink
                   className={page === currentPage ? current : notCurrent}
-                  href={page}
+                  href={`/${page}`}
+                  key={page}
                 >
                   {page}
                 </NavLink>

@@ -1,10 +1,10 @@
 import Image from 'next/image'
 
-import logo from '../images/logos/logo.png'
+import logo from '../../images/logos/logo.png'
 
 import { useRouter } from 'next/router'
 
-export function Logo(isGlowing) {
+export function Logo() {
   const router = useRouter()
   return (
     <div
@@ -18,13 +18,7 @@ export function Logo(isGlowing) {
         alt=""
       />
 
-      <span
-        className={
-          isGlowing === true
-            ? ' glow invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible '
-            : ' invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible '
-        }
-      >
+      <span className=" invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible ">
         ANNA{' '}
       </span>
     </div>

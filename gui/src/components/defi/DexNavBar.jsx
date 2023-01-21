@@ -1,4 +1,4 @@
-import { NavLink } from './NavLink'
+import { NavLink } from '../reusable/NavLink'
 import { useRouter } from 'next/router'
 
 export function DexNavBar({ currentPage }) {
@@ -41,18 +41,18 @@ export function DexNavBar({ currentPage }) {
             className="-mb-px flex space-x-8 rounded-2xl bg-gray-700/80 px-4 shadow-[0px_0px_10px_5px_#805ad5] "
             aria-label="Tabs"
           >
-            <NavLink href="Swap" className={swap}>
+            <NavLink href="/DeFi" className={swap}>
               {' '}
               Swap{' '}
             </NavLink>
-            <NavLink href="Pools" className={pools}>
+            <NavLink href="/DeFi/Pools" className={pools}>
               Pools{' '}
             </NavLink>
-            <NavLink href="Investments" className={investments}>
+            <NavLink href="/DeFi/Investments" className={investments}>
               {' '}
               Investments{' '}
             </NavLink>
-            <NavLink href="Anna" className={anna}>
+            <NavLink href="/DeFi/Anna" className={anna}>
               {' '}
               Anna{' '}
             </NavLink>

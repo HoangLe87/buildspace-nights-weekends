@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { NavLink } from '@/components/NavLink'
+import { NavLink } from '@/components/reusable/NavLink'
 import { SiGitbook } from 'react-icons/si'
 import { TfiTwitter } from 'react-icons/tfi'
 

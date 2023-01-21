@@ -4,11 +4,11 @@ import { useRouter } from 'next/router'
 import { useAddress, useSDK } from '@thirdweb-dev/react'
 import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
 import { signInWithCustomToken, signOut, getAuth } from 'firebase/auth'
-import initializeFirebaseClient from '../../firebase/firebaseConfig'
+import initializeFirebaseClient from '../../../firebase/firebaseConfig'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { Button } from '@/components/Button'
+import { Button } from '@/components/reusable/Button'
 import { getServerSideProps } from '@/pages/secure'
 
 export function Hero() {

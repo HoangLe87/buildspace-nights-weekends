@@ -4,8 +4,8 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { PoolDetailsContext } from './LPPools'
 import { connectToContractUsingEthers } from '@/utils/metamask'
-import exchangeABI from '../../public/static/ex.json'
-import erc20ABI from '../../public/static/erc20.json'
+import exchangeABI from '../../../public/static/ex.json'
+import erc20ABI from '../../../public/static/erc20.json'
 import { ethers } from 'ethers'
 
 export function LPPoolDeposit({ token1, token2, exchangeAddress }) {

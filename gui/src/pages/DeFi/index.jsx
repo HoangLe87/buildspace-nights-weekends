@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { DexNavBar } from '@/components/DexNavBar'
-import { SwapBox } from '@/components/SwapBox'
+import { Footer } from '@/components/layout/Footer'
+import { Header } from '@/components/layout/Header'
+import { DexNavBar } from '@/components/defi/DexNavBar'
+import { SwapBox } from '@/components/defi/SwapBox'
 import { useFetchAllFirestoreData } from '@/utils/firestore'
 
 export default function Swap() {
@@ -17,7 +17,7 @@ export default function Swap() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header currentPage={'Swap'} isGlowing={false} />
+      <Header currentPage={'DeFi'} isGlowing={false} />
       <main className="grid h-screen bg-[url('../images/background/3.jpeg')] bg-cover">
         <DexNavBar currentPage={'Swap'} />
         <SwapBox pairs={pairs} setPairs={setPairs} />

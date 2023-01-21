@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { LPPools } from '@/components/LPPools'
-import { DexNavBar } from '@/components/DexNavBar'
+import { Footer } from '@/components/layout/Footer'
+import { Header } from '@/components/layout/Header'
+import { LPPools } from '@/components/defi/LPPools'
+import { DexNavBar } from '@/components/defi/DexNavBar'
 
 export default function Pools() {
   return (

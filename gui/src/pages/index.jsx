@@ -1,14 +1,14 @@
 import Head from 'next/head'
 
-import { CallToAction } from '@/components/CallToAction'
-import { Faqs } from '@/components/Faqs'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { Hero } from '@/components/Hero'
-import { Services } from '@/components/Services'
-import { MeetUs } from '@/components/MeetUs'
-import { AnnaStats } from '@/components/AnnaStats'
-import { Roadmap } from '@/components/Roadmap'
+import { CallToAction } from '@/components/home/CallToAction'
+import { Faqs } from '@/components/home/Faqs'
+import { Footer } from '@/components/layout/Footer'
+import { Header } from '@/components/layout/Header'
+import { Hero } from '@/components/home/Hero'
+import { Services } from '@/components/home/Services'
+import { MeetUs } from '@/components/home/MeetUs'
+import { AnnaStats } from '@/components/home/AnnaStats'
+import { Roadmap } from '@/components/home/Roadmap'
 
 export default function Home() {
   return (
