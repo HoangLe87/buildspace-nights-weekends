@@ -4,7 +4,7 @@ import { ConnectWallet } from '@thirdweb-dev/react'
 import { useState } from 'react'
 import { Button } from '../reusable/Button'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import profileWhite from '../../images/icons/profileWhite.png'
+import profileWhite from '../../images/icons/profileGray.png'
 import Image from 'next/image'
 
 const current =
@@ -54,11 +54,12 @@ export function Wallet() {
       className="font-cinzel text-white "
       onMouseOver={() => setIsOpen(true)}
       onMouseLeave={() => setTimeout(() => setIsOpen(false), 200)}
+      onClick={() => setIsOpen(!isOpen)}
     >
       <Image
         src={profileWhite}
         alt=""
-        className=" mr-1 h-8 w-8 rounded-full bg-slate-100/10 transition delay-100 hover:bg-violet-200/50 hover:shadow-[0px_0px_10px_5px_#805ad5]"
+        className=" mr-1 h-8 w-8 rounded-full transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
       />
       {isOpen && (
         <div className="absolute right-1 z-10 grid h-60 w-60 items-center justify-center gap-2 rounded-xl border border-solid border-stone-500 bg-slate-800 px-4 py-8 delay-150 hover:shadow-[0px_0px_10px_5px_#805ad5] ">

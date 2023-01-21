@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { NavLink } from '@/components/reusable/NavLink'
 import { SiGitbook } from 'react-icons/si'
 import { TfiTwitter } from 'react-icons/tfi'
-import twitter from '../../images/icons/twitter.png'
-import book from '../../images/icons/book1.png'
-import linkedin from '../../images/icons/linkedin.png'
+import twitter from '../../images/icons/twitterGray.png'
+import book from '../../images/icons/bookGray.png'
+import linkedin from '../../images/icons/linkedinGray.png'
 import Image from 'next/image'
 
 export function Footer() {
@@ -13,7 +13,7 @@ export function Footer() {
   return (
     <footer className=" w-screen bg-gray-900 py-5 shadow-[0px_0px_10px_5px_#805ad5]">
       <nav className="mt-10 text-sm" aria-label="quick links">
-        <div className="-my-1 flex justify-center gap-x-6">
+        <div className="-my-1 flex justify-center gap-x-2 sm:gap-x-6">
           <NavLink className={className} href="/">
             About us
           </NavLink>
@@ -35,21 +35,33 @@ export function Footer() {
             className="group"
             aria-label="ANNA on Twitter"
           >
-            <Image src={twitter} alt="twitter" className="h-8 w-8" />
+            <Image
+              src={twitter}
+              alt="twitter"
+              className="h-8 w-8 transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
+            />
           </Link>
           <Link
             href="https://www.linkedin.com/company/anna-defi/?viewAsMember=true"
             className="group"
             aria-label="ANNA on LinkedIn"
           >
-            <Image src={linkedin} alt="linkedin" className="h-8 w-8" />
+            <Image
+              src={linkedin}
+              alt="linkedin"
+              className="h-8 w-8 transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
+            />
           </Link>
           <Link
             href="https://anna-21.gitbook.io/product-docs/"
             className="group"
             aria-label="ANNA on GitBook"
           >
-            <Image src={book} alt="book" className="mr-4 h-8 w-8" />
+            <Image
+              src={book}
+              alt="book"
+              className="mr-4 h-8 w-8 transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
+            />
           </Link>
         </div>
         <p className="mt-6 text-sm text-slate-500 sm:mt-0">
