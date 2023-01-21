@@ -61,8 +61,8 @@ export function Services() {
     >
       <div className="relative">
         <div className="max-w-2xl px-2 md:mx-auto md:text-center xl:max-w-none">
-          <h2 className=" text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            The all inclusive DeFi protocol you'd probably ever need
+          <h2 className=" font-cinzel text-3xl font-bold text-white sm:text-4xl">
+            The all inclusive DeFi protocol
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
             Check out our roadmap to see the release dates and features

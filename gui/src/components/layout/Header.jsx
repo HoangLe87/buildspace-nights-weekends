@@ -10,7 +10,7 @@ import Image from 'next/image'
 const current =
   'inline-block font-cinzel glow cursor-pointer transition delay-150 rounded-lg py-1 px-2 text-sm text-slate-100 font-bold'
 const notCurrent =
-  'inline-block text-slate-600 transition delay-150 hover:text-slate-400 font-cinzel  cursor-pointer rounded-lg py-1 px-2 text-sm text-slate-100 font-bold'
+  'inline-block text-slate-600 transition delay-150 hover:text-slate-400 font-cinzel  cursor-pointer rounded-lg py-1 px-2 text-sm font-bold'
 
 export const Header = ({ currentPage }) => {
   const pages = ['DeFi', 'Marketplace', 'Games', 'Dashboard']

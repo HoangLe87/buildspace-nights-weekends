@@ -65,7 +65,7 @@ export function Faqs() {
             id="faq-title"
             className=" text-3xl tracking-tight text-slate-900 sm:text-4xl"
           >
-            <span className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text  text-transparent">
+            <span className="font-cinzel text-3xl font-bold text-slate-800 sm:text-4xl">
               Frequently asked questions
             </span>
           </h2>

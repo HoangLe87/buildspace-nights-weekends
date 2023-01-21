@@ -2,7 +2,7 @@ export const AnnaStats = () => {
   return (
     <div className="grid h-screen w-full items-center text-center">
       <div className="grid gap-3">
-        <h1 className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-3xl text-transparent  sm:text-4xl">
+        <h1 className="font-cinzel text-3xl font-bold text-slate-800 sm:text-4xl">
           Stake ANNA to earn LOVE
         </h1>
         Learn web3, enjoy digital art, grow your assets and most importantly
