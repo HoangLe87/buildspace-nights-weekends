@@ -17,7 +17,7 @@ export default function Swap() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header currentPage={'DeFi'} isGlowing={false} />
+      <Header currentPage={'DeFi'} />
       <main className="grid h-screen bg-[url('../images/background/3.jpeg')] bg-cover">
         <DexNavBar currentPage={'Swap'} />
         <SwapBox pairs={pairs} setPairs={setPairs} />

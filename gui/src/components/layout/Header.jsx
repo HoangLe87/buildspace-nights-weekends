@@ -13,7 +13,13 @@ const notCurrent =
   'inline-block text-slate-600 transition delay-150 hover:text-slate-400 font-cinzel  cursor-pointer rounded-lg py-1 px-2 text-sm font-bold'
 
 export const Header = ({ currentPage }) => {
-  const pages = ['DeFi', 'Marketplace', 'Games', 'Dashboard']
+  const [isOpen, setIsOpen] = useState(false)
+  const pages = [
+    { name: 'DeFi', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
+    { name: 'Marketplace', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
+    { name: 'Games', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
+    { name: 'Dashboard', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
+  ]
 
   return (
     <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
@@ -24,11 +30,12 @@ export const Header = ({ currentPage }) => {
             <div className="md:flex md:gap-x-8">
               {pages.map((page) => (
                 <NavLink
-                  className={page === currentPage ? current : notCurrent}
-                  href={`/${page}`}
-                  key={page}
+                  className={page.name === currentPage ? current : notCurrent}
+                  href={`/${page.name}`}
+                  key={page.name}
+                  onMouseOver={() => setIsOpen(true)}
                 >
-                  {page}
+                  {page.name}
                 </NavLink>
               ))}
             </div>
@@ -62,7 +69,7 @@ export function Wallet() {
         className=" mr-1 h-8 w-8 rounded-full transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
       />
       {isOpen && (
-        <div className="absolute right-1 z-10 grid h-60 w-60 items-center justify-center gap-2 rounded-xl border border-solid border-stone-500 bg-slate-800 px-4 py-8 delay-150 hover:shadow-[0px_0px_10px_5px_#805ad5] ">
+        <div className="absolute right-1 z-10 grid w-60 items-center justify-center gap-2 overflow-hidden rounded-xl border border-solid border-stone-500 bg-slate-800 px-4 py-8 delay-150 hover:shadow-[0px_0px_10px_5px_#805ad5] sm:w-fit md:h-60 ">
           <ConnectWallet className={notCurrent} accentColor="black" />
 
           <input type="email"></input>

@@ -179,7 +179,7 @@ export default function Investments() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header />
+      <Header currentPage={'DeFi'} />
       <main className="grid min-h-screen w-screen bg-[url('../images/background/9.jpeg')] bg-cover">
         <DexNavBar currentPage={'Investments'} />
         <div className="px-4 sm:px-6 lg:px-8 ">

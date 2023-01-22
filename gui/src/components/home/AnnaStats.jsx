@@ -1,6 +1,6 @@
 export const AnnaStats = () => {
   return (
-    <div className="grid h-screen w-full items-center text-center">
+    <div className="mt-10 grid h-screen w-full items-center text-center">
       <div className="grid gap-3">
         <h1 className="font-cinzel text-3xl font-bold text-slate-800 sm:text-4xl">
           Stake ANNA to earn LOVE

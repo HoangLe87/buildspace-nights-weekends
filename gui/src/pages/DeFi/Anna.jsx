@@ -59,7 +59,7 @@ export default function Anna() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header />
+      <Header currentPage={'DeFi'} />
       <main className="grid min-h-screen bg-[url('../images/background/4.jpeg')] bg-cover">
         <DexNavBar currentPage={'Anna'} />
 
