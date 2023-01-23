@@ -61,10 +61,10 @@ export function Wallet() {
       className="font-cinzel text-white "
       onMouseOver={() => setIsOpen(true)}
       onMouseLeave={() => setTimeout(() => setIsOpen(false), 200)}
-      onClick={() => setIsOpen(!isOpen)}
     >
       <Image
         src={profileWhite}
+        onClick={() => setIsOpen(!isOpen)}
         alt=""
         className=" mr-1 h-8 w-8 rounded-full transition delay-100 hover:bg-white hover:shadow-[0px_0px_10px_5px_#805ad5]"
       />
