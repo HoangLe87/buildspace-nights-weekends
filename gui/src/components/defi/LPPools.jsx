@@ -12,8 +12,7 @@ import { useContext } from 'react'
 export const PoolDetailsContext = createContext()
 
 export function LPPools() {
-  const [currentAccount, setCurrentAccount, accountsStatic] =
-    useContext(WalletContext)
+  const accountsStatic = useContext(WalletContext)
 
   const [isCreatePoolBoxOpen, setCreatePoolBoxOpen] = useState(false)
   const [isDepositBoxOpen, setDepositBoxOpen] = useState(false)

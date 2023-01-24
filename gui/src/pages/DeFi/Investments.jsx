@@ -11,8 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { _fetchData } from 'ethers/lib/utils'
 
 export default function Investments() {
-  const [currentAccount, setCurrentAccount, accountsStatic] =
-    useContext(WalletContext)
+  const accountsStatic = useContext(WalletContext)
 
   const [options, setOptions] = useState([
     {

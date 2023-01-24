@@ -12,11 +12,9 @@ import { connectToContractUsingEthers } from '@/utils/metamask'
 import { ethers } from 'ethers'
 
 export default function Anna() {
-  const [currentAccount, setCurrentAccount, accountsStatic] =
-    useContext(WalletContext)
+  const accountsStatic = useContext(WalletContext)
   const [buyAmount, setBuyAmount] = useState('')
   const [displayAmount, setDisplayAmount] = useState('')
-  console.log(currentAccount)
   const calculateAmount = (e) => {
     setBuyAmount(e.target.value)
     if (e.target.value > 0) {

@@ -1,11 +1,21 @@
 import { NavLink } from '../reusable/NavLink'
 import { Logo } from '@/components/layout/Logo'
-import { ConnectWallet } from '@thirdweb-dev/react'
+import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
 import { useState } from 'react'
 import { Button } from '../reusable/Button'
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+} from 'firebase/auth'
 import profileWhite from '../../images/icons/profileGray.png'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
+import initializeFirebaseClient from '../../../firebase/firebaseConfig'
 
 const current =
   'inline-block font-cinzel glow cursor-pointer transition delay-150 rounded-lg py-1 px-2 text-sm text-slate-100 font-bold'
@@ -23,6 +33,7 @@ export const Header = ({ currentPage }) => {
 
   return (
     <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
+      <ToastContainer position="top-right" />
       <div className="w-full bg-gray-900 py-5 pr-5">
         <nav className="z-1 relative flex justify-between">
           <div className="hidden items-center gap-x-6 sm:flex md:gap-x-16">
@@ -54,8 +65,55 @@ export const Header = ({ currentPage }) => {
 }
 
 export function Wallet() {
+  const { db, auth } = initializeFirebaseClient()
+  const router = useRouter()
+  const address = useAddress()
   const [isOpen, setIsOpen] = useState(false)
   const provider = new GoogleAuthProvider()
+
+  const logOut = () => {
+    signOut(auth)
+    setIsOpen(false)
+    router.push('/')
+  }
+
+  const logIn = () => {
+    if (!address) return toast('Please connect wallet first')
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result)
+        const token = credential.accessToken
+        // The signed-in user info.
+        const user = result.user
+        const usersRef = doc(db, 'Users', user.email)
+
+        getDoc(usersRef).then((doc) => {
+          if (!doc.exists()) {
+            setDoc(
+              usersRef,
+              {
+                uid: user.uid,
+                email: user.email,
+                address: address,
+                level: 1,
+                createdAt: serverTimestamp(),
+              },
+              { merge: true }
+            )
+          }
+        })
+        toast(`Welcome ${user.email.split('@')[0]}`)
+        setIsOpen(false)
+        router.push('/')
+      })
+      .catch((error) => {
+        toast(errorMessage)
+        setIsOpen(false)
+      })
+  }
+
   return (
     <div
       className="font-cinzel text-white "
@@ -71,10 +129,18 @@ export function Wallet() {
       {isOpen && (
         <div className="absolute right-1 z-10 grid w-60 items-center justify-center gap-2 overflow-hidden rounded-xl border border-solid border-stone-500 bg-slate-800 px-4 py-8 delay-150 hover:shadow-[0px_0px_10px_5px_#805ad5] sm:w-fit md:h-60 ">
           <ConnectWallet className={notCurrent} accentColor="black" />
-
-          <input type="email"></input>
-          <Button className={notCurrent}>Log In with Google</Button>
-          <Button className={notCurrent}>Log In with Facebook</Button>
+          {!auth.currentUser ? (
+            <Button onClick={logIn} className={notCurrent}>
+              Log In with Google
+            </Button>
+          ) : (
+            <>
+              <div className="text-center">
+                {auth.currentUser.email.split('@')[0]}
+              </div>
+              <Button onClick={logOut}>Log out</Button>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -120,19 +186,19 @@ export function HamburgerMenu() {
             <NavLink className={notCurrent} href={'/'}>
               Home
             </NavLink>
-            <NavLink className={notCurrent} href={'Swap'}>
-              Dex
+            <NavLink className={notCurrent} href={'/DeFi'}>
+              DeFi
             </NavLink>
-            <NavLink className={notCurrent} href={'Marketplace'}>
+            <NavLink className={notCurrent} href={'/Marketplace'}>
               Marketplace
             </NavLink>
-            <NavLink className={notCurrent} href={'Games'}>
+            <NavLink className={notCurrent} href={'/Games'}>
               Games
             </NavLink>
-            <NavLink className={notCurrent} href={'Dashboard'}>
+            <NavLink className={notCurrent} href={'/Dashboard'}>
               Dashboard
             </NavLink>
-            <NavLink className={notCurrent} href={'secure'}>
+            <NavLink className={notCurrent} href={'/secure'}>
               Secure
             </NavLink>
           </div>

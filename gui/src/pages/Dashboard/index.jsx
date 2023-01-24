@@ -14,12 +14,14 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
+import { useAddress } from '@thirdweb-dev/react'
 
 export default function Dashboard() {
   const router = useRouter()
+  const address = useAddress()
   const auth = getAuth()
-  const [currentAccount, setCurrentAccount, accountsStatic] =
-    useContext(WalletContext)
+
+  const contractStatics = useContext(WalletContext)
   const [stats, setStats] = useState({
     annaBalance: '',
     loveBalance: '',
@@ -32,29 +34,29 @@ export default function Dashboard() {
 
   const getAnnaBalance = async () => {
     if (!window.ethereum) return
-    if (!accountsStatic.anna.address || !accountsStatic.love.address) return
+    if (!contractStatics.anna.address || !contractStatics.love.address) return
     try {
       const anna = await connectToContractUsingEthers(
-        accountsStatic.anna.json,
-        accountsStatic.anna.address
+        contractStatics.anna.json,
+        contractStatics.anna.address
       )
 
       const annaBalance = ethers.utils.formatEther(
-        String(await anna.balanceOf(currentAccount))
+        String(await anna.balanceOf(address))
       )
 
       const love = await connectToContractUsingEthers(
-        accountsStatic.love.json,
-        accountsStatic.love.address
+        contractStatics.love.json,
+        contractStatics.love.address
       )
 
       const loveBalance = ethers.utils.formatEther(
-        String(await love.balanceOf(currentAccount))
+        String(await love.balanceOf(address))
       )
 
       const investments = await connectToContractUsingEthers(
-        accountsStatic.investments.json,
-        accountsStatic.investments.address
+        contractStatics.investments.json,
+        contractStatics.investments.address
       )
 
       setStats({
@@ -76,7 +78,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getAnnaBalance()
-  }, [stats.annaBalance, stats.loveBalance])
+  }, [])
 
   const claim = () => {
     try {

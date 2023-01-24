@@ -1,4 +1,11 @@
+import CountUp from 'react-countup'
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
+import { Card, Col, Row, Statistic } from 'antd'
+
 export const AnnaStats = () => {
+  const formatter = (value, duration) => (
+    <CountUp end={value} duration={duration} separator="," />
+  )
   return (
     <div className="mt-20 grid h-screen w-full items-center text-center">
       <div className="grid gap-3">
@@ -8,29 +15,32 @@ export const AnnaStats = () => {
         Learn web3, enjoy digital art, grow your assets and most importantly
         have fun at the same time! There will be only one champion.
         <div>Do you have what it takes to win?</div>
-        <div className="rounded-xl bg-slate-900 p-5 text-white">
+        <div className="rounded-xl bg-slate-400 p-5 text-slate-900">
           <div className="grid grid-cols-3 items-center gap-10 text-white">
             <div className="flex flex-col items-center py-10 text-center text-xs font-bold xl:px-10 xl:text-left">
-              <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
-                Total locked:
-              </div>{' '}
-              <div className="text-sm sm:text-2xl">1k</div>
+              <Statistic
+                title="Total locked"
+                formatter={() => formatter(1000, 3)}
+                valueStyle={{ color: '#ded5f3' }}
+              />
             </div>
             <div className=" flex flex-col items-center py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
-              <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
-                ANNA Market cap:{' '}
-              </div>
-              <div className="text-sm sm:text-2xl">2k</div>
+              <Statistic
+                title="Market Cap"
+                valueStyle={{ color: '#ded5f3' }}
+                formatter={() => formatter(2000, 5)}
+              />
             </div>
             <div className=" flex flex-col items-center py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
-              <div className="bg-gradient-to-r from-rose-600 to-blue-600 bg-clip-text text-transparent">
-                Current owner:{' '}
-              </div>
-              <div className="text-sm sm:text-2xl">Anna.eth</div>
+              <Statistic
+                title="Current owner"
+                valueStyle={{ color: '#ded5f3' }}
+                value={'Anna.eth'}
+              />
             </div>
           </div>
-          <div className="mt-2 font-bold">Top 5</div>
-          <ul className="m-auto mt-2 rounded-xl border border-solid border-slate-400 text-white">
+          <div className="mt-2 font-bold text-slate-600">Top 5</div>
+          <ul className="m-auto mt-2 rounded-xl border border-solid border-slate-400 text-slate-600">
             <li className="flex justify-center">
               <div className="w-40 overflow-hidden">
                 0x45a7ff4990f858f851a2fdb67b72f47945ffe551

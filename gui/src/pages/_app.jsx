@@ -1,7 +1,6 @@
 import 'focus-visible'
 import '@/styles/tailwind.css'
-import { useEffect, useState, createContext } from 'react'
-import { checkIfWalletIsConnected } from '@/utils/metamask'
+import { createContext } from 'react'
 import annaJson from '../../public/static/anna.json'
 import erc20Json from '../../public/static/erc20.json'
 import loveJson from '../../public/static/love.json'
@@ -13,7 +12,6 @@ import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
 export const WalletContext = createContext()
 
 export default function App({ Component, pageProps }) {
-  const [currentAccount, setCurrentAccount] = useState('')
   const activeChainId = ChainId.Goerli
   const contractsStatic = {
     anna: {
@@ -40,13 +38,8 @@ export default function App({ Component, pageProps }) {
     },
   }
 
-  useEffect(() => {
-    checkIfWalletIsConnected(setCurrentAccount)
-  }, [])
   return (
-    <WalletContext.Provider
-      value={[currentAccount, setCurrentAccount, contractsStatic]}
-    >
+    <WalletContext.Provider value={contractsStatic}>
       <ThirdwebProvider desiredChainId={activeChainId}>
         <Component {...pageProps} />
       </ThirdwebProvider>

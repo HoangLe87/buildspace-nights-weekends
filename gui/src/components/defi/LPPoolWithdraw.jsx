@@ -9,8 +9,10 @@ import erc20ABI from '../../../public/static/erc20.json'
 import { WalletContext } from '../../pages/_app'
 import { Button } from '../reusable/Button'
 import { ethers } from 'ethers'
+import { useAddress } from '@thirdweb-dev/react'
 
 export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
+  const address = useAddress()
   const [
     isCreatePoolBoxOpen,
     setCreatePoolBoxOpen,
@@ -25,7 +27,6 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
   ] = useContext(PoolDetailsContext)
 
   const [userLpBalance, setUserLpBalance] = useState('')
-  const [currentAccount, setCurrentAccount] = useContext(WalletContext)
 
   const getMaxLp = async (e) => {
     try {
@@ -37,7 +38,7 @@ export function LPPoolWithdraw({ token1, token2, exchangeAddress }) {
         )
 
         let userLpBalance = ethers.utils.formatEther(
-          await erc20lp.balanceOf(currentAccount)
+          await erc20lp.balanceOf(address)
         )
         setUserLpBalance(userLpBalance)
       }
