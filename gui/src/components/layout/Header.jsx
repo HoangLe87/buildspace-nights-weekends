@@ -31,12 +31,12 @@ export const Header = ({ currentPage }) => {
     },
     {
       name: 'Marketplace',
-      subs: ['m1', 'm2'],
+      subs: [],
       current: false,
     },
     {
-      name: 'Games',
-      subs: [],
+      name: 'Education',
+      subs: ['Playground', 'Library', 'School'],
       current: false,
     },
     {
@@ -242,8 +242,8 @@ export function HamburgerMenu() {
             <NavLink className={notCurrent} href={'/Marketplace'}>
               Marketplace
             </NavLink>
-            <NavLink className={notCurrent} href={'/Games'}>
-              Games
+            <NavLink className={notCurrent} href={'/Education'}>
+              Education
             </NavLink>
             <NavLink className={notCurrent} href={'/Dashboard'}>
               Dashboard
