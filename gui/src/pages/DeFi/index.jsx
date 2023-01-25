@@ -9,7 +9,9 @@ import { DexNavBar } from '@/components/defi/DexNavBar'
 export default function Home() {
   const { db, auth } = initializeFirebaseClient()
   const [isAnimated, setIsAnimated] = useState(false)
-  const user = auth.currentUser ? auth.currentUser : ''
+  const user = auth?.currentUser?.email
+    ? auth.currentUser.email.split('@')[0]
+    : 'friend'
   return (
     <>
       <Head>
@@ -27,7 +29,7 @@ export default function Home() {
               sequence={[
                 'Hello',
                 1000,
-                `Hello ${user.email ? user.email.split('@')[0] : 'friend'}`,
+                `Hello ${user}`,
                 2000,
                 'Welcome to this incredible journey to explore DeFi',
                 2000,
