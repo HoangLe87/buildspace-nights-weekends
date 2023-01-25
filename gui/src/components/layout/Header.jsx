@@ -23,31 +23,77 @@ const notCurrent =
   'inline-block text-slate-600 transition delay-150 hover:text-slate-400 font-cinzel  cursor-pointer rounded-lg py-1 px-2 text-sm font-bold'
 
 export const Header = ({ currentPage }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const pages = [
-    { name: 'DeFi', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
-    { name: 'Marketplace', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
-    { name: 'Games', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
-    { name: 'Dashboard', subs: ['Swap', 'Pools', 'Investments', 'Anna'] },
-  ]
+  const [pages, setPages] = useState([
+    {
+      name: 'DeFi',
+      subs: ['Swap', 'Pools', 'Investments', 'Anna'],
+      current: false,
+    },
+    {
+      name: 'Marketplace',
+      subs: ['m1', 'm2'],
+      current: false,
+    },
+    {
+      name: 'Games',
+      subs: [],
+      current: false,
+    },
+    {
+      name: 'Dashboard',
+      subs: [],
+      current: false,
+    },
+  ])
+
+  const dropDown = (i) => {
+    const newPages = pages.map((page) =>
+      page !== i ? page : { ...i, current: true }
+    )
+    setPages(newPages)
+  }
+
+  const dropDownCollapse = async (i) => {
+    const newPages = pages.map((page) =>
+      page !== i ? page : { ...i, current: false }
+    )
+    setPages(newPages)
+  }
 
   return (
     <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
       <ToastContainer position="top-right" />
       <div className="w-full bg-gray-900 py-5 pr-5">
-        <nav className="z-1 relative flex justify-between">
+        <nav className="relative z-10 flex justify-between">
           <div className="hidden items-center gap-x-6 sm:flex md:gap-x-16">
             <Logo className="h-10 w-auto" />
             <div className="md:flex md:gap-x-8">
               {pages.map((page) => (
-                <NavLink
-                  className={page.name === currentPage ? current : notCurrent}
-                  href={`/${page.name}`}
+                <div
                   key={page.name}
-                  onMouseOver={() => setIsOpen(true)}
+                  onMouseOver={() => dropDown(page)}
+                  onMouseLeave={() => dropDownCollapse(page)}
                 >
-                  {page.name}
-                </NavLink>
+                  <NavLink
+                    className={page.name === currentPage ? current : notCurrent}
+                    href={`/${page.name}`}
+                  >
+                    {page.name}
+                  </NavLink>
+                  {page.current && page.subs.length > 1 && (
+                    <div className=" absolute ml-2 grid w-28 gap-1 rounded-xl border-b-[1px] border-stone-500 bg-slate-800 px-1 py-8 delay-150 ">
+                      {page.subs.map((i) => (
+                        <NavLink
+                          key={i}
+                          href={`/${page.name}/${i}`}
+                          className={notCurrent}
+                        >
+                          {i}
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>
@@ -77,41 +123,45 @@ export function Wallet() {
     router.push('/')
   }
 
-  const logIn = () => {
+  const logIn = async () => {
     if (!address) return toast('Please connect wallet first')
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result)
-        const token = credential.accessToken
-        // The signed-in user info.
-        const user = result.user
-        const usersRef = doc(db, 'Users', user.email)
-
-        getDoc(usersRef).then((doc) => {
-          if (!doc.exists()) {
-            setDoc(
-              usersRef,
-              {
-                uid: user.uid,
-                email: user.email,
-                address: address,
-                level: 1,
-                createdAt: serverTimestamp(),
-              },
-              { merge: true }
-            )
-          }
-        })
-        toast(`Welcome ${user.email.split('@')[0]}`)
-        setIsOpen(false)
-        router.push('/')
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const credential = GoogleAuthProvider.credentialFromResult(result)
+      const token = credential.accessToken
+      const user = result.user
+      const usersRef = doc(db, 'Users', user.email)
+      getDoc(usersRef).then((doc) => {
+        if (!doc.exists()) {
+          setDoc(
+            usersRef,
+            {
+              uid: user.uid,
+              email: user.email,
+              address: address,
+              level: 1,
+              createdAt: serverTimestamp(),
+            },
+            { merge: true }
+          )
+        }
       })
-      .catch((error) => {
-        toast(errorMessage)
-        setIsOpen(false)
+      const tokenID = await auth.currentUser.getIdToken()
+      const data = await fetch('api/auth/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tokenID),
       })
+      const response = await data.json()
+      setIsOpen(false)
+      router.push('/Dashboard')
+    } catch (error) {
+      toast(error)
+      setIsOpen(false)
+    }
   }
 
   return (

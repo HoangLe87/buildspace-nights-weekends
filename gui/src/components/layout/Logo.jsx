@@ -21,6 +21,7 @@ export function Logo() {
       <span className=" invisible relative text-2xl  text-slate-100 hover:cursor-pointer sm:visible ">
         ANNA{' '}
       </span>
+      <span className="mb-8 h-1 w-2 text-xs text-red-600">BETA</span>
     </div>
   )
 }

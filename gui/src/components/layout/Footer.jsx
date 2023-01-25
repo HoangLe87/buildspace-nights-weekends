@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import { NavLink } from '@/components/reusable/NavLink'
-import { SiGitbook } from 'react-icons/si'
-import { TfiTwitter } from 'react-icons/tfi'
 import twitter from '../../images/icons/twitterGray.png'
 import book from '../../images/icons/bookGray.png'
 import linkedin from '../../images/icons/linkedinGray.png'

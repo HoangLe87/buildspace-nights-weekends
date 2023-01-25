@@ -9,27 +9,29 @@ export function Roadmap() {
           <h2 className=" font-cinzel text-3xl font-bold text-white sm:text-4xl ">
             Roadmap
           </h2>
-
           <p className="mt-4 rounded-xl text-lg tracking-tight text-white">
-            FEB 2023: Marketplace release
+            FEB 2023: MVP and core design
           </p>
           <p className="mt-4 rounded-xl text-lg tracking-tight text-white">
-            MAR 2023: Additional games release
+            MAR 2023: University, challenges and games
+          </p>
+          <p className="mt-4 rounded-xl text-lg tracking-tight text-white">
+            APR 2023: Marketplace
           </p>
           <p className=" mt-4 rounded-xl text-lg tracking-tight text-white">
-            APR 2023: Whitelist & Final preparations
+            MAY 2023: Additional features
           </p>
           <p className=" mt-4 rounded-xl text-lg tracking-tight text-white">
-            MAY 2023: Mainnet Launch
+            JUN 2023: ICO Partnerships & Sponsorships
           </p>
           <p className=" mt-4 rounded-xl text-lg tracking-tight text-white">
-            JUN 2023: User engagement & Feedback
+            JUL 2023: Mainnet launch
           </p>
           <p className=" mt-4 rounded-xl text-lg tracking-tight text-white">
-            JUL 2023: Partnerships & Sponsorships
+            AUG 2023: Community inclusion and governance
           </p>
           <p className=" mt-4 rounded-xl text-lg tracking-tight text-white">
-            further timeline to be released in due course
+            further timeline and features to be released
           </p>
         </div>
       </div>

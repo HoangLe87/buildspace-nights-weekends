@@ -7,9 +7,8 @@ import { signInWithCustomToken, signOut, getAuth } from 'firebase/auth'
 import initializeFirebaseClient from '../../../firebase/firebaseConfig'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
 import { Button } from '@/components/reusable/Button'
-import { getServerSideProps } from '@/pages/secure'
+import { TypeAnimation } from 'react-type-animation'
 
 export function Hero() {
   const auth = getAuth()
@@ -127,13 +126,26 @@ export function Hero() {
         <ToastContainer position="top-right" />
         <div className="place-self-top mt-36 grid justify-center  bg-gray-700/80 py-2">
           <h1 className="max-w-4xl text-5xl font-medium tracking-tight text-white sm:text-7xl ">
-            Earn and learn{' '}
+            A life simulator{' '}
             <span className="relative whitespace-nowrap">
               <span className="relative inline-block text-orange-400 ">
-                DeFi{' '}
+                game{' '}
               </span>
             </span>
-            <span> by playing a life simulator </span>
+            <TypeAnimation
+              sequence={[
+                'to learn DeFi',
+                1000,
+                'to earn ANNA',
+                2000,
+                'to claim LOVE',
+                20000,
+              ]}
+              wrapper="div"
+              cursor={true}
+              repeat={Infinity}
+              speed={10}
+            />
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-white">
             Complete quests to earn ANNA. Stake them to earn LOVE. The first

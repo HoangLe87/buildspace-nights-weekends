@@ -15,26 +15,28 @@ export const AnnaStats = () => {
         Learn web3, enjoy digital art, grow your assets and most importantly
         have fun at the same time! There will be only one champion.
         <div>Do you have what it takes to win?</div>
-        <div className="rounded-xl bg-slate-400 p-5 text-slate-900">
+        <div className="rounded-xl p-5 text-slate-900">
           <div className="grid grid-cols-3 items-center gap-10 text-white">
             <div className="flex flex-col items-center py-10 text-center text-xs font-bold xl:px-10 xl:text-left">
               <Statistic
                 title="Total locked"
-                formatter={() => formatter(1000, 3)}
-                valueStyle={{ color: '#ded5f3' }}
+                formatter={() => formatter(1000, 2)}
+                prefix="$"
+                valueStyle={{ color: '#0f172a' }}
               />
             </div>
             <div className=" flex flex-col items-center py-10   text-center text-xs font-bold xl:px-10 xl:text-left">
               <Statistic
                 title="Market Cap"
-                valueStyle={{ color: '#ded5f3' }}
-                formatter={() => formatter(2000, 5)}
+                valueStyle={{ color: '#0f172a' }}
+                prefix="$"
+                formatter={() => formatter(2000, 4)}
               />
             </div>
             <div className=" flex flex-col items-center py-10  text-center text-xs font-bold xl:px-10 xl:text-left">
               <Statistic
                 title="Current owner"
-                valueStyle={{ color: '#ded5f3' }}
+                valueStyle={{ color: '#0f172a' }}
                 value={'Anna.eth'}
               />
             </div>

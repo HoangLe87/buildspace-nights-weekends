@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import initializeFirebaseServer from '../../../firebase/firebaseAdmin'
+import { useAddress } from '@thirdweb-dev/react'
 
 export async function getServerSideProps(context) {
   try {
@@ -33,6 +34,11 @@ export async function getServerSideProps(context) {
 export default function Secure({ user }) {
   const router = useRouter()
   const auth = getAuth()
+  const address = useAddress()
+  if (!address || !user) {
+    router.push('/')
+    return <div>loading...</div>
+  }
   const sendApi = async () => {
     try {
       const token = await auth.currentUser.getIdToken()

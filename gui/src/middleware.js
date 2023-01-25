@@ -6,7 +6,7 @@ export default async function middleware(req, res) {
   /*const JWT = req.cookies.get('JWT') | ''
   console.log('JWT', JWT)
   const { auth } = initializeFirebaseServer()
-  const meta = await auth.verifyIdToken(JWT)
+  const meta = await auth.verifySessionCookie(JWT)
   const user = meta.uid
   console.log('user', user)
   /*
@@ -26,5 +26,5 @@ export default async function middleware(req, res) {
 }
 
 export const config = {
-  matcher: ['/secure', '/'],
+  matcher: ['/Marketplace'],
 }

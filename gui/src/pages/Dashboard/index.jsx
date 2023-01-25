@@ -20,6 +20,10 @@ export default function Dashboard() {
   const router = useRouter()
   const address = useAddress()
   const auth = getAuth()
+  if (!address || !auth.currentUser) {
+    router.push('/')
+    return <div>loading...</div>
+  }
 
   const contractStatics = useContext(WalletContext)
   const [stats, setStats] = useState({

@@ -5,9 +5,9 @@ export function DexNavBar({ currentPage }) {
   const router = useRouter()
   const tabs = ['Swap', 'Pools', 'Investments', 'Anna']
   const current =
-    'border-indigo-500 text-white font-bold hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm'
+    'border-indigo-500 text-white font-bold hover:cursor-pointer hover:border-gray-300 hover:text-slate-100 whitespace-nowrap border-b-2 py-4 px-1 text-sm'
   const notCurrent =
-    'border-transparent text-gray-400 hover:cursor-pointer hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+    'border-transparent text-gray-400 hover:cursor-pointer hover:border-gray-300 hover:text-slate-200 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
   const swap = currentPage === tabs[0] ? current : notCurrent
 
   const pools = currentPage === tabs[1] ? current : notCurrent
@@ -41,7 +41,7 @@ export function DexNavBar({ currentPage }) {
             className="-mb-px flex space-x-8 rounded-2xl bg-gray-700/80 px-4 shadow-[0px_0px_10px_5px_#805ad5] "
             aria-label="Tabs"
           >
-            <NavLink href="/DeFi" className={swap}>
+            <NavLink href="/DeFi/Swap" className={swap}>
               {' '}
               Swap{' '}
             </NavLink>
