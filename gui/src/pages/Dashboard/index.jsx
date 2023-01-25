@@ -19,11 +19,7 @@ import { useAddress } from '@thirdweb-dev/react'
 export default function Dashboard() {
   const router = useRouter()
   const address = useAddress()
-  const { auth, db } = initializeFirebaseClient()
-  if (!address || !auth.currentUser) {
-    router.push('/')
-    return <div>loading...</div>
-  }
+  const { db, auth } = initializeFirebaseClient()
 
   const contractStatics = useContext(WalletContext)
   const [stats, setStats] = useState({
