@@ -19,8 +19,13 @@ import { useAddress } from '@thirdweb-dev/react'
 export default function Dashboard() {
   const router = useRouter()
   const address = useAddress()
+
   const { db, auth } = initializeFirebaseClient()
 
+  if (!address || auth.currentUser) {
+    router.push('/')
+    return <div>Please log in first...</div>
+  }
   const contractStatics = useContext(WalletContext)
   const [stats, setStats] = useState({
     annaBalance: '',
