@@ -61,7 +61,7 @@ export const Header = ({ currentPage }) => {
   }
 
   return (
-    <header className="absolute w-screen shadow-[0px_0px_10px_5px_#805ad5]">
+    <header className="absolute z-10 w-screen shadow-[0px_0px_10px_5px_#805ad5]">
       <ToastContainer position="top-right" />
       <div className="w-full bg-gray-900 py-5 pr-5">
         <nav className="relative z-10 flex justify-between">
@@ -81,7 +81,7 @@ export const Header = ({ currentPage }) => {
                     {page.name}
                   </NavLink>
                   {page.current && page.subs.length > 1 && (
-                    <div className=" absolute ml-2 grid w-28 gap-1 rounded-xl border-b-[1px] border-stone-500 bg-slate-800 px-1 py-8 delay-150 ">
+                    <div className=" absolute ml-2 grid w-28 gap-1 rounded-xl border-b-[2px] border-stone-500 bg-gray-900  px-1 py-8 delay-150 ">
                       {page.subs.map((i) => (
                         <NavLink
                           key={i}

@@ -12,14 +12,14 @@ import logo1 from '../../images/logos/logo1.png'
 import { Button } from '@/components/reusable/Button'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { getAuth } from 'firebase/auth'
+import initializeFirebaseClient from '../../../firebase/firebaseConfig'
 import { useRouter } from 'next/router'
 import { useAddress } from '@thirdweb-dev/react'
 
 export default function Dashboard() {
   const router = useRouter()
   const address = useAddress()
-  const auth = getAuth()
+  const { auth, db } = initializeFirebaseClient()
   if (!address || !auth.currentUser) {
     router.push('/')
     return <div>loading...</div>
