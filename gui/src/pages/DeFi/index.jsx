@@ -9,11 +9,11 @@ import { DexNavBar } from '@/components/defi/DexNavBar'
 export default function Home() {
   const { db, auth } = initializeFirebaseClient()
   const [isAnimated, setIsAnimated] = useState(false)
-
+  const user = auth.currentUser ? auth.currentUser : ''
   return (
     <>
       <Head>
-        <title>ANNA - Simple DeFi at your hand</title>
+        <title>ANNA - DeFi at your fingertip</title>
         <meta
           name="description"
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
@@ -27,11 +27,7 @@ export default function Home() {
               sequence={[
                 'Hello',
                 1000,
-                `Hello ${
-                  auth.currentUser
-                    ? auth.currentUser.email.split('@')[0]
-                    : 'friend'
-                }`,
+                `Hello ${user.email ? user.email.split('@')[0] : 'friend'}`,
                 2000,
                 'Welcome to this incredible journey to explore DeFi',
                 2000,
