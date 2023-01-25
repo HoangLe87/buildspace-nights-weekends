@@ -21,7 +21,7 @@ export default function Home() {
       </Head>
       <Header currentPage={'DeFi'} />
       <main className="grid h-screen bg-[url('../images/background/11.jpeg')] bg-cover">
-        <div className="w-full bg-gray-700/80 py-60 pr-5">
+        <div className="w-full bg-gray-700/80 py-60">
           <div className="flex justify-center px-8 text-center align-middle text-slate-100">
             <TypeAnimation
               sequence={[

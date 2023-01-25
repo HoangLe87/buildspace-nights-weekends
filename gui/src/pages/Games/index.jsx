@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { TypeAnimation } from 'react-type-animation'
 
 export default function Games() {
   return (
@@ -13,9 +14,20 @@ export default function Games() {
         />
       </Head>
       <Header currentPage={'Games'} />
-      <main className="min-h-screen">
-        <div className="mt-60 flex justify-center">
-          Comming soon in Spring 2023
+      <main className="grid h-screen bg-[url('../images/background/13.jpeg')] bg-cover">
+        <div className="w-full bg-gray-700/80 py-60">
+          <div className="mx-8 flex justify-center text-center align-middle text-slate-100">
+            <TypeAnimation
+              sequence={[
+                'Comming soon in spring 2023.',
+                1000,
+                'Comming soon in spring 2023. Please check our Roadmap on the Home page',
+              ]}
+              wrapper="div"
+              cursor={true}
+              style={{ fontSize: '2em' }}
+            />
+          </div>
         </div>
       </main>
       <Footer />
