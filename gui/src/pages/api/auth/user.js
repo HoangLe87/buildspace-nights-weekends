@@ -5,10 +5,10 @@ export default async function user(req, res) {
   const token = req.body
   console.log('token', token)
   const expiresIn = 3000000
-  const { db, auth } = initializeFirebaseServer()
+  const { adminDb, adminAuth } = initializeFirebaseServer()
   try {
     if (reqMethod == 'POST') {
-      const meta = await auth.verifyIdToken(token)
+      const meta = await adminAuth.verifyIdToken(token)
       const user = meta.uid
 
       if (new Date().getTime() / 1000 - meta.auth_time < 45 * 60) {

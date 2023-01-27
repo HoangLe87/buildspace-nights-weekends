@@ -137,11 +137,11 @@ export function Wallet() {
           setDoc(
             usersRef,
             {
-              uid: user.uid,
-              email: user.email,
               address: address,
+              email: user.email,
               level: 1,
               createdAt: serverTimestamp(),
+              BTCUSDT: 0,
             },
             { merge: true }
           )

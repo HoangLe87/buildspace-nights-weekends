@@ -4,9 +4,9 @@ import initializeFirebaseServer from '../../../../firebase/firebaseAdmin'
 export default async function login(req, res) {
   const loginPayload = req.body.payload
 
-  const { auth } = initializeFirebaseServer()
+  const { adminAuth } = initializeFirebaseServer()
 
-  const token = await auth.createCustomToken(loginPayload)
+  const token = await adminAuth.createCustomToken(loginPayload)
   return res.status(200).json({ token })
 }
 

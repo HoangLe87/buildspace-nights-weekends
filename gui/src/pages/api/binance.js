@@ -1,8 +1,9 @@
 import Binance from 'binance-api-node'
 import initializeFirebaseClient from '../../../firebase/firebaseConfig'
+import initializeFirebaseServer from '../../../firebase/firebaseAdmin'
+import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
 
 export default async function login(req, res) {
-  console.log(req.method)
   try {
     if (req.method === 'GET') {
       const required = ['BTCUSDT']
@@ -16,6 +17,27 @@ export default async function login(req, res) {
       return res.status(200).json(data)
     }
     if (req.method === 'POST') {
+      const amount = req.body.amount
+      const action = req.body.action
+      const token = req.body.token
+      const { adminDb, adminAuth } = initializeFirebaseServer()
+      const decodedToken = await adminAuth.verifyIdToken(token)
+      const email = decodedToken.email
+      console.log('decodedToken', decodedToken)
+      const { db, auth } = initializeFirebaseClient()
+      const usersRef = doc(db, 'Users', email)
+      console.log('2')
+      getDoc(usersRef).then((doc) => {
+        if (doc.exists()) {
+          setDoc(
+            usersRef,
+            {
+              BTCUSDT: amount,
+            },
+            { merge: true }
+          )
+        }
+      })
       return res.status(200).json('POST')
     }
   } catch (error) {

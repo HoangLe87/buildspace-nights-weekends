@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 
 export function DexNavBar({ currentPage }) {
   const router = useRouter()
-  const tabs = ['Swap', 'Pools', 'Investments', 'Anna']
+  const tabs = ['Swap', 'Pools', 'Investments', 'Anna', 'CFD']
   const current =
     'border-indigo-500 text-white font-bold hover:cursor-pointer hover:border-gray-300 hover:text-slate-100 whitespace-nowrap border-b-2 py-4 px-1 text-sm'
   const notCurrent =
@@ -15,6 +15,8 @@ export function DexNavBar({ currentPage }) {
   const investments = currentPage === tabs[2] ? current : notCurrent
 
   const anna = currentPage === tabs[3] ? current : notCurrent
+
+  const cfd = currentPage === tabs[4] ? current : notCurrent
 
   return (
     <div className="mt-60 flex w-screen justify-center px-4 sm:px-6 lg:px-8">
@@ -28,7 +30,7 @@ export function DexNavBar({ currentPage }) {
           name="tabs"
           className="block w-full rounded-md py-2 pl-3 pr-10 text-base focus:border-indigo-400 focus:outline-none focus:ring-indigo-400 sm:text-sm"
           defaultValue={currentPage}
-          onChange={(e) => router.push(e.target.value)}
+          onChange={(e) => router.push(`/DeFi/${e.target.value}`)}
         >
           {tabs.map((tab) => (
             <option key={tabs.indexOf(tab)}>{tab}</option>
@@ -55,6 +57,10 @@ export function DexNavBar({ currentPage }) {
             <NavLink href="/DeFi/Anna" className={anna}>
               {' '}
               Anna{' '}
+            </NavLink>
+            <NavLink href="/DeFi/CFD" className={cfd}>
+              {' '}
+              CFD{' '}
             </NavLink>
           </nav>
         </div>

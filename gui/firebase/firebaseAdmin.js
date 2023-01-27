@@ -19,11 +19,11 @@ export default function initializeFirebaseServer() {
     })
   }
 
-  const db = getFirestore()
-  const auth = getAuth()
+  const adminDb = getFirestore()
+  const adminAuth = getAuth()
 
   return {
-    db,
-    auth,
+    adminDb,
+    adminAuth,
   }
 }

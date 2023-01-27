@@ -9,13 +9,14 @@ import initializeFirebaseClient from '../../../firebase/firebaseConfig'
 import { useAddress } from '@thirdweb-dev/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { DexNavBar } from '@/components/defi/DexNavBar'
 
 export default function CFD() {
   const address = useAddress()
-  const { db, auth } = initializeFirebaseClient()
-  const user = auth.currentUser
-  console.log('user', user)
+
   const transact = async (e) => {
+    const { db, auth } = initializeFirebaseClient()
+    const user = auth.currentUser
     if (!address) {
       toast('Please connect your wallet')
     }
@@ -23,9 +24,11 @@ export default function CFD() {
       toast('Please connect your wallet')
     }
     e.preventDefault()
+    const token = await user.getIdToken()
     const response = await axios.post('/api/binance', {
       action: e.target.action.value,
       amount: e.target.amount.value,
+      token: token,
     })
     alert(JSON.stringify(response.data))
   }
@@ -79,9 +82,10 @@ export default function CFD() {
         />
       </Head>
       <Header currentPage={'DeFi'} />
-      <main className="grid min-h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
+      <main className="grid h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
+        <DexNavBar currentPage={'CFD'} />
         <ToastContainer position="top-right" />
-        <div className="w-full bg-gray-700/80 py-60">
+        <div className="mt-2 w-full bg-gray-700/80 pt-10">
           <div className="mx-8 flex justify-center text-center align-middle text-slate-100"></div>
           <h1 className="mb-10 text-center text-2xl text-white">
             {' '}
@@ -122,7 +126,6 @@ export default function CFD() {
               loader={<div>Loading Chart</div>}
               data={chartPrices}
               options={options}
-              rootProps={{ 'data-testid': '1' }}
             />
           </div>
         </div>
