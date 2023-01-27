@@ -1,5 +1,6 @@
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import initializeFirebaseServer from '../../../../firebase/firebaseAdmin'
+import anna from '../../../../public/static/anna.json'
 
 export default async function login(req, res) {
   const loginPayload = req.body.payload

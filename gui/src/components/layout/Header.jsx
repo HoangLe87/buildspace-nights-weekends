@@ -3,12 +3,7 @@ import { Logo } from '@/components/layout/Logo'
 import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
 import { useState } from 'react'
 import { Button } from '../reusable/Button'
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-} from 'firebase/auth'
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 import profileWhite from '../../images/icons/profileGray.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -26,7 +21,7 @@ export const Header = ({ currentPage }) => {
   const [pages, setPages] = useState([
     {
       name: 'DeFi',
-      subs: ['Swap', 'Pools', 'Investments', 'Anna', 'CFD'],
+      subs: ['Swap', 'Pools', 'Investments', 'Anna', 'Binary'],
       current: false,
     },
     {
@@ -36,7 +31,7 @@ export const Header = ({ currentPage }) => {
     },
     {
       name: 'Education',
-      subs: ['Playground', 'Library', 'School'],
+      subs: ['Playground', 'Library', 'School', 'Exams'],
       current: false,
     },
     {
@@ -142,6 +137,7 @@ export function Wallet() {
               level: 1,
               createdAt: serverTimestamp(),
               BTCUSDT: 0,
+              price: 0,
             },
             { merge: true }
           )

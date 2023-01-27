@@ -10,33 +10,59 @@ import { useAddress } from '@thirdweb-dev/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { DexNavBar } from '@/components/defi/DexNavBar'
+import { doc, serverTimestamp, setDoc, getDoc } from 'firebase/firestore'
 
-export default function CFD() {
+export default function Binary() {
   const address = useAddress()
+  const [userData, setUserData] = useState()
+  const { db, auth } = initializeFirebaseClient()
+  const user = auth.currentUser
+
+  const getUserData = async () => {
+    if (!user) return
+    try {
+      const usersRef = doc(db, 'Users', user.email)
+      const docSnap = await getDoc(usersRef)
+      if (docSnap.exists()) {
+        const data = docSnap.data()
+        setUserData({
+          holdingBTC: Number(data.BTCUSDT),
+          holdingPrice: Number(data.price),
+          cfdEntry: Number(data.cfdEntry),
+        })
+      }
+    } catch (error) {
+      return
+    }
+  }
 
   const transact = async (e) => {
-    const { db, auth } = initializeFirebaseClient()
-    const user = auth.currentUser
-    if (!address) {
-      toast('Please connect your wallet')
-    }
-    if (!user) {
-      toast('Please connect your wallet')
-    }
     e.preventDefault()
-    const token = await user.getIdToken()
-    const response = await axios.post('/api/priceBTC', {
-      action: e.target.action.value,
-      amount: e.target.amount.value,
-      token: token,
-    })
-    alert(JSON.stringify(response.data))
+    try {
+      if (!address) {
+        toast('Please connect your wallet')
+        return
+      }
+      if (!user) {
+        toast('Please connect your wallet')
+        return
+      }
+      const token = await user.getIdToken()
+      const response = await axios.post('/api/priceBTC', {
+        action: e.target.action.value,
+        amount: e.target.amount.value,
+        token: token,
+      })
+      toast('Success', response)
+    } catch (error) {
+      toast('You cannot do this now', error)
+    }
   }
 
   const [data, setData] = useState()
   const getBinanceData = async () => {
     const allData = await axios.get('/api/priceBTC')
-    setData(allData.data)
+    setData([allData.data])
   }
   const options = {
     legend: 'none',
@@ -70,8 +96,8 @@ export default function CFD() {
   useEffect(() => {
     getBinanceData()
     getChartPrices()
+    getUserData()
   }, [])
-
   return (
     <>
       <Head>
@@ -82,7 +108,7 @@ export default function CFD() {
         />
       </Head>
       <Header currentPage={'DeFi'} />
-      <main className="grid h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
+      <main className="grid min-h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
         <DexNavBar currentPage={'CFD'} />
         <ToastContainer position="top-right" />
         <div className="mt-2 w-full bg-gray-700/80 pt-10">
@@ -117,6 +143,22 @@ export default function CFD() {
               </Button>
             </form>
           ))}
+          {userData && (
+            <div className="text-center text-white">
+              <div>Your position: {userData.holdingBTC} </div>
+              <div>Your entry price: {userData.holdingPrice} </div>
+              <div>
+                Countdown:
+                {userData.cfdEntry === 0
+                  ? ''
+                  : (
+                      (new Date().getTime() - userData.cfdEntry) /
+                      360000
+                    ).toFixed(1)}{' '}
+                hours
+              </div>
+            </div>
+          )}
 
           <div className="container m-auto mt-5 flex w-screen justify-center text-center text-white">
             <Chart

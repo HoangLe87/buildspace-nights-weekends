@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 
 export function DexNavBar({ currentPage }) {
   const router = useRouter()
-  const tabs = ['Swap', 'Pools', 'Investments', 'Anna', 'CFD']
+  const tabs = ['Swap', 'Pools', 'Investments', 'Anna', 'Binary']
   const current =
     'border-indigo-500 text-white font-bold hover:cursor-pointer hover:border-gray-300 hover:text-slate-100 whitespace-nowrap border-b-2 py-4 px-1 text-sm'
   const notCurrent =
@@ -16,7 +16,7 @@ export function DexNavBar({ currentPage }) {
 
   const anna = currentPage === tabs[3] ? current : notCurrent
 
-  const cfd = currentPage === tabs[4] ? current : notCurrent
+  const binary = currentPage === tabs[4] ? current : notCurrent
 
   return (
     <div className="mt-60 flex w-screen justify-center px-4 sm:px-6 lg:px-8">
@@ -58,9 +58,9 @@ export function DexNavBar({ currentPage }) {
               {' '}
               Anna{' '}
             </NavLink>
-            <NavLink href="/DeFi/CFD" className={cfd}>
+            <NavLink href="/DeFi/Binary" className={binary}>
               {' '}
-              CFD{' '}
+              Binary{' '}
             </NavLink>
           </nav>
         </div>
