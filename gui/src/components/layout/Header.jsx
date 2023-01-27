@@ -26,12 +26,21 @@ export const Header = ({ currentPage }) => {
   const [pages, setPages] = useState([
     {
       name: 'DeFi',
-      subs: ['Swap', 'Pools', 'Investments', 'Anna'],
+      subs: [
+        'Swap',
+        'Pools',
+        'Investments',
+        'Anna',
+        'CFD',
+        'Lottery',
+        'Binaries',
+        'High Low',
+      ],
       current: false,
     },
     {
       name: 'Marketplace',
-      subs: [],
+      subs: ['News'],
       current: false,
     },
     {
@@ -80,7 +89,7 @@ export const Header = ({ currentPage }) => {
                   >
                     {page.name}
                   </NavLink>
-                  {page.current && page.subs.length > 1 && (
+                  {page.current && page.subs.length > 0 && (
                     <div className=" absolute ml-2 grid w-28 gap-1 rounded-xl border-b-[2px] border-stone-500 bg-gray-900  px-1 py-8 delay-150 ">
                       {page.subs.map((i) => (
                         <NavLink
