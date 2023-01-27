@@ -3,7 +3,7 @@ import axios from 'axios'
 export default async function PriceBTC(req, res) {
   try {
     const prices = await axios.get(
-      'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'
+      'https://api.binance.us/api/v3/ticker/price?symbol=BTCUSDT'
     )
     if (req.method === 'GET') {
       return res.status(200).json(prices.data)

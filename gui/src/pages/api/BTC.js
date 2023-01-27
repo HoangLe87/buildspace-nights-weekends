@@ -4,7 +4,7 @@ export default async function BTC(req, res) {
   try {
     if (req.method === 'GET') {
       const result = await axios.get(
-        'https://api.binance.com/api/v3/klines?interval=1d&symbol=BTCUSDT&limit=15'
+        'https://api.binance.us/api/v3/klines?interval=1d&symbol=BTCUSDT&limit=15'
       )
       const candles = result.data
       const data = [['time', 'low', 'open', 'close', 'high']]
