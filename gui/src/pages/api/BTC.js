@@ -1,23 +1,21 @@
-import Binance from 'binance-api-node'
+import axios from 'axios'
 
 export default async function BTC(req, res) {
   try {
     if (req.method === 'GET') {
-      const client = Binance()
+      const result = await axios.get(
+        'https://api.binance.com/api/v3/klines?interval=1d&symbol=BTCUSDT&limit=15'
+      )
+      const candles = result.data
       const data = [['time', 'low', 'open', 'close', 'high']]
-      const candles = await client.candles({
-        symbol: 'BTCUSDT',
-        interval: '1d',
-        limit: '15',
-      })
       for (let i = 0; i < 15; i++) {
-        let time = new Date(candles[i].openTime)
+        let time = new Date(candles[i][0])
         data.push([
           `${time.getDate()}/${time.getMonth() + 1}`,
-          Number(candles[i].low),
-          Number(candles[i].open),
-          Number(candles[i].close),
-          Number(candles[i].high),
+          Number(candles[i][3]),
+          Number(candles[i][1]),
+          Number(candles[i][4]),
+          Number(candles[i][2]),
         ])
       }
       return res.status(200).json(data)
