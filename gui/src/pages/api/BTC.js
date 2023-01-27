@@ -23,6 +23,6 @@ export default async function BTC(req, res) {
       return res.status(200).json(data)
     }
   } catch (error) {
-    return res.status(400).send('Unavailable')
+    return res.status(400).json(error)
   }
 }

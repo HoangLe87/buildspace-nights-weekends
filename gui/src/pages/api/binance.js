@@ -41,6 +41,6 @@ export default async function login(req, res) {
       return res.status(200).json('POST')
     }
   } catch (error) {
-    return res.status(200).json('Unavailable')
+    return res.status(200).json(error)
   }
 }
