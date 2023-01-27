@@ -26,16 +26,7 @@ export const Header = ({ currentPage }) => {
   const [pages, setPages] = useState([
     {
       name: 'DeFi',
-      subs: [
-        'Swap',
-        'Pools',
-        'Investments',
-        'Anna',
-        'CFD',
-        'Lottery',
-        'Binaries',
-        'High Low',
-      ],
+      subs: ['Swap', 'Pools', 'Investments', 'Anna', 'CFD'],
       current: false,
     },
     {
@@ -256,9 +247,6 @@ export function HamburgerMenu() {
             </NavLink>
             <NavLink className={notCurrent} href={'/Dashboard'}>
               Dashboard
-            </NavLink>
-            <NavLink className={notCurrent} href={'/secure'}>
-              Secure
             </NavLink>
           </div>
         </div>

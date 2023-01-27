@@ -4,17 +4,69 @@ import { Header } from '@/components/layout/Header'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/reusable/Button'
-import { Formik, Form } from 'formik'
+import Chart from 'react-google-charts'
+import initializeFirebaseClient from '../../../firebase/firebaseConfig'
+import { useAddress } from '@thirdweb-dev/react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function CFD() {
+  const address = useAddress()
+  const { db, auth } = initializeFirebaseClient()
+  const user = auth.currentUser
+  console.log('user', user)
+  const transact = async (e) => {
+    if (!address) {
+      toast('Please connect your wallet')
+    }
+    if (!user) {
+      toast('Please connect your wallet')
+    }
+    e.preventDefault()
+    const response = await axios.post('/api/binance', {
+      action: e.target.action.value,
+      amount: e.target.amount.value,
+    })
+    alert(JSON.stringify(response.data))
+  }
+
   const [data, setData] = useState()
-  const fetch = async () => {
+  const getBinanceData = async () => {
     const allData = await axios.get('/api/binance')
     setData(allData.data)
   }
-
+  const options = {
+    legend: 'none',
+    bar: { groupWidth: '100%' }, // Remove space between bars.
+    candlestick: {
+      fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+      risingColor: { strokeWidth: 0, fill: '#0f9d58' }, // green
+    },
+    backgroundColor: {
+      stroke: 'none',
+      fill: 'none',
+    },
+    hAxis: {
+      textStyle: {
+        color: 'white',
+        fontSize: '10',
+      },
+    },
+    vAxis: {
+      textStyle: {
+        color: 'white',
+        fontSize: '10',
+      },
+    },
+  }
+  const [chartPrices, setChartPrices] = useState()
+  const getChartPrices = async () => {
+    const allData = await axios.get('/api/BTC')
+    setChartPrices(allData.data)
+  }
   useEffect(() => {
-    fetch()
+    getBinanceData()
+    getChartPrices()
   }, [])
 
   return (
@@ -26,28 +78,53 @@ export default function CFD() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
-      <Header currentPage={'Marketplace'} />
-      <main className="grid h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
+      <Header currentPage={'DeFi'} />
+      <main className="grid min-h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
+        <ToastContainer position="top-right" />
         <div className="w-full bg-gray-700/80 py-60">
           <div className="mx-8 flex justify-center text-center align-middle text-slate-100"></div>
           <h1 className="mb-10 text-center text-2xl text-white">
             {' '}
-            Trade margin with ANNA{' '}
+            Bet on the BTC direction with your ANNA holdings{' '}
           </h1>
           {data?.map((i) => (
             <form
               key={i.symbol}
-              className="mb-2 flex justify-center gap-2 text-center align-middle text-white"
+              onSubmit={transact}
+              className="mb-2 grid justify-center gap-2 text-center align-middle text-white sm:flex"
             >
               {i.symbol} : {parseInt(i.price)}
               <input
-                type="number"
+                id="amount"
+                placeholder="0"
                 className="h-6 w-28 rounded-2xl bg-gray-800 text-center text-white "
-              ></input>
-              <Button className="h-6 w-20">Buy</Button>
-              <Button className="h-6 w-20">Sell</Button>
+              />
+              <select
+                id="action"
+                className="h-6 w-28 rounded-2xl bg-gray-800 text-center text-white "
+              >
+                <option value="buy" defaultValue={'Buy'}>
+                  Buy
+                </option>
+                <option value="sell">Sell</option>
+              </select>
+              <Button type="submit" className="h-6 w-28">
+                Transact
+              </Button>
             </form>
           ))}
+
+          <div className="container m-auto mt-5 flex w-screen justify-center text-center text-white">
+            <Chart
+              width={'100%'}
+              height={450}
+              chartType="CandlestickChart"
+              loader={<div>Loading Chart</div>}
+              data={chartPrices}
+              options={options}
+              rootProps={{ 'data-testid': '1' }}
+            />
+          </div>
         </div>
       </main>
       <Footer />
