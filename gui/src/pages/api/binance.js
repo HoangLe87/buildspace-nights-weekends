@@ -9,7 +9,7 @@ export default async function login(req, res) {
       const required = ['BTCUSDT']
       const client = Binance()
       const data = []
-      const BTC = await client.prices() // get all prices
+      const BTC = await client.prices({ symbol: 'BTCUSDT' }) // get all prices
 
       for (let i = 0; i < required.length; i++) {
         data.push({ symbol: required[i], price: BTC[required[i]] })
