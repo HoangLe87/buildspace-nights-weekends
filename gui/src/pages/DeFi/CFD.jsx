@@ -25,7 +25,7 @@ export default function CFD() {
     }
     e.preventDefault()
     const token = await user.getIdToken()
-    const response = await axios.post('/api/binance', {
+    const response = await axios.post('/api/priceBTC', {
       action: e.target.action.value,
       amount: e.target.amount.value,
       token: token,
@@ -35,7 +35,7 @@ export default function CFD() {
 
   const [data, setData] = useState()
   const getBinanceData = async () => {
-    const allData = await axios.get('/api/binance')
+    const allData = await axios.get('/api/priceBTC')
     setData(allData.data)
   }
   const options = {
