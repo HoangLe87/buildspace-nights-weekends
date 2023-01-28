@@ -78,7 +78,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    if (!address || auth.currentUser) {
+    if (!address || !auth.currentUser) {
       router.push('/')
     }
     getAnnaBalance()

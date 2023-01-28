@@ -152,7 +152,7 @@ export default function Binary() {
                 {userData.cfdEntry === 0
                   ? ''
                   : (
-                      (new Date().getTime() - userData.cfdEntry) /
+                      (userData.cfdEntry + 3600000 - new Date().getTime()) /
                       360000
                     ).toFixed(1)}{' '}
                 hours

@@ -26,12 +26,12 @@ export const Header = ({ currentPage }) => {
     },
     {
       name: 'Marketplace',
-      subs: ['News'],
+      subs: [],
       current: false,
     },
     {
       name: 'Education',
-      subs: ['Playground', 'Library', 'School', 'Exams'],
+      subs: ['Playground', 'Library', 'School', 'Exams', 'Newsroom'],
       current: false,
     },
     {
@@ -61,7 +61,7 @@ export const Header = ({ currentPage }) => {
       <div className="w-full bg-gray-900 py-5 pr-5">
         <nav className="relative z-10 flex justify-between">
           <div className="hidden items-center gap-x-6 sm:flex md:gap-x-16">
-            <Logo className="h-10 w-auto" />
+            <Logo className=" h-10 w-auto" />
             <div className="md:flex md:gap-x-8">
               {pages.map((page) => (
                 <div

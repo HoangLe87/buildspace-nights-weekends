@@ -19,9 +19,13 @@ export default function Marketplace() {
           <div className="mx-8 flex justify-center text-center align-middle text-slate-100">
             <TypeAnimation
               sequence={[
-                'Comming soon in spring 2023.',
+                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide decentralised ",
                 1000,
-                'Comming soon in spring 2023. Please check our Roadmap on the Home page',
+                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity.",
+                1000,
+                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity. Our in-house marketplace connects creators and collectors,",
+                1000,
+                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity. Our in-house marketplace provides a low cost P2P platform for buying and selling these unique, one-of-a-kind digital assets.",
               ]}
               wrapper="div"
               cursor={true}

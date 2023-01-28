@@ -20,6 +20,7 @@ export default function Home() {
           content="A gamified DeFi protocol that lets the user claim ownership of the entire ecosystem"
         />
       </Head>
+
       <Header />
       <main>
         <Hero />

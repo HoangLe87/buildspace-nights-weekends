@@ -14,7 +14,7 @@ export function Logo() {
       <Image
         src={logo}
         priority
-        className="glow h-8 w-8 hover:cursor-pointer "
+        className=" glow h-8 w-8 hover:cursor-pointer "
         alt=""
       />
 
