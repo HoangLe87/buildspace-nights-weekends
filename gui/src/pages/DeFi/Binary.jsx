@@ -108,8 +108,8 @@ export default function Binary() {
         />
       </Head>
       <Header currentPage={'DeFi'} />
-      <main className="grid min-h-screen bg-[url('../images/background/12.jpeg')] bg-cover">
-        <DexNavBar currentPage={'CFD'} />
+      <main className="grid min-h-screen bg-[url('../images/education/9.jpeg')] bg-cover">
+        <DexNavBar currentPage={'Binary'} />
         <ToastContainer position="top-right" />
         <div className="mt-2 w-full bg-gray-700/80 pt-10">
           <div className="mx-8 flex justify-center text-center align-middle text-slate-100"></div>

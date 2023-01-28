@@ -19,7 +19,7 @@ export default function School() {
       <Header currentPage={'Education'} />
 
       <main className="grid h-screen bg-[url('../images/background/13.jpeg')] bg-cover">
-        <div className="z-1 absolute h-full w-full bg-gray-900/80 "> </div>
+        <div className="z-1 absolute h-screen w-full bg-gray-900/80 "> </div>
         <div className="w-full bg-gray-700/80 py-60">
           <h1 className="mb-5 text-center text-3xl text-white">
             Get rewarded for studying new tech
