@@ -21,11 +21,13 @@ export default function Marketplace() {
               sequence={[
                 "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide decentralised ",
                 1000,
-                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity.",
+                'They provide true digital scarcity and authenticity.',
                 1000,
-                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity. Our in-house marketplace connects creators and collectors,",
+                'Our in-house marketplace connects creators and collectors,',
                 1000,
-                "NFTs are the ultimate way to monetize and showcase your company's digital assets. They provide true digital scarcity and authenticity. Our in-house marketplace provides a low cost P2P platform for buying and selling these unique, one-of-a-kind digital assets.",
+                'Our in-house marketplace provides a low cost P2P platform for buying and selling these',
+                1000,
+                'Our in-house marketplace provides a low cost P2P platform for buying and selling these unique aseets',
               ]}
               wrapper="div"
               cursor={true}

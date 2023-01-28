@@ -23,9 +23,9 @@ export default function Games() {
             sequence={[
               'Blockchain technology is a revolutionizing',
               1000,
-              'Blockchain technology is game-changing and disruptive. It is driving transformation',
+              'Blockchain technology is driving transformation and creating revenue streams',
               1000,
-              "Blockchain technology is game-changing and disruptive. It is driving digital transformation and creating new revenue streams. Developing your blockchain acumen through education will position you as a valuable asset in today's fast-paced, decentralized economy.",
+              'Develop your blockchain acumen through our education.',
             ]}
             wrapper="div"
             cursor={true}

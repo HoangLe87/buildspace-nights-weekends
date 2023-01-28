@@ -33,9 +33,9 @@ export default function Home() {
                 2000,
                 'Welcome to this incredible journey to explore DeFi.',
                 1000,
-                'Welcome to this incredible journey to explore DeFi. Are you ready to embark?',
+                'Are you ready to embark?',
                 1000,
-                'Welcome to this incredible journey to explore DeFi. Then make your choice:',
+                'Then make your choice:',
                 500,
                 () => {
                   setIsAnimated(true)
