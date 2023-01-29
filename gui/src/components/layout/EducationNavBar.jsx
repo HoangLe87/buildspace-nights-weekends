@@ -3,7 +3,14 @@ import { useRouter } from 'next/router'
 
 export function EducationNavBar({ currentPage }) {
   const router = useRouter()
-  const tabs = ['Playground', 'Library', 'School', 'Exams', 'Newsroom']
+  const tabs = [
+    'Playground',
+    'Library',
+    'School',
+    'Exams',
+    'Newsroom',
+    'Trending',
+  ]
   const current =
     'border-indigo-500 text-white font-bold hover:cursor-pointer hover:border-gray-300 hover:text-slate-100 whitespace-nowrap border-b-2 py-4 px-1 text-sm'
   const notCurrent =
@@ -17,6 +24,8 @@ export function EducationNavBar({ currentPage }) {
   const exams = currentPage === tabs[3] ? current : notCurrent
 
   const newsroom = currentPage === tabs[4] ? current : notCurrent
+
+  const trending = currentPage === tabs[4] ? current : notCurrent
 
   return (
     <div className="mt-60 flex w-screen justify-center px-4 sm:px-6 lg:px-8">
@@ -61,6 +70,10 @@ export function EducationNavBar({ currentPage }) {
             <NavLink href="/Education/Newsroom" className={newsroom}>
               {' '}
               Newsroom{' '}
+            </NavLink>
+            <NavLink href="/Education/Trending" className={trending}>
+              {' '}
+              Trending{' '}
             </NavLink>
           </nav>
         </div>

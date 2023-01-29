@@ -31,7 +31,14 @@ export const Header = ({ currentPage }) => {
     },
     {
       name: 'Education',
-      subs: ['Playground', 'Library', 'School', 'Exams', 'Newsroom'],
+      subs: [
+        'Playground',
+        'Library',
+        'School',
+        'Exams',
+        'Newsroom',
+        'Trending',
+      ],
       current: false,
     },
     {
