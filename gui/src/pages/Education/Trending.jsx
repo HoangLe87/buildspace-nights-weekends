@@ -41,7 +41,7 @@ export default function Newsroom() {
       </Head>
       <Header currentPage={'Education'} />
       <main className="grid min-h-screen overflow-hidden bg-[url('../images/education/11.jpeg')] bg-cover">
-        <EducationNavBar currentPage={'Newsroom'} />
+        <EducationNavBar currentPage={'Trending'} />
 
         <div className="m-auto mt-5 grid grid-cols-2 justify-center gap-4 overflow-hidden bg-gray-800/80  p-5 align-middle md:gap-8 lg:grid-cols-5">
           {trending?.map((i) => (
