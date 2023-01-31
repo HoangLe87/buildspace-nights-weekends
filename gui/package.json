@@ -11,6 +11,7 @@
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@egjs/react-flicking": "^4.10.5",
     "@headlessui/react": "^1.7.2",
     "@tailwindcss/forms": "^0.5.3",
     "@thirdweb-dev/react": "^3.6.9",
